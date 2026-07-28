@@ -96,7 +96,6 @@ function App() {
         <GameStatusBanner
           status={status}
           targetDriver={targetDriver}
-          guesses={guesses}
           guessCount={guessCount}
           onNewGame={resetGame}
           onShowAnswer={handleShowAnswer}

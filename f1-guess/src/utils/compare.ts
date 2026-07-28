@@ -43,12 +43,7 @@ function compareNumeric(guess: number, target: number, closeThreshold: number): 
 export function compareDrivers(guess: Driver, target: Driver): GuessFeedback {
   return {
     nationality: compareNationality(guess.nationality, target.nationality),
-    team:
-      guess.team === target.team
-        ? 'correct'
-        : guess.teams.some((t) => target.teams.includes(t))
-          ? 'close'
-          : 'wrong',
+    team: guess.team === target.team ? 'correct' : 'wrong',
     number: compareNumeric(guess.number, target.number, 1),
     championships: compareNumeric(guess.championships, target.championships, 1),
     podiums: compareNumeric(guess.podiums, target.podiums, 1),

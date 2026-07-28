@@ -7,7 +7,7 @@ interface HelpModalProps {
 
 const rules = [
   { label: '国籍', correct: '相同', close: '同一大洲', wrong: '不同大洲' },
-  { label: '车队', correct: '相同', close: '曾效力同一车队', wrong: '不同' },
+  { label: '车队', correct: '相同', close: '-', wrong: '不同' },
   { label: '车号', correct: '相同', close: '相差 ≤1', wrong: '相差 >1' },
   { label: '世界冠军', correct: '相同', close: '相差 ≤1', wrong: '相差 >1' },
   { label: '领奖台', correct: '相同', close: '相差 ≤1', wrong: '相差 >1' },
@@ -70,7 +70,7 @@ export function HelpModal({ isOpen, onClose }: HelpModalProps) {
                 <span className="w-8 h-8 bg-f1-yellow rounded flex items-center justify-center text-f1-dark font-bold">
                   🟨
                 </span>
-                <span>接近 - 属性相近（数值差距小或曾效力同一车队）</span>
+                <span>接近 - 属性相近（数值差距小或同一大洲）</span>
               </div>
               <div className="flex items-center gap-3">
                 <span className="w-8 h-8 bg-f1-gray rounded flex items-center justify-center font-bold">
