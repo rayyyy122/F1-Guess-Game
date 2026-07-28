@@ -1013,5 +1013,151 @@
     "debutYear": 2021,
     "status": "reserve",
     "country": "JP"
+  },
+  {
+    "id": "sergey-sirotkin",
+    "name": "Sergey Sirotkin",
+    "nameCn": "谢尔盖·斯洛特金",
+    "nationality": "俄罗斯",
+    "team": "Williams",
+    "teamCn": "威廉姆斯",
+    "teams": [
+      "Williams"
+    ],
+    "number": 35,
+    "championships": 0,
+    "podiums": 0,
+    "wins": 0,
+    "debutYear": 2018,
+    "status": "retired",
+    "country": "RU"
+  },
+  {
+    "id": "antonio-giovinazzi",
+    "name": "Antonio Giovinazzi",
+    "nameCn": "安东尼奥·乔维纳齐",
+    "nationality": "意大利",
+    "team": "Alfa Romeo",
+    "teamCn": "阿尔法·罗密欧",
+    "teams": [
+      "Alfa Romeo"
+    ],
+    "number": 99,
+    "championships": 0,
+    "podiums": 0,
+    "wins": 0,
+    "debutYear": 2019,
+    "status": "retired",
+    "country": "IT"
+  },
+  {
+    "id": "nicholas-latifi",
+    "name": "Nicholas Latifi",
+    "nameCn": "尼古拉斯·拉提菲",
+    "nationality": "加拿大",
+    "team": "Williams",
+    "teamCn": "威廉姆斯",
+    "teams": [
+      "Williams"
+    ],
+    "number": 6,
+    "championships": 0,
+    "podiums": 0,
+    "wins": 0,
+    "debutYear": 2020,
+    "status": "retired",
+    "country": "CA"
+  },
+  {
+    "id": "mick-schumacher",
+    "name": "Mick Schumacher",
+    "nameCn": "米克·舒马赫",
+    "nationality": "德国",
+    "team": "Haas",
+    "teamCn": "哈斯",
+    "teams": [
+      "Haas"
+    ],
+    "number": 47,
+    "championships": 0,
+    "podiums": 0,
+    "wins": 0,
+    "debutYear": 2021,
+    "status": "retired",
+    "country": "DE"
+  },
+  {
+    "id": "nikita-mazepin",
+    "name": "Nikita Mazepin",
+    "nameCn": "尼基塔·马泽平",
+    "nationality": "俄罗斯",
+    "team": "Haas",
+    "teamCn": "哈斯",
+    "teams": [
+      "Haas"
+    ],
+    "number": 9,
+    "championships": 0,
+    "podiums": 0,
+    "wins": 0,
+    "debutYear": 2021,
+    "status": "retired",
+    "country": "RU"
+  },
+  {
+    "id": "nyck-de-vries",
+    "name": "Nyck de Vries",
+    "nameCn": "尼克·德弗里斯",
+    "nationality": "荷兰",
+    "team": "AlphaTauri",
+    "teamCn": "AlphaTauri",
+    "teams": [
+      "Williams",
+      "AlphaTauri"
+    ],
+    "number": 21,
+    "championships": 0,
+    "podiums": 0,
+    "wins": 0,
+    "debutYear": 2023,
+    "status": "retired",
+    "country": "NL"
+  },
+  {
+    "id": "logan-sargeant",
+    "name": "Logan Sargeant",
+    "nameCn": "洛根·萨金特",
+    "nationality": "美国",
+    "team": "Williams",
+    "teamCn": "威廉姆斯",
+    "teams": [
+      "Williams"
+    ],
+    "number": 2,
+    "championships": 0,
+    "podiums": 0,
+    "wins": 0,
+    "debutYear": 2023,
+    "status": "retired",
+    "country": "US"
+  },
+  {
+    "id": "jack-doohan",
+    "name": "Jack Doohan",
+    "nameCn": "杰克·杜汉",
+    "nationality": "澳大利亚",
+    "team": "Haas",
+    "teamCn": "哈斯",
+    "teams": [
+      "Alpine",
+      "Haas"
+    ],
+    "number": 61,
+    "championships": 0,
+    "podiums": 0,
+    "wins": 0,
+    "debutYear": 2024,
+    "status": "reserve",
+    "country": "AU"
   }
 ]

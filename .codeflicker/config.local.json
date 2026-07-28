@@ -3,7 +3,8 @@
     "allow": [
       "Fetch(domain:f1-guess-game-31fp.vercel.app)",
       "Fetch(domain:en.wikipedia.org)",
-      "Fetch(domain:www.bbc.com)"
+      "Fetch(domain:www.bbc.com)",
+      "Fetch(domain:www.formula1.com)"
     ]
   }
 }
