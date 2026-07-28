@@ -1,18 +1,32 @@
-import { useMemo } from 'react'
+import { useMemo, useState, useCallback } from 'react'
 import { useGame } from './hooks/useGame'
+import { useStats } from './hooks/useStats'
 import { Header } from './components/Header/Header'
 import { SearchBox } from './components/SearchBox/SearchBox'
 import { GuessTable } from './components/GuessTable/GuessTable'
 import { GameStatusBanner } from './components/GameStatus'
+import { StatsModal } from './components/StatsModal/StatsModal'
 
 function App() {
-  const { targetDriver, guesses, status, makeGuess, resetGame, guessCount } = useGame()
+  const { recordWin } = useStats()
+  const [isStatsOpen, setIsStatsOpen] = useState(false)
+
+  const handleWin = useCallback(
+    (guessCount: number) => {
+      recordWin(guessCount)
+    },
+    [recordWin]
+  )
+
+  const { targetDriver, guesses, status, makeGuess, resetGame, guessCount } = useGame({
+    onWin: handleWin,
+  })
 
   const guessedIds = useMemo(() => new Set(guesses.map((g) => g.driver.id)), [guesses])
 
   return (
     <div className="min-h-screen bg-f1-dark text-f1-text">
-      <Header onNewGame={resetGame} />
+      <Header onNewGame={resetGame} onShowStats={() => setIsStatsOpen(true)} />
 
       <main className="max-w-6xl mx-auto px-4 py-8">
         <div className="text-center mb-8">
@@ -23,6 +37,7 @@ function App() {
         <GameStatusBanner
           status={status}
           targetDriver={targetDriver}
+          guesses={guesses}
           guessCount={guessCount}
           onNewGame={resetGame}
         />
@@ -37,6 +52,8 @@ function App() {
 
         <GuessTable guesses={guesses} />
       </main>
+
+      <StatsModal isOpen={isStatsOpen} onClose={() => setIsStatsOpen(false)} />
     </div>
   )
 }

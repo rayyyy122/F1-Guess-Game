@@ -3,7 +3,11 @@ import type { Driver, Guess, GameStatus } from '../types'
 import { getRandomDriver } from '../utils/drivers'
 import { compareDrivers } from '../utils/compare'
 
-export function useGame() {
+interface UseGameOptions {
+  onWin?: (guessCount: number) => void
+}
+
+export function useGame(options?: UseGameOptions) {
   const [targetDriver, setTargetDriver] = useState<Driver>(() => getRandomDriver())
   const [guesses, setGuesses] = useState<Guess[]>([])
   const [status, setStatus] = useState<GameStatus>('playing')
@@ -15,13 +19,15 @@ export function useGame() {
 
       const feedback = compareDrivers(driver, targetDriver)
       const newGuess: Guess = { driver, feedback }
-      setGuesses((prev) => [...prev, newGuess])
+      const newGuesses = [...guesses, newGuess]
+      setGuesses(newGuesses)
 
       if (driver.id === targetDriver.id) {
         setStatus('won')
+        options?.onWin?.(newGuesses.length)
       }
     },
-    [targetDriver, guesses, status]
+    [targetDriver, guesses, status, options]
   )
 
   const resetGame = useCallback(() => {

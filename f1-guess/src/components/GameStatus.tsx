@@ -1,13 +1,21 @@
-import type { GameStatus, Driver } from '../types'
+import type { GameStatus, Driver, Guess } from '../types'
+import { ShareButton } from './ShareButton/ShareButton'
 
 interface GameStatusProps {
   status: GameStatus
   targetDriver: Driver
+  guesses: Guess[]
   guessCount: number
   onNewGame: () => void
 }
 
-export function GameStatusBanner({ status, targetDriver, guessCount, onNewGame }: GameStatusProps) {
+export function GameStatusBanner({
+  status,
+  targetDriver,
+  guesses,
+  guessCount,
+  onNewGame,
+}: GameStatusProps) {
   if (status === 'playing') return null
 
   return (
@@ -18,12 +26,15 @@ export function GameStatusBanner({ status, targetDriver, guessCount, onNewGame }
         {targetDriver.nameCn && ` (${targetDriver.nameCn})`}
       </p>
       <p className="text-sm mb-4">用了 {guessCount} 次猜测</p>
-      <button
-        onClick={onNewGame}
-        className="px-6 py-2 bg-f1-dark text-f1-text rounded-lg font-medium hover:bg-gray-800 transition-colors"
-      >
-        再来一局
-      </button>
+      <div className="flex flex-col gap-3">
+        <ShareButton guesses={guesses} guessCount={guessCount} />
+        <button
+          onClick={onNewGame}
+          className="px-6 py-2 bg-f1-dark text-f1-text rounded-lg font-medium hover:bg-gray-800 transition-colors"
+        >
+          再来一局
+        </button>
+      </div>
     </div>
   )
 }
