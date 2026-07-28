@@ -32,7 +32,9 @@ export interface Guess {
   feedback: GuessFeedback
 }
 
-export type GameStatus = 'playing' | 'won' | 'givenUp'
+export type GameStatus = 'playing' | 'won' | 'givenUp' | 'lost'
+
+export const MAX_GUESSES = 8
 
 export interface GameStats {
   totalGames: number

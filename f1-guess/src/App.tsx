@@ -12,7 +12,7 @@ import { AnswerModal } from './components/AnswerModal/AnswerModal'
 import { hasSeenHelp, markHelpSeen } from './utils/storage'
 
 function App() {
-  const { recordWin, recordGiveUp } = useStats()
+  const { recordWin, recordGiveUp, recordLoss } = useStats()
   const [isStatsOpen, setIsStatsOpen] = useState(false)
   const [isHelpOpen, setIsHelpOpen] = useState(false)
   const [isGiveUpConfirmOpen, setIsGiveUpConfirmOpen] = useState(false)
@@ -42,9 +42,24 @@ function App() {
     setIsAnswerOpen(true)
   }, [recordGiveUp])
 
-  const { targetDriver, guesses, status, makeGuess, giveUp, resetGame, guessCount } = useGame({
+  const handleLose = useCallback(() => {
+    recordLoss()
+  }, [recordLoss])
+
+  const {
+    targetDriver,
+    guesses,
+    status,
+    makeGuess,
+    giveUp,
+    resetGame,
+    guessCount,
+    remainingGuesses,
+    maxGuesses,
+  } = useGame({
     onWin: handleWin,
     onGiveUp: handleGiveUp,
+    onLose: handleLose,
   })
 
   const guessedIds = useMemo(() => new Set(guesses.map((g) => g.driver.id)), [guesses])
@@ -53,6 +68,10 @@ function App() {
     setIsAnswerOpen(false)
     resetGame()
   }, [resetGame])
+
+  const handleShowAnswer = useCallback(() => {
+    setIsAnswerOpen(true)
+  }, [])
 
   const isPlaying = status === 'playing'
 
@@ -67,7 +86,11 @@ function App() {
       <main className="max-w-6xl mx-auto px-4 py-8">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold mb-2">猜出 F1 车手</h1>
-          <p className="text-gray-400">通过国籍、车队、车号等属性找出隐藏的车手</p>
+          <p className="text-gray-400">
+            {isPlaying
+              ? `剩余 ${remainingGuesses} / ${maxGuesses} 次机会`
+              : '通过国籍、车队、车号等属性找出隐藏的车手'}
+          </p>
         </div>
 
         <GameStatusBanner
@@ -76,6 +99,7 @@ function App() {
           guesses={guesses}
           guessCount={guessCount}
           onNewGame={resetGame}
+          onShowAnswer={handleShowAnswer}
         />
 
         <div className="mb-8">
@@ -83,7 +107,9 @@ function App() {
         </div>
 
         {guesses.length > 0 && (
-          <div className="mb-4 text-center text-sm text-gray-400">已猜测 {guessCount} 次</div>
+          <div className="mb-4 text-center text-sm text-gray-400">
+            已猜测 {guessCount} / {maxGuesses} 次
+          </div>
         )}
 
         <GuessTable guesses={guesses} />

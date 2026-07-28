@@ -52,7 +52,7 @@ export function HelpModal({ isOpen, onClose }: HelpModalProps) {
           <section>
             <h3 className="text-lg font-bold mb-2 text-f1-red">玩法</h3>
             <p className="text-gray-300">
-              系统会随机选择一位 F1 车手（现役或传奇），你需要通过猜测车手的属性来找出答案。
+              系统会随机选择一位 F1 车手（现役或传奇），你需要在 <strong className="text-f1-red">8 次机会</strong> 内猜出答案。
               每次猜测后，系统会用颜色提示你与目标的接近程度。
             </p>
           </section>
@@ -110,7 +110,7 @@ export function HelpModal({ isOpen, onClose }: HelpModalProps) {
           <section>
             <h3 className="text-lg font-bold mb-2 text-f1-red">提示</h3>
             <ul className="list-disc list-inside space-y-1 text-gray-300">
-              <li>猜测次数不限，可以一直猜直到答对</li>
+              <li>最多可以猜 8 次，猜对即获胜</li>
               <li>不能重复猜测同一位车手</li>
               <li>连胜纪录和最佳成绩会被记录</li>
               <li>点击"新游戏"可以随时开始下一局</li>

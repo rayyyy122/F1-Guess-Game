@@ -1,11 +1,13 @@
 import { useState, useCallback } from 'react'
 import type { Driver, Guess, GameStatus } from '../types'
+import { MAX_GUESSES } from '../types'
 import { getRandomDriver } from '../utils/drivers'
 import { compareDrivers } from '../utils/compare'
 
 interface UseGameOptions {
   onWin?: (guessCount: number) => void
   onGiveUp?: (guessCount: number) => void
+  onLose?: (guessCount: number) => void
 }
 
 export function useGame(options?: UseGameOptions) {
@@ -17,6 +19,7 @@ export function useGame(options?: UseGameOptions) {
     (driver: Driver) => {
       if (status !== 'playing') return
       if (guesses.some((g) => g.driver.id === driver.id)) return
+      if (guesses.length >= MAX_GUESSES) return
 
       const feedback = compareDrivers(driver, targetDriver)
       const newGuess: Guess = { driver, feedback }
@@ -26,6 +29,9 @@ export function useGame(options?: UseGameOptions) {
       if (driver.id === targetDriver.id) {
         setStatus('won')
         options?.onWin?.(newGuesses.length)
+      } else if (newGuesses.length >= MAX_GUESSES) {
+        setStatus('lost')
+        options?.onLose?.(newGuesses.length)
       }
     },
     [targetDriver, guesses, status, options]
@@ -43,6 +49,8 @@ export function useGame(options?: UseGameOptions) {
     setStatus('playing')
   }, [])
 
+  const remainingGuesses = MAX_GUESSES - guesses.length
+
   return {
     targetDriver,
     guesses,
@@ -51,5 +59,7 @@ export function useGame(options?: UseGameOptions) {
     giveUp,
     resetGame,
     guessCount: guesses.length,
+    remainingGuesses,
+    maxGuesses: MAX_GUESSES,
   }
 }
