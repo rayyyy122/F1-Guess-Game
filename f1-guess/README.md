@@ -1,40 +1,31 @@
-# F1 Guess
+# F1 Guess (Web App)
 
-> F1 车手猜测游戏 - 通过属性提示找出隐藏的车手
+> F1 车手猜测游戏的前端应用
 
-类似 Wordle 和「足一把」的玩法，玩家通过猜测车手的国籍、车队、车号、冠军数、领奖台数、胜场数、首秀年份、现役状态等 8 个属性，根据颜色反馈找出隐藏的 F1 车手。
-
-## 功能
-
-- **无限模式**：随机选择车手，不限猜测次数
-- **颜色反馈**：🟩 正确 / 🟨 接近 / ⬜ 错误
-- **车手数据库**：50 位车手（23 位现役 + 27 位传奇）
-- **自动补全搜索**：支持中英文姓名、键盘导航
-- **统计系统**：总场次、胜率、连胜、最佳成绩（localStorage 持久化）
-- **分享功能**：复制结果到剪贴板 / 分享到 X
+在线访问：https://f1-guess-game.pages.dev
 
 ## 技术栈
 
-- **构建工具**：Vite 8
-- **框架**：React 18
-- **语言**：TypeScript 5
-- **样式**：Tailwind CSS 3
-- **存储**：localStorage
+- **构建工具**: Vite 8
+- **框架**: React 19
+- **语言**: TypeScript 5
+- **样式**: Tailwind CSS 3
+- **包管理**: pnpm
 
 ## 本地开发
 
 ```bash
 # 安装依赖
-npm install
+pnpm install
 
 # 启动开发服务器
-npm run dev
+pnpm run dev
 
 # 构建生产版本
-npm run build
+pnpm run build
 
 # 预览生产构建
-npm run preview
+pnpm run preview
 ```
 
 ## 项目结构
@@ -46,10 +37,12 @@ src/
 │   ├── SearchBox/      # 搜索框（自动补全）
 │   ├── GuessTable/     # 猜测结果表格
 │   ├── StatsModal/     # 统计弹窗
-│   ├── ShareButton/    # 分享按钮
-│   └── GameStatus.tsx  # 胜利提示横幅
+│   ├── HelpModal/      # 规则弹窗
+│   ├── ConfirmModal/   # 通用确认弹窗
+│   ├── AnswerModal/    # 答案展示弹窗
+│   └── GameStatus.tsx  # 游戏状态横幅
 ├── data/
-│   └── drivers.json    # 车手数据
+│   └── drivers.json    # 车手数据 (49 位)
 ├── hooks/
 │   ├── useGame.ts      # 游戏状态管理
 │   └── useStats.ts     # 统计数据管理
@@ -63,37 +56,30 @@ src/
 └── main.tsx            # 入口
 ```
 
-## 反馈规则
+## 核心逻辑
 
-| 属性 | 🟩 正确 | 🟨 接近 | ⬜ 错误 |
-|------|---------|---------|---------|
-| 国籍 | 相同 | - | 不同 |
-| 车队 | 相同 | 曾效力同一车队 | 不同 |
-| 车号 | 相同 | - | 不同 |
-| 冠军数 | 相同 | 相差 ±1 | 相差 >1 |
-| 领奖台 | 相同 | 差值 ≤10 | 差值 >10 |
-| 胜场 | 相同 | 差值 ≤5 | 差值 >5 |
-| 首秀年份 | 相同 | 相差 ±1 年 | 相差 >1 年 |
-| 现役状态 | 相同 | - | 不同 |
+### 颜色反馈
+
+- 🟩 `correct` - 完全匹配
+- 🟨 `close` - 接近（数值差 ≤1，或同一大洲）
+- ⬜ `wrong` - 不匹配
+
+### 数值方向
+
+数值类型的属性（车号、世界冠军、领奖台、分站冠军、首秀年份）会显示方向箭头：
+- `↑` 目标值比猜测值大
+- `↓` 目标值比猜测值小
+
+### 车手状态
+
+- `active` - 现役（2026 赛季正式车手）
+- `reserve` - 储备（无参赛席位但在 F1 体系内）
+- `retired` - 退役
+
+## 数据更新
+
+车手数据存储在 `src/data/drivers.json`，更新时间：2026-07-27（匈牙利大奖赛后）。
 
 ## 部署
 
-### Vercel
-
-```bash
-npx vercel
-```
-
-或在 Vercel 控制台导入 GitHub 仓库，构建配置已包含在 `vercel.json` 中。
-
-### Netlify
-
-```bash
-npx netlify-cli deploy --prod
-```
-
-或在 Netlify 控制台导入 GitHub 仓库，构建配置已包含在 `netlify.toml` 中。
-
-## License
-
-MIT
+通过 Cloudflare Pages 自动部署，配置见仓库根目录 README。
