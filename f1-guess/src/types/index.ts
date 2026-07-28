@@ -17,14 +17,21 @@ export interface Driver {
 
 export type FeedbackType = 'correct' | 'close' | 'wrong'
 
+export type NumericDirection = 'up' | 'down' | 'equal'
+
+export interface NumericFeedback {
+  type: FeedbackType
+  direction: NumericDirection
+}
+
 export interface GuessFeedback {
   nationality: FeedbackType
   team: FeedbackType
-  number: FeedbackType
-  championships: FeedbackType
-  podiums: FeedbackType
-  wins: FeedbackType
-  debutYear: FeedbackType
+  number: NumericFeedback
+  championships: NumericFeedback
+  podiums: NumericFeedback
+  wins: NumericFeedback
+  debutYear: NumericFeedback
   active: FeedbackType
 }
 

@@ -6,13 +6,13 @@ interface HelpModalProps {
 }
 
 const rules = [
-  { label: '国籍', correct: '相同', close: '-', wrong: '不同' },
+  { label: '国籍', correct: '相同', close: '同一大洲', wrong: '不同大洲' },
   { label: '车队', correct: '相同', close: '曾效力同一车队', wrong: '不同' },
-  { label: '车号', correct: '相同', close: '-', wrong: '不同' },
-  { label: '世界冠军', correct: '相同', close: '相差 ±1', wrong: '相差 >1' },
-  { label: '领奖台', correct: '相同', close: '差值 ≤10', wrong: '差值 >10' },
-  { label: '分站冠军', correct: '相同', close: '差值 ≤5', wrong: '差值 >5' },
-  { label: '首秀年份', correct: '相同', close: '相差 ±1 年', wrong: '相差 >1 年' },
+  { label: '车号', correct: '相同', close: '相差 ≤1', wrong: '相差 >1' },
+  { label: '世界冠军', correct: '相同', close: '相差 ≤1', wrong: '相差 >1' },
+  { label: '领奖台', correct: '相同', close: '相差 ≤1', wrong: '相差 >1' },
+  { label: '分站冠军', correct: '相同', close: '相差 ≤1', wrong: '相差 >1' },
+  { label: '首秀年份', correct: '相同', close: '相差 ≤1 年', wrong: '相差 >1 年' },
   { label: '现役状态', correct: '相同', close: '-', wrong: '不同' },
 ]
 
@@ -112,6 +112,7 @@ export function HelpModal({ isOpen, onClose }: HelpModalProps) {
             <ul className="list-disc list-inside space-y-1 text-gray-300">
               <li>最多可以猜 8 次，猜对即获胜</li>
               <li>不能重复猜测同一位车手</li>
+              <li>数值旁的 ↑ ↓ 表示目标值比你猜的更大或更小</li>
               <li>连胜纪录和最佳成绩会被记录</li>
               <li>点击"新游戏"可以随时开始下一局</li>
             </ul>
