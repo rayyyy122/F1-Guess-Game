@@ -1,6 +1,7 @@
 import type { GameStats } from '../types'
 
 const STATS_KEY = 'f1-guess-stats'
+const HELP_SEEN_KEY = 'f1-guess-help-seen'
 
 const defaultStats: GameStats = {
   totalGames: 0,
@@ -45,4 +46,20 @@ export function recordGameResult(won: boolean, guessCount: number): GameStats {
   }
   saveStats(newStats)
   return newStats
+}
+
+export function hasSeenHelp(): boolean {
+  try {
+    return localStorage.getItem(HELP_SEEN_KEY) === 'true'
+  } catch {
+    return false
+  }
+}
+
+export function markHelpSeen(): void {
+  try {
+    localStorage.setItem(HELP_SEEN_KEY, 'true')
+  } catch {
+    // localStorage 不可用时静默失败
+  }
 }

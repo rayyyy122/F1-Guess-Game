@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Fetch(domain:f1-guess-game-31fp.vercel.app)"
+    ]
+  }
+}

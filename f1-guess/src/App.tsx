@@ -1,4 +1,4 @@
-import { useMemo, useState, useCallback } from 'react'
+import { useMemo, useState, useCallback, useEffect } from 'react'
 import { useGame } from './hooks/useGame'
 import { useStats } from './hooks/useStats'
 import { Header } from './components/Header/Header'
@@ -6,10 +6,24 @@ import { SearchBox } from './components/SearchBox/SearchBox'
 import { GuessTable } from './components/GuessTable/GuessTable'
 import { GameStatusBanner } from './components/GameStatus'
 import { StatsModal } from './components/StatsModal/StatsModal'
+import { HelpModal } from './components/HelpModal/HelpModal'
+import { hasSeenHelp, markHelpSeen } from './utils/storage'
 
 function App() {
   const { recordWin } = useStats()
   const [isStatsOpen, setIsStatsOpen] = useState(false)
+  const [isHelpOpen, setIsHelpOpen] = useState(false)
+
+  useEffect(() => {
+    if (!hasSeenHelp()) {
+      setIsHelpOpen(true)
+    }
+  }, [])
+
+  const handleCloseHelp = useCallback(() => {
+    setIsHelpOpen(false)
+    markHelpSeen()
+  }, [])
 
   const handleWin = useCallback(
     (guessCount: number) => {
@@ -26,7 +40,11 @@ function App() {
 
   return (
     <div className="min-h-screen bg-f1-dark text-f1-text">
-      <Header onNewGame={resetGame} onShowStats={() => setIsStatsOpen(true)} />
+      <Header
+        onNewGame={resetGame}
+        onShowStats={() => setIsStatsOpen(true)}
+        onShowHelp={() => setIsHelpOpen(true)}
+      />
 
       <main className="max-w-6xl mx-auto px-4 py-8">
         <div className="text-center mb-8">
@@ -54,6 +72,7 @@ function App() {
       </main>
 
       <StatsModal isOpen={isStatsOpen} onClose={() => setIsStatsOpen(false)} />
+      <HelpModal isOpen={isHelpOpen} onClose={handleCloseHelp} />
     </div>
   )
 }
