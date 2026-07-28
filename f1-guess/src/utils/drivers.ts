@@ -12,13 +12,7 @@ export function searchDrivers(query: string, limit = 8): Driver[] {
   if (!query.trim()) return []
   const q = query.toLowerCase()
   return drivers
-    .filter(
-      (d) =>
-        d.name.toLowerCase().includes(q) ||
-        d.nameCn?.includes(q) ||
-        d.nationality.includes(q) ||
-        d.team.toLowerCase().includes(q)
-    )
+    .filter((d) => d.name.toLowerCase().includes(q) || d.nameCn?.includes(q))
     .slice(0, limit)
 }
 
