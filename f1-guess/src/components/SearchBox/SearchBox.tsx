@@ -84,8 +84,12 @@ export function SearchBox({ onSelect, disabled, guessedIds }: SearchBoxProps) {
                 idx === selectedIndex ? 'bg-f1-red' : 'hover:bg-gray-600'
               }`}
             >
-              <span className="font-medium">{driver.name}</span>
-              <span className="text-sm text-gray-400">{driver.team}</span>
+              <span className="font-medium">
+                {driver.nameCn ? `${driver.nameCn} (${driver.name})` : driver.name}
+              </span>
+              <span className="text-sm text-gray-400">
+                {driver.teamCn ? `${driver.teamCn} (${driver.team})` : driver.team}
+              </span>
             </li>
           ))}
         </ul>

@@ -4,6 +4,7 @@ export interface Driver {
   nameCn?: string
   nationality: string
   team: string
+  teamCn?: string
   teams: string[]
   number: number
   championships: number

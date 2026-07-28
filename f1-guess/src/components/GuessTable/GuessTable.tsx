@@ -32,7 +32,7 @@ function Cell({ value, feedback }: { value: string | number; feedback?: Feedback
   return (
     <td className="p-1">
       <div
-        className={`${colorClass} rounded px-2 py-2 text-sm font-medium text-center min-h-[2.5rem] flex items-center justify-center`}
+        className={`${colorClass} rounded px-2 py-2 text-xs font-medium text-center min-h-[2.5rem] flex items-center justify-center break-words leading-tight`}
       >
         {value}
       </div>
@@ -58,9 +58,22 @@ export function GuessTable({ guesses }: GuessTableProps) {
         <tbody>
           {guesses.map((guess) => (
             <tr key={guess.driver.id}>
-              <Cell value={guess.driver.name} />
+              <Cell
+                value={
+                  guess.driver.nameCn
+                    ? `${guess.driver.nameCn} (${guess.driver.name})`
+                    : guess.driver.name
+                }
+              />
               <Cell value={guess.driver.nationality} feedback={guess.feedback.nationality} />
-              <Cell value={guess.driver.team} feedback={guess.feedback.team} />
+              <Cell
+                value={
+                  guess.driver.teamCn
+                    ? `${guess.driver.teamCn} (${guess.driver.team})`
+                    : guess.driver.team
+                }
+                feedback={guess.feedback.team}
+              />
               <Cell value={guess.driver.number} feedback={guess.feedback.number} />
               <Cell value={guess.driver.championships} feedback={guess.feedback.championships} />
               <Cell value={guess.driver.podiums} feedback={guess.feedback.podiums} />

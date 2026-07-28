@@ -52,7 +52,10 @@ export function AnswerModal({ isOpen, driver, guessCount, onNewGame }: AnswerMod
           </div>
           <div className="space-y-1">
             <InfoRow label="国籍" value={driver.nationality} />
-            <InfoRow label="车队" value={driver.team} />
+            <InfoRow
+              label="车队"
+              value={driver.teamCn ? `${driver.teamCn} (${driver.team})` : driver.team}
+            />
             <InfoRow label="车号" value={driver.number} />
             <InfoRow label="世界冠军" value={`${driver.championships} 次`} />
             <InfoRow label="领奖台" value={`${driver.podiums} 次`} />
