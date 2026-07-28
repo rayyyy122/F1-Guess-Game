@@ -32,7 +32,7 @@ export interface Guess {
   feedback: GuessFeedback
 }
 
-export type GameStatus = 'playing' | 'won'
+export type GameStatus = 'playing' | 'won' | 'givenUp'
 
 export interface GameStats {
   totalGames: number

@@ -7,12 +7,16 @@ import { GuessTable } from './components/GuessTable/GuessTable'
 import { GameStatusBanner } from './components/GameStatus'
 import { StatsModal } from './components/StatsModal/StatsModal'
 import { HelpModal } from './components/HelpModal/HelpModal'
+import { ConfirmModal } from './components/ConfirmModal/ConfirmModal'
+import { AnswerModal } from './components/AnswerModal/AnswerModal'
 import { hasSeenHelp, markHelpSeen } from './utils/storage'
 
 function App() {
-  const { recordWin } = useStats()
+  const { recordWin, recordGiveUp } = useStats()
   const [isStatsOpen, setIsStatsOpen] = useState(false)
   const [isHelpOpen, setIsHelpOpen] = useState(false)
+  const [isGiveUpConfirmOpen, setIsGiveUpConfirmOpen] = useState(false)
+  const [isAnswerOpen, setIsAnswerOpen] = useState(false)
 
   useEffect(() => {
     if (!hasSeenHelp()) {
@@ -32,11 +36,25 @@ function App() {
     [recordWin]
   )
 
-  const { targetDriver, guesses, status, makeGuess, resetGame, guessCount } = useGame({
+  const handleGiveUp = useCallback(() => {
+    recordGiveUp()
+    setIsGiveUpConfirmOpen(false)
+    setIsAnswerOpen(true)
+  }, [recordGiveUp])
+
+  const { targetDriver, guesses, status, makeGuess, giveUp, resetGame, guessCount } = useGame({
     onWin: handleWin,
+    onGiveUp: handleGiveUp,
   })
 
   const guessedIds = useMemo(() => new Set(guesses.map((g) => g.driver.id)), [guesses])
+
+  const handleNewGameFromAnswer = useCallback(() => {
+    setIsAnswerOpen(false)
+    resetGame()
+  }, [resetGame])
+
+  const isPlaying = status === 'playing'
 
   return (
     <div className="min-h-screen bg-f1-dark text-f1-text">
@@ -61,7 +79,7 @@ function App() {
         />
 
         <div className="mb-8">
-          <SearchBox onSelect={makeGuess} disabled={status === 'won'} guessedIds={guessedIds} />
+          <SearchBox onSelect={makeGuess} disabled={!isPlaying} guessedIds={guessedIds} />
         </div>
 
         {guesses.length > 0 && (
@@ -69,10 +87,37 @@ function App() {
         )}
 
         <GuessTable guesses={guesses} />
+
+        {isPlaying && guesses.length > 0 && (
+          <div className="mt-8 text-center">
+            <button
+              onClick={() => setIsGiveUpConfirmOpen(true)}
+              className="px-6 py-2 text-gray-400 hover:text-f1-red border border-gray-600 hover:border-f1-red rounded-lg font-medium transition-colors"
+            >
+              放弃看答案
+            </button>
+          </div>
+        )}
       </main>
 
       <StatsModal isOpen={isStatsOpen} onClose={() => setIsStatsOpen(false)} />
       <HelpModal isOpen={isHelpOpen} onClose={handleCloseHelp} />
+      <ConfirmModal
+        isOpen={isGiveUpConfirmOpen}
+        title="确认放弃？"
+        message="放弃后将直接显示正确答案，并且当前连胜记录会被清零。确定要放弃吗？"
+        confirmText="确认放弃"
+        cancelText="继续猜"
+        danger
+        onConfirm={giveUp}
+        onCancel={() => setIsGiveUpConfirmOpen(false)}
+      />
+      <AnswerModal
+        isOpen={isAnswerOpen}
+        driver={targetDriver}
+        guessCount={guessCount}
+        onNewGame={handleNewGameFromAnswer}
+      />
     </div>
   )
 }

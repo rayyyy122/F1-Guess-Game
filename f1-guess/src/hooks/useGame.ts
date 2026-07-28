@@ -5,6 +5,7 @@ import { compareDrivers } from '../utils/compare'
 
 interface UseGameOptions {
   onWin?: (guessCount: number) => void
+  onGiveUp?: (guessCount: number) => void
 }
 
 export function useGame(options?: UseGameOptions) {
@@ -14,7 +15,7 @@ export function useGame(options?: UseGameOptions) {
 
   const makeGuess = useCallback(
     (driver: Driver) => {
-      if (status === 'won') return
+      if (status !== 'playing') return
       if (guesses.some((g) => g.driver.id === driver.id)) return
 
       const feedback = compareDrivers(driver, targetDriver)
@@ -30,6 +31,12 @@ export function useGame(options?: UseGameOptions) {
     [targetDriver, guesses, status, options]
   )
 
+  const giveUp = useCallback(() => {
+    if (status !== 'playing') return
+    setStatus('givenUp')
+    options?.onGiveUp?.(guesses.length)
+  }, [status, guesses.length, options])
+
   const resetGame = useCallback(() => {
     setTargetDriver((prev) => getRandomDriver(prev.id))
     setGuesses([])
@@ -41,6 +48,7 @@ export function useGame(options?: UseGameOptions) {
     guesses,
     status,
     makeGuess,
+    giveUp,
     resetGame,
     guessCount: guesses.length,
   }

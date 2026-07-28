@@ -14,12 +14,18 @@ export function useStats() {
     setStats(newStats)
   }, [])
 
+  const recordGiveUp = useCallback(() => {
+    const newStats = recordGameResult(false, 0)
+    setStats(newStats)
+  }, [])
+
   const winRate = stats.totalGames > 0 ? Math.round((stats.wins / stats.totalGames) * 100) : 0
   const averageGuesses = stats.wins > 0 ? (stats.totalGuesses / stats.wins).toFixed(1) : '-'
 
   return {
     stats,
     recordWin,
+    recordGiveUp,
     winRate,
     averageGuesses,
   }
