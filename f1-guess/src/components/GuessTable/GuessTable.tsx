@@ -9,9 +9,9 @@ const columns = [
   { key: 'nationality', label: '国籍' },
   { key: 'team', label: '车队' },
   { key: 'number', label: '车号' },
-  { key: 'championships', label: '冠军' },
+  { key: 'championships', label: '世界冠军' },
   { key: 'podiums', label: '领奖台' },
-  { key: 'wins', label: '胜场' },
+  { key: 'wins', label: '分站冠军' },
   { key: 'debutYear', label: '首秀' },
   { key: 'active', label: '现役' },
 ] as const

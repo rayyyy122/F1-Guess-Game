@@ -70,7 +70,7 @@ export function SearchBox({ onSelect, disabled, guessedIds }: SearchBoxProps) {
         onChange={(e) => setQuery(e.target.value)}
         onKeyDown={handleKeyDown}
         disabled={disabled}
-        placeholder="搜索 F1 车手..."
+        placeholder="输入车手名字(中文或英文)..."
         className="w-full px-4 py-3 rounded-lg bg-f1-gray text-f1-text placeholder-gray-400 border-2 border-transparent focus:border-f1-red focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
       />
       {isOpen && (

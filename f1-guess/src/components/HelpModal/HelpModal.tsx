@@ -9,9 +9,9 @@ const rules = [
   { label: '国籍', correct: '相同', close: '-', wrong: '不同' },
   { label: '车队', correct: '相同', close: '曾效力同一车队', wrong: '不同' },
   { label: '车号', correct: '相同', close: '-', wrong: '不同' },
-  { label: '冠军数', correct: '相同', close: '相差 ±1', wrong: '相差 >1' },
+  { label: '世界冠军', correct: '相同', close: '相差 ±1', wrong: '相差 >1' },
   { label: '领奖台', correct: '相同', close: '差值 ≤10', wrong: '差值 >10' },
-  { label: '胜场', correct: '相同', close: '差值 ≤5', wrong: '差值 >5' },
+  { label: '分站冠军', correct: '相同', close: '差值 ≤5', wrong: '差值 >5' },
   { label: '首秀年份', correct: '相同', close: '相差 ±1 年', wrong: '相差 >1 年' },
   { label: '现役状态', correct: '相同', close: '-', wrong: '不同' },
 ]
