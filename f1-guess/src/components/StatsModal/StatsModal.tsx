@@ -1,5 +1,6 @@
-import { useEffect } from 'react'
-import { useStats } from '../../hooks/useStats'
+import { useEffect, useState } from 'react'
+import type { GameStats } from '../../types'
+import { loadStats } from '../../utils/storage'
 
 interface StatsModalProps {
   isOpen: boolean
@@ -16,7 +17,13 @@ function StatItem({ label, value }: { label: string; value: string | number }) {
 }
 
 export function StatsModal({ isOpen, onClose }: StatsModalProps) {
-  const { stats, winRate, averageGuesses } = useStats()
+  const [stats, setStats] = useState<GameStats>(loadStats)
+
+  useEffect(() => {
+    if (isOpen) {
+      setStats(loadStats())
+    }
+  }, [isOpen])
 
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
@@ -29,6 +36,9 @@ export function StatsModal({ isOpen, onClose }: StatsModalProps) {
   }, [isOpen, onClose])
 
   if (!isOpen) return null
+
+  const winRate = stats.totalGames > 0 ? Math.round((stats.wins / stats.totalGames) * 100) : 0
+  const averageGuesses = stats.wins > 0 ? (stats.totalGuesses / stats.wins).toFixed(1) : '-'
 
   return (
     <div
