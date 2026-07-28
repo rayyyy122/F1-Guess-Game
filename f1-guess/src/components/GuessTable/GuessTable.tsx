@@ -13,8 +13,14 @@ const columns = [
   { key: 'podiums', label: '领奖台' },
   { key: 'wins', label: '分站冠军' },
   { key: 'debutYear', label: '首秀' },
-  { key: 'active', label: '现役' },
+  { key: 'status', label: '状态' },
 ] as const
+
+const statusText: Record<string, string> = {
+  active: '现役',
+  reserve: '储备',
+  retired: '退役',
+}
 
 function getCellColor(feedback: FeedbackType): string {
   switch (feedback) {
@@ -99,8 +105,8 @@ export function GuessTable({ guesses }: GuessTableProps) {
               <NumericCell value={guess.driver.wins} feedback={guess.feedback.wins} />
               <NumericCell value={guess.driver.debutYear} feedback={guess.feedback.debutYear} />
               <Cell
-                value={guess.driver.active ? '现役' : '退役'}
-                feedback={guess.feedback.active}
+                value={statusText[guess.driver.status] ?? guess.driver.status}
+                feedback={guess.feedback.status}
               />
             </tr>
           ))}

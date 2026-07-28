@@ -1,3 +1,5 @@
+export type DriverStatus = 'active' | 'reserve' | 'retired'
+
 export interface Driver {
   id: string
   name: string
@@ -11,7 +13,7 @@ export interface Driver {
   podiums: number
   wins: number
   debutYear: number
-  active: boolean
+  status: DriverStatus
   country: string
 }
 
@@ -32,7 +34,7 @@ export interface GuessFeedback {
   podiums: NumericFeedback
   wins: NumericFeedback
   debutYear: NumericFeedback
-  active: FeedbackType
+  status: FeedbackType
 }
 
 export interface Guess {

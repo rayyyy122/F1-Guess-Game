@@ -6,13 +6,15 @@
     "nationality": "意大利",
     "team": "Mercedes",
     "teamCn": "梅赛德斯",
-    "teams": ["Mercedes"],
+    "teams": [
+      "Mercedes"
+    ],
     "number": 12,
     "championships": 0,
     "podiums": 12,
     "wins": 6,
     "debutYear": 2025,
-    "active": true,
+    "status": "active",
     "country": "IT"
   },
   {
@@ -22,13 +24,17 @@
     "nationality": "英国",
     "team": "Ferrari",
     "teamCn": "法拉利",
-    "teams": ["McLaren", "Mercedes", "Ferrari"],
+    "teams": [
+      "McLaren",
+      "Mercedes",
+      "Ferrari"
+    ],
     "number": 44,
     "championships": 7,
     "podiums": 207,
     "wins": 106,
     "debutYear": 2007,
-    "active": true,
+    "status": "active",
     "country": "GB"
   },
   {
@@ -38,13 +44,16 @@
     "nationality": "英国",
     "team": "Mercedes",
     "teamCn": "梅赛德斯",
-    "teams": ["Williams", "Mercedes"],
+    "teams": [
+      "Williams",
+      "Mercedes"
+    ],
     "number": 63,
     "championships": 0,
     "podiums": 29,
     "wins": 7,
     "debutYear": 2019,
-    "active": true,
+    "status": "active",
     "country": "GB"
   },
   {
@@ -54,13 +63,16 @@
     "nationality": "摩纳哥",
     "team": "Ferrari",
     "teamCn": "法拉利",
-    "teams": ["Sauber", "Ferrari"],
+    "teams": [
+      "Sauber",
+      "Ferrari"
+    ],
     "number": 16,
     "championships": 0,
     "podiums": 54,
     "wins": 9,
     "debutYear": 2018,
-    "active": true,
+    "status": "active",
     "country": "MC"
   },
   {
@@ -70,13 +82,15 @@
     "nationality": "英国",
     "team": "McLaren",
     "teamCn": "迈凯伦",
-    "teams": ["McLaren"],
+    "teams": [
+      "McLaren"
+    ],
     "number": 1,
     "championships": 1,
     "podiums": 47,
     "wins": 12,
     "debutYear": 2019,
-    "active": true,
+    "status": "active",
     "country": "GB"
   },
   {
@@ -86,13 +100,16 @@
     "nationality": "荷兰",
     "team": "Red Bull Racing",
     "teamCn": "红牛",
-    "teams": ["Toro Rosso", "Red Bull Racing"],
+    "teams": [
+      "Toro Rosso",
+      "Red Bull Racing"
+    ],
     "number": 3,
     "championships": 4,
     "podiums": 131,
     "wins": 71,
     "debutYear": 2015,
-    "active": true,
+    "status": "active",
     "country": "NL"
   },
   {
@@ -102,13 +119,15 @@
     "nationality": "澳大利亚",
     "team": "McLaren",
     "teamCn": "迈凯伦",
-    "teams": ["McLaren"],
+    "teams": [
+      "McLaren"
+    ],
     "number": 81,
     "championships": 0,
     "podiums": 28,
     "wins": 9,
     "debutYear": 2023,
-    "active": true,
+    "status": "active",
     "country": "AU"
   },
   {
@@ -118,13 +137,20 @@
     "nationality": "西班牙",
     "team": "Aston Martin",
     "teamCn": "阿斯顿·马丁",
-    "teams": ["Minardi", "Renault", "McLaren", "Ferrari", "Alpine", "Aston Martin"],
+    "teams": [
+      "Minardi",
+      "Renault",
+      "McLaren",
+      "Ferrari",
+      "Alpine",
+      "Aston Martin"
+    ],
     "number": 14,
     "championships": 2,
     "podiums": 106,
     "wins": 32,
     "debutYear": 2001,
-    "active": true,
+    "status": "active",
     "country": "ES"
   },
   {
@@ -134,13 +160,19 @@
     "nationality": "西班牙",
     "team": "Williams",
     "teamCn": "威廉姆斯",
-    "teams": ["Toro Rosso", "Renault", "McLaren", "Ferrari", "Williams"],
+    "teams": [
+      "Toro Rosso",
+      "Renault",
+      "McLaren",
+      "Ferrari",
+      "Williams"
+    ],
     "number": 55,
     "championships": 0,
     "podiums": 29,
     "wins": 4,
     "debutYear": 2015,
-    "active": true,
+    "status": "active",
     "country": "ES"
   },
   {
@@ -150,13 +182,17 @@
     "nationality": "泰国",
     "team": "Williams",
     "teamCn": "威廉姆斯",
-    "teams": ["Toro Rosso", "Red Bull Racing", "Williams"],
+    "teams": [
+      "Toro Rosso",
+      "Red Bull Racing",
+      "Williams"
+    ],
     "number": 23,
     "championships": 0,
     "podiums": 2,
     "wins": 0,
     "debutYear": 2019,
-    "active": true,
+    "status": "active",
     "country": "TH"
   },
   {
@@ -166,13 +202,18 @@
     "nationality": "法国",
     "team": "Alpine",
     "teamCn": "阿尔派",
-    "teams": ["Toro Rosso", "Red Bull Racing", "AlphaTauri", "Alpine"],
+    "teams": [
+      "Toro Rosso",
+      "Red Bull Racing",
+      "AlphaTauri",
+      "Alpine"
+    ],
     "number": 10,
     "championships": 0,
     "podiums": 6,
     "wins": 1,
     "debutYear": 2017,
-    "active": true,
+    "status": "active",
     "country": "FR"
   },
   {
@@ -182,13 +223,16 @@
     "nationality": "阿根廷",
     "team": "Alpine",
     "teamCn": "阿尔派",
-    "teams": ["Williams", "Alpine"],
+    "teams": [
+      "Williams",
+      "Alpine"
+    ],
     "number": 43,
     "championships": 0,
     "podiums": 0,
     "wins": 0,
     "debutYear": 2024,
-    "active": true,
+    "status": "active",
     "country": "AR"
   },
   {
@@ -198,13 +242,17 @@
     "nationality": "加拿大",
     "team": "Aston Martin",
     "teamCn": "阿斯顿·马丁",
-    "teams": ["Williams", "Racing Point", "Aston Martin"],
+    "teams": [
+      "Williams",
+      "Racing Point",
+      "Aston Martin"
+    ],
     "number": 18,
     "championships": 0,
     "podiums": 3,
     "wins": 0,
     "debutYear": 2017,
-    "active": true,
+    "status": "active",
     "country": "CA"
   },
   {
@@ -214,13 +262,16 @@
     "nationality": "法国",
     "team": "Red Bull Racing",
     "teamCn": "红牛",
-    "teams": ["RB", "Red Bull Racing"],
+    "teams": [
+      "RB",
+      "Red Bull Racing"
+    ],
     "number": 6,
     "championships": 0,
     "podiums": 1,
     "wins": 0,
     "debutYear": 2025,
-    "active": true,
+    "status": "active",
     "country": "FR"
   },
   {
@@ -230,13 +281,18 @@
     "nationality": "新西兰",
     "team": "Racing Bulls",
     "teamCn": "红牛二队",
-    "teams": ["AlphaTauri", "RB", "Red Bull Racing", "Racing Bulls"],
+    "teams": [
+      "AlphaTauri",
+      "RB",
+      "Red Bull Racing",
+      "Racing Bulls"
+    ],
     "number": 30,
     "championships": 0,
     "podiums": 0,
     "wins": 0,
     "debutYear": 2023,
-    "active": true,
+    "status": "active",
     "country": "NZ"
   },
   {
@@ -246,13 +302,15 @@
     "nationality": "英国",
     "team": "Racing Bulls",
     "teamCn": "红牛二队",
-    "teams": ["Racing Bulls"],
+    "teams": [
+      "Racing Bulls"
+    ],
     "number": 41,
     "championships": 0,
     "podiums": 0,
     "wins": 0,
     "debutYear": 2026,
-    "active": true,
+    "status": "active",
     "country": "GB"
   },
   {
@@ -262,13 +320,22 @@
     "nationality": "德国",
     "team": "Audi",
     "teamCn": "奥迪",
-    "teams": ["Williams", "Force India", "Sauber", "Renault", "Racing Point", "Aston Martin", "Haas", "Audi"],
+    "teams": [
+      "Williams",
+      "Force India",
+      "Sauber",
+      "Renault",
+      "Racing Point",
+      "Aston Martin",
+      "Haas",
+      "Audi"
+    ],
     "number": 27,
     "championships": 0,
     "podiums": 1,
     "wins": 0,
     "debutYear": 2010,
-    "active": true,
+    "status": "active",
     "country": "DE"
   },
   {
@@ -278,13 +345,16 @@
     "nationality": "巴西",
     "team": "Audi",
     "teamCn": "奥迪",
-    "teams": ["Sauber", "Audi"],
+    "teams": [
+      "Sauber",
+      "Audi"
+    ],
     "number": 5,
     "championships": 0,
     "podiums": 0,
     "wins": 0,
     "debutYear": 2025,
-    "active": true,
+    "status": "active",
     "country": "BR"
   },
   {
@@ -294,13 +364,16 @@
     "nationality": "英国",
     "team": "Haas",
     "teamCn": "哈斯",
-    "teams": ["Ferrari", "Haas"],
+    "teams": [
+      "Ferrari",
+      "Haas"
+    ],
     "number": 87,
     "championships": 0,
     "podiums": 0,
     "wins": 0,
     "debutYear": 2024,
-    "active": true,
+    "status": "active",
     "country": "GB"
   },
   {
@@ -310,13 +383,19 @@
     "nationality": "法国",
     "team": "Haas",
     "teamCn": "哈斯",
-    "teams": ["Manor", "Force India", "Renault", "Alpine", "Haas"],
+    "teams": [
+      "Manor",
+      "Force India",
+      "Renault",
+      "Alpine",
+      "Haas"
+    ],
     "number": 31,
     "championships": 0,
     "podiums": 4,
     "wins": 1,
     "debutYear": 2016,
-    "active": true,
+    "status": "active",
     "country": "FR"
   },
   {
@@ -326,13 +405,20 @@
     "nationality": "墨西哥",
     "team": "Cadillac",
     "teamCn": "凯迪拉克",
-    "teams": ["Sauber", "McLaren", "Force India", "Racing Point", "Red Bull Racing", "Cadillac"],
+    "teams": [
+      "Sauber",
+      "McLaren",
+      "Force India",
+      "Racing Point",
+      "Red Bull Racing",
+      "Cadillac"
+    ],
     "number": 11,
     "championships": 0,
     "podiums": 39,
     "wins": 6,
     "debutYear": 2011,
-    "active": true,
+    "status": "active",
     "country": "MX"
   },
   {
@@ -342,13 +428,19 @@
     "nationality": "芬兰",
     "team": "Cadillac",
     "teamCn": "凯迪拉克",
-    "teams": ["Williams", "Mercedes", "Alfa Romeo", "Sauber", "Cadillac"],
+    "teams": [
+      "Williams",
+      "Mercedes",
+      "Alfa Romeo",
+      "Sauber",
+      "Cadillac"
+    ],
     "number": 77,
     "championships": 0,
     "podiums": 67,
     "wins": 10,
     "debutYear": 2013,
-    "active": true,
+    "status": "active",
     "country": "FI"
   },
   {
@@ -358,13 +450,18 @@
     "nationality": "德国",
     "team": "Ferrari",
     "teamCn": "法拉利",
-    "teams": ["Jordan", "Benetton", "Ferrari", "Mercedes"],
+    "teams": [
+      "Jordan",
+      "Benetton",
+      "Ferrari",
+      "Mercedes"
+    ],
     "number": 1,
     "championships": 7,
     "podiums": 155,
     "wins": 91,
     "debutYear": 1991,
-    "active": false,
+    "status": "retired",
     "country": "DE"
   },
   {
@@ -374,13 +471,19 @@
     "nationality": "德国",
     "team": "Red Bull Racing",
     "teamCn": "红牛",
-    "teams": ["BMW Sauber", "Toro Rosso", "Red Bull Racing", "Ferrari", "Aston Martin"],
+    "teams": [
+      "BMW Sauber",
+      "Toro Rosso",
+      "Red Bull Racing",
+      "Ferrari",
+      "Aston Martin"
+    ],
     "number": 5,
     "championships": 4,
     "podiums": 122,
     "wins": 53,
     "debutYear": 2007,
-    "active": false,
+    "status": "retired",
     "country": "DE"
   },
   {
@@ -390,13 +493,19 @@
     "nationality": "芬兰",
     "team": "Ferrari",
     "teamCn": "法拉利",
-    "teams": ["Sauber", "McLaren", "Ferrari", "Lotus", "Alfa Romeo"],
+    "teams": [
+      "Sauber",
+      "McLaren",
+      "Ferrari",
+      "Lotus",
+      "Alfa Romeo"
+    ],
     "number": 7,
     "championships": 1,
     "podiums": 103,
     "wins": 21,
     "debutYear": 2001,
-    "active": false,
+    "status": "retired",
     "country": "FI"
   },
   {
@@ -406,13 +515,18 @@
     "nationality": "巴西",
     "team": "McLaren",
     "teamCn": "迈凯伦",
-    "teams": ["Toleman", "Lotus", "McLaren", "Williams"],
+    "teams": [
+      "Toleman",
+      "Lotus",
+      "McLaren",
+      "Williams"
+    ],
     "number": 1,
     "championships": 3,
     "podiums": 80,
     "wins": 41,
     "debutYear": 1984,
-    "active": false,
+    "status": "retired",
     "country": "BR"
   },
   {
@@ -422,13 +536,18 @@
     "nationality": "法国",
     "team": "McLaren",
     "teamCn": "迈凯伦",
-    "teams": ["Renault", "McLaren", "Ferrari", "Williams"],
+    "teams": [
+      "Renault",
+      "McLaren",
+      "Ferrari",
+      "Williams"
+    ],
     "number": 1,
     "championships": 4,
     "podiums": 106,
     "wins": 51,
     "debutYear": 1980,
-    "active": false,
+    "status": "retired",
     "country": "FR"
   },
   {
@@ -438,13 +557,19 @@
     "nationality": "奥地利",
     "team": "Ferrari",
     "teamCn": "法拉利",
-    "teams": ["March", "BRM", "Ferrari", "Brabham", "McLaren"],
+    "teams": [
+      "March",
+      "BRM",
+      "Ferrari",
+      "Brabham",
+      "McLaren"
+    ],
     "number": 1,
     "championships": 3,
     "podiums": 54,
     "wins": 25,
     "debutYear": 1971,
-    "active": false,
+    "status": "retired",
     "country": "AT"
   },
   {
@@ -454,13 +579,18 @@
     "nationality": "阿根廷",
     "team": "Mercedes",
     "teamCn": "梅赛德斯",
-    "teams": ["Alfa Romeo", "Maserati", "Mercedes", "Ferrari"],
+    "teams": [
+      "Alfa Romeo",
+      "Maserati",
+      "Mercedes",
+      "Ferrari"
+    ],
     "number": 1,
     "championships": 5,
     "podiums": 35,
     "wins": 24,
     "debutYear": 1950,
-    "active": false,
+    "status": "retired",
     "country": "AR"
   },
   {
@@ -470,13 +600,15 @@
     "nationality": "英国",
     "team": "Lotus",
     "teamCn": "莲花",
-    "teams": ["Lotus"],
+    "teams": [
+      "Lotus"
+    ],
     "number": 1,
     "championships": 2,
     "podiums": 32,
     "wins": 25,
     "debutYear": 1960,
-    "active": false,
+    "status": "retired",
     "country": "GB"
   },
   {
@@ -486,13 +618,17 @@
     "nationality": "英国",
     "team": "Tyrrell",
     "teamCn": "泰瑞尔",
-    "teams": ["BRM", "Matra", "Tyrrell"],
+    "teams": [
+      "BRM",
+      "Matra",
+      "Tyrrell"
+    ],
     "number": 1,
     "championships": 3,
     "podiums": 43,
     "wins": 27,
     "debutYear": 1965,
-    "active": false,
+    "status": "retired",
     "country": "GB"
   },
   {
@@ -502,13 +638,20 @@
     "nationality": "巴西",
     "team": "Brabham",
     "teamCn": "布拉汉姆",
-    "teams": ["Ensign", "McLaren", "Brabham", "Williams", "Lotus", "Benetton"],
+    "teams": [
+      "Ensign",
+      "McLaren",
+      "Brabham",
+      "Williams",
+      "Lotus",
+      "Benetton"
+    ],
     "number": 1,
     "championships": 3,
     "podiums": 60,
     "wins": 23,
     "debutYear": 1978,
-    "active": false,
+    "status": "retired",
     "country": "BR"
   },
   {
@@ -518,13 +661,18 @@
     "nationality": "英国",
     "team": "Williams",
     "teamCn": "威廉姆斯",
-    "teams": ["Lotus", "Williams", "Ferrari", "McLaren"],
+    "teams": [
+      "Lotus",
+      "Williams",
+      "Ferrari",
+      "McLaren"
+    ],
     "number": 5,
     "championships": 1,
     "podiums": 59,
     "wins": 31,
     "debutYear": 1980,
-    "active": false,
+    "status": "retired",
     "country": "GB"
   },
   {
@@ -534,13 +682,18 @@
     "nationality": "英国",
     "team": "Williams",
     "teamCn": "威廉姆斯",
-    "teams": ["Brabham", "Williams", "Arrows", "Jordan"],
+    "teams": [
+      "Brabham",
+      "Williams",
+      "Arrows",
+      "Jordan"
+    ],
     "number": 0,
     "championships": 1,
     "podiums": 42,
     "wins": 22,
     "debutYear": 1992,
-    "active": false,
+    "status": "retired",
     "country": "GB"
   },
   {
@@ -550,13 +703,16 @@
     "nationality": "芬兰",
     "team": "McLaren",
     "teamCn": "迈凯伦",
-    "teams": ["Lotus", "McLaren"],
+    "teams": [
+      "Lotus",
+      "McLaren"
+    ],
     "number": 1,
     "championships": 2,
     "podiums": 51,
     "wins": 20,
     "debutYear": 1991,
-    "active": false,
+    "status": "retired",
     "country": "FI"
   },
   {
@@ -566,13 +722,21 @@
     "nationality": "英国",
     "team": "Brawn",
     "teamCn": "布朗",
-    "teams": ["Williams", "Benetton", "Renault", "BAR", "Honda", "Brawn", "McLaren"],
+    "teams": [
+      "Williams",
+      "Benetton",
+      "Renault",
+      "BAR",
+      "Honda",
+      "Brawn",
+      "McLaren"
+    ],
     "number": 22,
     "championships": 1,
     "podiums": 50,
     "wins": 15,
     "debutYear": 2000,
-    "active": false,
+    "status": "retired",
     "country": "GB"
   },
   {
@@ -582,13 +746,19 @@
     "nationality": "加拿大",
     "team": "Williams",
     "teamCn": "威廉姆斯",
-    "teams": ["Williams", "BAR", "Renault", "Sauber", "BMW Sauber"],
+    "teams": [
+      "Williams",
+      "BAR",
+      "Renault",
+      "Sauber",
+      "BMW Sauber"
+    ],
     "number": 1,
     "championships": 1,
     "podiums": 23,
     "wins": 11,
     "debutYear": 1996,
-    "active": false,
+    "status": "retired",
     "country": "CA"
   },
   {
@@ -598,13 +768,20 @@
     "nationality": "美国",
     "team": "Lotus",
     "teamCn": "莲花",
-    "teams": ["Lotus", "March", "Ferrari", "Parnelli", "Alfa Romeo", "Williams"],
+    "teams": [
+      "Lotus",
+      "March",
+      "Ferrari",
+      "Parnelli",
+      "Alfa Romeo",
+      "Williams"
+    ],
     "number": 1,
     "championships": 1,
     "podiums": 19,
     "wins": 12,
     "debutYear": 1968,
-    "active": false,
+    "status": "retired",
     "country": "US"
   },
   {
@@ -614,13 +791,17 @@
     "nationality": "巴西",
     "team": "McLaren",
     "teamCn": "迈凯伦",
-    "teams": ["Lotus", "McLaren", "Fittipaldi"],
+    "teams": [
+      "Lotus",
+      "McLaren",
+      "Fittipaldi"
+    ],
     "number": 1,
     "championships": 2,
     "podiums": 35,
     "wins": 14,
     "debutYear": 1970,
-    "active": false,
+    "status": "retired",
     "country": "BR"
   },
   {
@@ -630,13 +811,19 @@
     "nationality": "英国",
     "team": "BRM",
     "teamCn": "BRM",
-    "teams": ["Lotus", "BRM", "Brabham", "Hill", "Shadow"],
+    "teams": [
+      "Lotus",
+      "BRM",
+      "Brabham",
+      "Hill",
+      "Shadow"
+    ],
     "number": 1,
     "championships": 2,
     "podiums": 36,
     "wins": 14,
     "debutYear": 1958,
-    "active": false,
+    "status": "retired",
     "country": "GB"
   },
   {
@@ -646,13 +833,17 @@
     "nationality": "英国",
     "team": "McLaren",
     "teamCn": "迈凯伦",
-    "teams": ["Hesketh", "McLaren", "Wolf"],
+    "teams": [
+      "Hesketh",
+      "McLaren",
+      "Wolf"
+    ],
     "number": 11,
     "championships": 1,
     "podiums": 23,
     "wins": 10,
     "debutYear": 1973,
-    "active": false,
+    "status": "retired",
     "country": "GB"
   },
   {
@@ -662,13 +853,16 @@
     "nationality": "加拿大",
     "team": "Ferrari",
     "teamCn": "法拉利",
-    "teams": ["McLaren", "Ferrari"],
+    "teams": [
+      "McLaren",
+      "Ferrari"
+    ],
     "number": 27,
     "championships": 0,
     "podiums": 13,
     "wins": 6,
     "debutYear": 1977,
-    "active": false,
+    "status": "retired",
     "country": "CA"
   },
   {
@@ -678,13 +872,21 @@
     "nationality": "澳大利亚",
     "team": "Red Bull Racing",
     "teamCn": "红牛",
-    "teams": ["HRT", "Toro Rosso", "Red Bull Racing", "Renault", "McLaren", "AlphaTauri", "RB"],
+    "teams": [
+      "HRT",
+      "Toro Rosso",
+      "Red Bull Racing",
+      "Renault",
+      "McLaren",
+      "AlphaTauri",
+      "RB"
+    ],
     "number": 3,
     "championships": 0,
     "podiums": 32,
     "wins": 8,
     "debutYear": 2011,
-    "active": false,
+    "status": "reserve",
     "country": "AU"
   },
   {
@@ -694,13 +896,16 @@
     "nationality": "德国",
     "team": "Mercedes",
     "teamCn": "梅赛德斯",
-    "teams": ["Williams", "Mercedes"],
+    "teams": [
+      "Williams",
+      "Mercedes"
+    ],
     "number": 6,
     "championships": 1,
     "podiums": 57,
     "wins": 23,
     "debutYear": 2006,
-    "active": false,
+    "status": "retired",
     "country": "DE"
   },
   {
@@ -710,13 +915,18 @@
     "nationality": "南非",
     "team": "Ferrari",
     "teamCn": "法拉利",
-    "teams": ["McLaren", "Tyrrell", "Wolf", "Ferrari"],
+    "teams": [
+      "McLaren",
+      "Tyrrell",
+      "Wolf",
+      "Ferrari"
+    ],
     "number": 1,
     "championships": 1,
     "podiums": 33,
     "wins": 10,
     "debutYear": 1972,
-    "active": false,
+    "status": "retired",
     "country": "ZA"
   },
   {
@@ -726,13 +936,21 @@
     "nationality": "澳大利亚",
     "team": "Williams",
     "teamCn": "威廉姆斯",
-    "teams": ["Hesketh", "Hill", "Surtees", "Shadow", "Williams", "Arrows", "Lola"],
+    "teams": [
+      "Hesketh",
+      "Hill",
+      "Surtees",
+      "Shadow",
+      "Williams",
+      "Arrows",
+      "Lola"
+    ],
     "number": 1,
     "championships": 1,
     "podiums": 24,
     "wins": 12,
     "debutYear": 1975,
-    "active": false,
+    "status": "retired",
     "country": "AU"
   },
   {
@@ -742,13 +960,20 @@
     "nationality": "芬兰",
     "team": "Williams",
     "teamCn": "威廉姆斯",
-    "teams": ["Theodore", "ATS", "Wolf", "Fittipaldi", "Williams", "McLaren"],
+    "teams": [
+      "Theodore",
+      "ATS",
+      "Wolf",
+      "Fittipaldi",
+      "Williams",
+      "McLaren"
+    ],
     "number": 1,
     "championships": 1,
     "podiums": 17,
     "wins": 5,
     "debutYear": 1978,
-    "active": false,
+    "status": "retired",
     "country": "FI"
   },
   {
@@ -758,13 +983,16 @@
     "nationality": "中国",
     "team": "Sauber",
     "teamCn": "索伯",
-    "teams": ["Alfa Romeo", "Sauber"],
+    "teams": [
+      "Alfa Romeo",
+      "Sauber"
+    ],
     "number": 24,
     "championships": 0,
     "podiums": 0,
     "wins": 0,
     "debutYear": 2022,
-    "active": false,
+    "status": "reserve",
     "country": "CN"
   },
   {
@@ -774,13 +1002,16 @@
     "nationality": "日本",
     "team": "RB",
     "teamCn": "RB",
-    "teams": ["AlphaTauri", "RB"],
+    "teams": [
+      "AlphaTauri",
+      "RB"
+    ],
     "number": 22,
     "championships": 0,
     "podiums": 0,
     "wins": 0,
     "debutYear": 2021,
-    "active": false,
+    "status": "reserve",
     "country": "JP"
   }
 ]

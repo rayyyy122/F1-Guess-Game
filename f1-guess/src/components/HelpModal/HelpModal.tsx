@@ -13,7 +13,7 @@ const rules = [
   { label: '领奖台', correct: '相同', close: '相差 ≤1', wrong: '相差 >1' },
   { label: '分站冠军', correct: '相同', close: '相差 ≤1', wrong: '相差 >1' },
   { label: '首秀年份', correct: '相同', close: '相差 ≤1 年', wrong: '相差 >1 年' },
-  { label: '现役状态', correct: '相同', close: '-', wrong: '不同' },
+  { label: '状态', correct: '相同 (现役/储备/退役)', close: '-', wrong: '不同' },
 ]
 
 export function HelpModal({ isOpen, onClose }: HelpModalProps) {

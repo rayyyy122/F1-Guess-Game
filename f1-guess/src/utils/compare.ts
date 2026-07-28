@@ -54,6 +54,6 @@ export function compareDrivers(guess: Driver, target: Driver): GuessFeedback {
     podiums: compareNumeric(guess.podiums, target.podiums, 1),
     wins: compareNumeric(guess.wins, target.wins, 1),
     debutYear: compareNumeric(guess.debutYear, target.debutYear, 1),
-    active: guess.active === target.active ? 'correct' : 'wrong',
+    status: guess.status === target.status ? 'correct' : 'wrong',
   }
 }

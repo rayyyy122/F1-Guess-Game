@@ -8,6 +8,12 @@ interface AnswerModalProps {
   onNewGame: () => void
 }
 
+const statusText: Record<string, string> = {
+  active: '现役',
+  reserve: '储备车手',
+  retired: '退役',
+}
+
 function InfoRow({ label, value }: { label: string; value: string | number }) {
   return (
     <div className="flex justify-between py-2 border-b border-gray-700 last:border-b-0">
@@ -61,7 +67,7 @@ export function AnswerModal({ isOpen, driver, guessCount, onNewGame }: AnswerMod
             <InfoRow label="领奖台" value={`${driver.podiums} 次`} />
             <InfoRow label="分站冠军" value={`${driver.wins} 次`} />
             <InfoRow label="首秀年份" value={driver.debutYear} />
-            <InfoRow label="状态" value={driver.active ? '现役' : '退役'} />
+            <InfoRow label="状态" value={statusText[driver.status] ?? driver.status} />
           </div>
         </div>
 

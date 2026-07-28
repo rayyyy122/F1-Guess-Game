@@ -13,12 +13,12 @@ function generateShareText(guesses: Guess[], guessCount: number): string {
     const row = [
       guess.feedback.nationality,
       guess.feedback.team,
-      guess.feedback.number,
-      guess.feedback.championships,
-      guess.feedback.podiums,
-      guess.feedback.wins,
-      guess.feedback.debutYear,
-      guess.feedback.active,
+      guess.feedback.number.type,
+      guess.feedback.championships.type,
+      guess.feedback.podiums.type,
+      guess.feedback.wins.type,
+      guess.feedback.debutYear.type,
+      guess.feedback.status,
     ]
       .map((f) => (f === 'correct' ? '🟩' : f === 'close' ? '🟨' : '⬜'))
       .join('')
