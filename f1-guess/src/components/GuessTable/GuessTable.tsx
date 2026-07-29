@@ -2,6 +2,7 @@ import type { Guess, FeedbackType, NumericFeedback } from '../../types'
 
 interface GuessTableProps {
   guesses: Guess[]
+  targetDriverId?: string
 }
 
 const columns = [
@@ -62,7 +63,7 @@ function NumericCell({ value, feedback }: { value: number; feedback: NumericFeed
   )
 }
 
-export function GuessTable({ guesses }: GuessTableProps) {
+export function GuessTable({ guesses, targetDriverId }: GuessTableProps) {
   if (guesses.length === 0) return null
 
   return (
@@ -86,6 +87,7 @@ export function GuessTable({ guesses }: GuessTableProps) {
                     ? `${guess.driver.nameCn} (${guess.driver.name})`
                     : guess.driver.name
                 }
+                feedback={guess.driver.id === targetDriverId ? 'correct' : undefined}
               />
               <Cell value={guess.driver.nationality} feedback={guess.feedback.nationality} />
               <Cell

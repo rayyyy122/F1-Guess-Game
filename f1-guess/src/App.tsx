@@ -112,7 +112,7 @@ function App() {
           </div>
         )}
 
-        <GuessTable guesses={guesses} />
+        <GuessTable guesses={guesses} targetDriverId={targetDriver.id} />
 
         {isPlaying && guesses.length > 0 && (
           <div className="mt-8 text-center">
