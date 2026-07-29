@@ -111,6 +111,23 @@ export function HelpModal({ isOpen, onClose }: HelpModalProps) {
               <li>点击"新游戏"可以随时开始下一局</li>
             </ul>
           </section>
+
+          <section>
+            <h3 className="text-lg font-bold mb-2 text-f1-red">车队说明</h3>
+            <ul className="list-disc list-inside space-y-1 text-gray-300">
+              <li>
+                <strong>现役车手</strong>：显示当前效力车队
+              </li>
+              <li>
+                <strong>储备车手</strong>：显示最后效力车队
+                <span className="text-gray-400 text-sm">（如周冠宇现为法拉利储备，但显示索伯）</span>
+              </li>
+              <li>
+                <strong>退役车手</strong>：显示最后效力车队
+                <span className="text-gray-400 text-sm">（如舒马赫显示梅赛德斯，而非法拉利）</span>
+              </li>
+            </ul>
+          </section>
         </div>
 
         <button
