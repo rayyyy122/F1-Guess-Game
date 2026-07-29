@@ -61,21 +61,15 @@ export function HelpModal({ isOpen, onClose }: HelpModalProps) {
             <h3 className="text-lg font-bold mb-3 text-f1-red">颜色含义</h3>
             <div className="space-y-2">
               <div className="flex items-center gap-3">
-                <span className="w-8 h-8 bg-f1-green rounded flex items-center justify-center text-f1-dark font-bold">
-                  🟩
-                </span>
+                <span className="text-2xl leading-none">🟩</span>
                 <span>正确 - 属性完全匹配</span>
               </div>
               <div className="flex items-center gap-3">
-                <span className="w-8 h-8 bg-f1-yellow rounded flex items-center justify-center text-f1-dark font-bold">
-                  🟨
-                </span>
+                <span className="text-2xl leading-none">🟨</span>
                 <span>接近 - 属性相近（数值差距小或同一大洲）</span>
               </div>
               <div className="flex items-center gap-3">
-                <span className="w-8 h-8 bg-f1-gray rounded flex items-center justify-center font-bold">
-                  ⬜
-                </span>
+                <span className="text-2xl leading-none">⬜</span>
                 <span>错误 - 属性不匹配</span>
               </div>
             </div>
