@@ -10,6 +10,7 @@ import { HelpModal } from './components/HelpModal/HelpModal'
 import { ConfirmModal } from './components/ConfirmModal/ConfirmModal'
 import { AnswerModal } from './components/AnswerModal/AnswerModal'
 import { hasSeenHelp, markHelpSeen } from './utils/storage'
+import { drivers } from './utils/drivers'
 
 function App() {
   const { recordWin, recordGiveUp, recordLoss } = useStats()
@@ -126,7 +127,7 @@ function App() {
       </main>
 
       <footer className="w-full py-4 text-center text-xs text-gray-500">
-        数据截止到 2026-07-27，匈牙利大奖赛
+        数据截止到 2026-07-27，匈牙利大奖赛，共 {drivers.length} 名车手
       </footer>
 
       <StatsModal isOpen={isStatsOpen} onClose={() => setIsStatsOpen(false)} />
