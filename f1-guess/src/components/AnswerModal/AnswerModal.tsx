@@ -53,8 +53,9 @@ export function AnswerModal({ isOpen, driver, guessCount, onNewGame }: AnswerMod
 
         <div className="bg-f1-dark rounded-lg p-4 mb-6">
           <div className="text-center mb-4 pb-4 border-b border-gray-700">
-            <div className="text-2xl font-bold text-f1-red">{driver.name}</div>
-            {driver.nameCn && <div className="text-gray-400 mt-1">{driver.nameCn}</div>}
+            <div className="text-2xl font-bold text-f1-red">
+              {driver.nameCn ? `${driver.nameCn} (${driver.name})` : driver.name}
+            </div>
           </div>
           <div className="space-y-1">
             <InfoRow label="国籍" value={driver.nationality} />

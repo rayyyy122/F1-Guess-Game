@@ -44,8 +44,12 @@ export function GameStatusBanner({
     <div className="w-full max-w-xl mx-auto mb-6 p-6 bg-f1-green text-f1-dark rounded-lg text-center">
       <h2 className="text-2xl font-bold mb-2">🎉 恭喜你猜对了！</h2>
       <p className="mb-1">
-        答案是 <strong>{targetDriver.name}</strong>
-        {targetDriver.nameCn && ` (${targetDriver.nameCn})`}
+        答案是{' '}
+        <strong>
+          {targetDriver.nameCn
+            ? `${targetDriver.nameCn} (${targetDriver.name})`
+            : targetDriver.name}
+        </strong>
       </p>
       <p className="text-sm mb-4">用了 {guessCount} 次猜测</p>
       <button
