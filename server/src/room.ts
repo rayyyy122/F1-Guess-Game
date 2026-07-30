@@ -89,6 +89,8 @@ export class GameRoom implements DurableObject {
 
       const opponentId = Object.keys(this.roomState.players).find((id) => id !== currentPlayerId)
 
+      this.sessions.set(ws, currentPlayerId)
+
       this.send(ws, {
         type: 'room_joined',
         roomId: this.roomState.id,
@@ -110,6 +112,8 @@ export class GameRoom implements DurableObject {
       player.connected = true
       player.lastSeen = Date.now()
 
+      this.sessions.set(ws, currentPlayerId)
+
       const opponentId = Object.keys(this.roomState.players).find((id) => id !== currentPlayerId)
 
       this.send(ws, {
@@ -120,10 +124,16 @@ export class GameRoom implements DurableObject {
           ? { name: this.roomState.players[opponentId].name }
           : { name: '' },
       })
+
+      if (this.roomState.status === 'playing') {
+        this.send(ws, {
+          type: 'game_start',
+          duration: Math.max(0, Math.floor((this.roomState.endTime! - Date.now()) / 1000)),
+        })
+      }
     }
 
     await this.saveState()
-    this.sessions.set(ws, currentPlayerId)
 
     ws.addEventListener('message', async (event) => {
       try {
