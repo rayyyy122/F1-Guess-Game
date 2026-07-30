@@ -45,6 +45,7 @@ export default {
 
       const doUrl = new URL(request.url)
       doUrl.pathname = '/room'
+      doUrl.searchParams.set('roomId', roomId)
 
       return stub.fetch(doUrl.toString(), request)
     }

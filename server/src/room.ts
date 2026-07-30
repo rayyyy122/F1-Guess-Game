@@ -31,8 +31,9 @@ export class GameRoom implements DurableObject {
 
       const playerId = url.searchParams.get('playerId')
       const playerName = url.searchParams.get('playerName') || 'Player'
+      const roomId = url.searchParams.get('roomId') || this.state.id.toString()
 
-      await this.handleSession(server, playerId, playerName)
+      await this.handleSession(server, playerId, playerName, roomId)
 
       return new Response(null, { status: 101, webSocket: client })
     }
@@ -47,7 +48,7 @@ export class GameRoom implements DurableObject {
     return new Response('Not found', { status: 404 })
   }
 
-  async handleSession(ws: WebSocket, playerId: string | null, playerName: string) {
+  async handleSession(ws: WebSocket, playerId: string | null, playerName: string, roomId: string) {
     ws.accept()
     await this.loadState()
 
@@ -55,7 +56,7 @@ export class GameRoom implements DurableObject {
 
     if (!this.roomState) {
       this.roomState = {
-        id: this.state.id.toString(),
+        id: roomId,
         status: 'waiting',
         players: {},
         targetDriverId: null,
