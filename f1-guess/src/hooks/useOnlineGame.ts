@@ -48,20 +48,7 @@ export function useOnlineGame() {
   }, [state])
 
   const handleMessage = useCallback((data: any) => {
-    const currentState = stateRef.current
-
     switch (data.type) {
-      case 'room_created':
-        setState((prev) => ({
-          ...prev,
-          phase: 'waiting',
-          roomId: data.roomId,
-          playerId: data.playerId,
-        }))
-        const wsUrl = `${API_BASE.replace('https', 'wss')}/room/${data.roomId}?playerId=${data.playerId}&playerName=${encodeURIComponent(currentState.playerName)}`
-        setWsUrl(wsUrl)
-        break
-
       case 'room_joined':
         setState((prev) => ({
           ...prev,
@@ -128,6 +115,7 @@ export function useOnlineGame() {
         if (!response.ok) throw new Error('创建房间失败')
         const data = await response.json()
 
+        setState((prev) => ({ ...prev, roomId: data.roomId }))
         const wsUrl = `${API_BASE.replace('https', 'wss')}/room/${data.roomId}?playerName=${encodeURIComponent(playerName)}`
         setWsUrl(wsUrl)
       } catch (err) {

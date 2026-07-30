@@ -34,18 +34,6 @@ export default {
 
     if (url.pathname === '/create' && request.method === 'POST') {
       const roomId = generateRoomId()
-      const id = env.ROOMS.idFromName(roomId)
-      const stub = env.ROOMS.get(id)
-
-      const wsUrl = new URL(request.url)
-      wsUrl.pathname = '/room'
-      wsUrl.searchParams.set('playerName', url.searchParams.get('playerName') || 'Player')
-
-      const response = await stub.fetch(wsUrl.toString(), request)
-      if (!response.ok) {
-        return jsonResponse({ error: 'Failed to create room' }, 500)
-      }
-
       return jsonResponse({ roomId })
     }
 
