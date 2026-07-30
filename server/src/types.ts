@@ -50,7 +50,7 @@ export interface RoomState {
 export type ClientMessage =
   | { type: 'create_room'; playerName: string }
   | { type: 'join_room'; roomId: string; playerName: string }
-  | { type: 'make_guess'; driverId: string; feedback: Record<string, string> }
+  | { type: 'make_guess'; driverId: string }
   | { type: 'give_up' }
   | { type: 'request_restart' }
   | { type: 'confirm_restart' }
@@ -61,6 +61,7 @@ export type ServerMessage =
   | { type: 'room_joined'; roomId: string; playerId: string; opponent: { name: string } }
   | { type: 'opponent_joined'; opponent: { name: string } }
   | { type: 'game_start'; duration: number }
+  | { type: 'guess_result'; driverId: string; feedback: Record<string, string>; isCorrect: boolean }
   | { type: 'opponent_guess'; guessCount: number; feedback: Record<string, string> }
   | { type: 'opponent_finished'; status: PlayerStatus; guessCount: number }
   | { type: 'timer_sync'; remaining: number }

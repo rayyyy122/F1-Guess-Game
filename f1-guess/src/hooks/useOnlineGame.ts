@@ -1,7 +1,6 @@
 import { useState, useCallback, useEffect, useRef } from 'react'
 import { useWebSocket } from './useWebSocket'
 import type { Driver, Guess } from '../types'
-import { compareDrivers } from '../utils/compare'
 import { getDriverById } from '../utils/drivers'
 
 const API_BASE = 'https://api.f1-guess.online'
@@ -16,7 +15,7 @@ interface OnlineGameState {
   opponentName: string | null
   myGuesses: Guess[]
   opponentGuessCount: number
-  opponentLatestFeedback: Record<string, string> | null
+  opponentLatestFeedback: Record<string, any> | null
   targetDriverId: string | null
   remainingTime: number
   result: 'win' | 'lose' | 'tie' | null
@@ -70,6 +69,17 @@ export function useOnlineGame() {
           remainingTime: data.duration,
         }))
         break
+
+      case 'guess_result': {
+        const driver = getDriverById(data.driverId)
+        if (driver) {
+          setState((prev) => ({
+            ...prev,
+            myGuesses: [...prev.myGuesses, { driver, feedback: data.feedback }],
+          }))
+        }
+        break
+      }
 
       case 'opponent_guess':
         setState((prev) => ({
@@ -133,39 +143,10 @@ export function useOnlineGame() {
 
   const makeGuess = useCallback(
     (driver: Driver) => {
-      if (!stateRef.current.targetDriverId) {
-        const feedback = compareDrivers(driver, getDriverById(driver.id)!)
-        setState((prev) => ({
-          ...prev,
-          myGuesses: [...prev.myGuesses, { driver, feedback }],
-        }))
-      }
-
-      const targetDriver = stateRef.current.targetDriverId
-        ? getDriverById(stateRef.current.targetDriverId)
-        : null
-
-      const feedback = targetDriver ? compareDrivers(driver, targetDriver) : compareDrivers(driver, driver)
-
       send({
         type: 'make_guess',
         driverId: driver.id,
-        feedback: {
-          nationality: feedback.nationality,
-          team: feedback.team,
-          number: feedback.number.type,
-          championships: feedback.championships.type,
-          podiums: feedback.podiums.type,
-          wins: feedback.wins.type,
-          debutYear: feedback.debutYear.type,
-          status: feedback.status,
-        },
       })
-
-      setState((prev) => ({
-        ...prev,
-        myGuesses: [...prev.myGuesses, { driver, feedback }],
-      }))
     },
     [send]
   )

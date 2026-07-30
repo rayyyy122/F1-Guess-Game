@@ -6,6 +6,7 @@ import type {
   Driver,
 } from './types'
 import { generatePlayerId, getRandomDriver } from './utils'
+import { compareDrivers } from './compare'
 import driversData from './drivers.json'
 
 const drivers = driversData as Driver[]
@@ -161,7 +162,7 @@ export class GameRoom implements DurableObject {
 
     switch (message.type) {
       case 'make_guess':
-        await this.handleGuess(playerId, message.driverId, message.feedback)
+        await this.handleGuess(playerId, message.driverId)
         break
       case 'give_up':
         await this.handleGiveUp(playerId)
@@ -180,15 +181,28 @@ export class GameRoom implements DurableObject {
     await this.saveState()
   }
 
-  async handleGuess(playerId: string, driverId: string, feedback: Record<string, string>) {
+  async handleGuess(playerId: string, driverId: string) {
     if (!this.roomState || this.roomState.status !== 'playing') return
 
     const player = this.roomState.players[playerId]
     if (!player || player.status !== 'playing') return
 
+    const targetDriver = drivers.find((d) => d.id === this.roomState!.targetDriverId)
+    const guessDriver = drivers.find((d) => d.id === driverId)
+    if (!targetDriver || !guessDriver) return
+
+    const feedback = compareDrivers(guessDriver, targetDriver)
     const isCorrect = driverId === this.roomState.targetDriverId
+
     player.guessCount++
     player.guesses.push({ driverId, feedback, timestamp: Date.now() })
+
+    this.sendTo(playerId, {
+      type: 'guess_result',
+      driverId,
+      feedback,
+      isCorrect,
+    })
 
     if (isCorrect) {
       player.status = 'won'

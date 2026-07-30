@@ -7,7 +7,7 @@ import { Countdown } from './Countdown'
 interface OnlineGameViewProps {
   myGuesses: Guess[]
   opponentGuessCount: number
-  opponentLatestFeedback: Record<string, string> | null
+  opponentLatestFeedback: Record<string, any> | null
   remainingTime: number
   playerName: string
   opponentName: string | null
@@ -15,12 +15,13 @@ interface OnlineGameViewProps {
   onGiveUp: () => void
 }
 
-function FeedbackRow({ feedback }: { feedback: Record<string, string> }) {
+function FeedbackRow({ feedback }: { feedback: Record<string, any> }) {
   const keys = ['nationality', 'team', 'number', 'championships', 'podiums', 'wins', 'debutYear', 'status']
   return (
     <div className="flex gap-1 justify-center">
       {keys.map((key) => {
-        const type = feedback[key]
+        const value = feedback[key]
+        const type = typeof value === 'object' && value !== null ? value.type : value
         const emoji = type === 'correct' ? '🟩' : type === 'close' ? '🟨' : '⬜'
         return <span key={key} className="text-xl">{emoji}</span>
       })}
