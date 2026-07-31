@@ -66,6 +66,7 @@ export class GameRoom implements DurableObject {
         duration: GAME_DURATION,
         winner: null,
         createdAt: Date.now(),
+        restartRequests: [],
       }
     }
 
@@ -168,10 +169,16 @@ export class GameRoom implements DurableObject {
         await this.handleGiveUp(playerId)
         break
       case 'request_restart':
-        this.broadcastTo(ws, { type: 'opponent_request_restart' })
+        await this.handleRestartRequest(playerId)
         break
-      case 'confirm_restart':
-        await this.restart()
+      case 'accept_restart':
+        await this.handleRestartAccept(playerId)
+        break
+      case 'decline_restart':
+        await this.handleRestartDecline(playerId)
+        break
+      case 'leave_room':
+        await this.handleLeaveRoom(playerId)
         break
       case 'ping':
         this.send(ws, { type: 'pong' })
@@ -261,6 +268,92 @@ export class GameRoom implements DurableObject {
     }, RECONNECT_WINDOW + 1000)
   }
 
+  async handleRestartRequest(playerId: string) {
+    if (!this.roomState || this.roomState.status !== 'finished') return
+
+    // Add this player to restart requests
+    if (!this.roomState.restartRequests.includes(playerId)) {
+      this.roomState.restartRequests.push(playerId)
+    }
+
+    const player = this.roomState.players[playerId]
+
+    // Notify the opponent
+    this.broadcastExcept(playerId, {
+      type: 'opponent_request_restart',
+      playerName: player.name,
+    })
+
+    // If both players have requested, automatically start the game
+    if (this.roomState.restartRequests.length === 2) {
+      await this.restart()
+    }
+  }
+
+  async handleRestartAccept(playerId: string) {
+    if (!this.roomState || this.roomState.status !== 'finished') return
+
+    // Add this player to restart requests
+    if (!this.roomState.restartRequests.includes(playerId)) {
+      this.roomState.restartRequests.push(playerId)
+    }
+
+    const player = this.roomState.players[playerId]
+
+    // Notify the requestor that restart was accepted
+    this.broadcastExcept(playerId, {
+      type: 'restart_accepted',
+      acceptedBy: player.name,
+    })
+
+    // If both players have requested, start the game
+    if (this.roomState.restartRequests.length === 2) {
+      await this.restart()
+    }
+  }
+
+  async handleRestartDecline(playerId: string) {
+    if (!this.roomState || this.roomState.status !== 'finished') return
+
+    // Clear restart requests
+    this.roomState.restartRequests = []
+
+    // Notify the opponent that restart was declined
+    this.broadcastExcept(playerId, {
+      type: 'restart_declined',
+    })
+  }
+
+  async handleLeaveRoom(playerId: string) {
+    if (!this.roomState) return
+
+    const player = this.roomState.players[playerId]
+    if (!player) return
+
+    // Notify the opponent
+    this.broadcastExcept(playerId, {
+      type: 'opponent_left',
+    })
+
+    // Remove this player from the room
+    delete this.roomState.players[playerId]
+
+    // Check if there are still players in the room
+    const remainingPlayers = Object.keys(this.roomState.players)
+
+    if (remainingPlayers.length === 0) {
+      // No players left, close the room
+      await this.state.storage.delete('roomState')
+      this.roomState = null
+    } else {
+      // One player left, notify them to go back to waiting
+      const remainingPlayerId = remainingPlayers[0]
+      this.sendTo(remainingPlayerId, {
+        type: 'room_closed',
+      })
+    }
+  }
+
   async startGame() {
     if (!this.roomState || this.roomState.status !== 'waiting') return
 
@@ -268,6 +361,7 @@ export class GameRoom implements DurableObject {
     this.roomState.targetDriverId = getRandomDriver(drivers).id
     this.roomState.startTime = Date.now()
     this.roomState.endTime = Date.now() + GAME_DURATION * 1000
+    this.roomState.restartRequests = []
 
     this.broadcast({
       type: 'game_start',
@@ -358,6 +452,7 @@ export class GameRoom implements DurableObject {
     this.roomState.targetDriverId = null
     this.roomState.startTime = null
     this.roomState.endTime = null
+    this.roomState.restartRequests = []
 
     await this.startGame()
     this.broadcast({ type: 'game_restart' })

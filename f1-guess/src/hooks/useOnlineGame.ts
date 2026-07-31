@@ -21,6 +21,13 @@ interface OnlineGameState {
   remainingTime: number
   result: 'win' | 'lose' | 'tie' | null
   error: string | null
+  // 再来一局邀请状态
+  restartInvite: {
+    from: string | null
+    accepted: boolean
+    declined: boolean
+    iRequested: boolean
+  }
 }
 
 const getInitialState = () => ({
@@ -36,6 +43,12 @@ const getInitialState = () => ({
   remainingTime: 120,
   result: null as 'win' | 'lose' | 'tie' | null,
   error: null as string | null,
+  restartInvite: {
+    from: null as string | null,
+    accepted: false,
+    declined: false,
+    iRequested: false,
+  },
 })
 
 export function useOnlineGame() {
@@ -100,7 +113,78 @@ export function useOnlineGame() {
           phase: 'finished',
           result: data.result,
           targetDriverId: data.targetDriverId,
+          restartInvite: {
+            from: null,
+            accepted: false,
+            declined: false,
+            iRequested: false,
+          },
         }))
+        break
+
+      case 'opponent_request_restart':
+        setState((prev) => ({
+          ...prev,
+          restartInvite: {
+            from: data.playerName,
+            accepted: false,
+            declined: false,
+            iRequested: false,
+          },
+        }))
+        break
+
+      case 'restart_accepted':
+        // Opponent accepted our restart request, game will start soon
+        setState((prev) => ({
+          ...prev,
+          restartInvite: {
+            ...prev.restartInvite,
+            accepted: true,
+          },
+        }))
+        break
+
+      case 'restart_declined':
+        setState((prev) => ({
+          ...prev,
+          restartInvite: {
+            ...prev.restartInvite,
+            declined: true,
+          },
+        }))
+        break
+
+      case 'game_restart':
+        // Reset game state for new round
+        setState((prev) => ({
+          ...prev,
+          phase: 'playing',
+          myGuesses: [],
+          opponentGuessCount: 0,
+          opponentLatestFeedback: null,
+          result: null,
+          targetDriverId: null,
+          remainingTime: data.duration || 120,
+          restartInvite: {
+            from: null,
+            accepted: false,
+            declined: false,
+            iRequested: false,
+          },
+        }))
+        break
+
+      case 'room_closed':
+        // Opponent left after game finished, go back to lobby
+        setState((prev) => ({
+          ...prev,
+          phase: 'lobby',
+          roomId: null,
+          opponentName: null,
+          error: '对手已离开房间',
+        }))
+        setWsUrl(null)
         break
 
       case 'opponent_left':
@@ -156,6 +240,38 @@ export function useOnlineGame() {
     send({ type: 'give_up' })
   }, [send])
 
+  const requestRestart = useCallback(() => {
+    send({ type: 'request_restart' })
+    setState((prev) => ({
+      ...prev,
+      restartInvite: {
+        ...prev.restartInvite,
+        iRequested: true,
+      },
+    }))
+  }, [send])
+
+  const acceptRestart = useCallback(() => {
+    send({ type: 'accept_restart' })
+  }, [send])
+
+  const declineRestart = useCallback(() => {
+    send({ type: 'decline_restart' })
+    setState((prev) => ({
+      ...prev,
+      restartInvite: {
+        ...prev.restartInvite,
+        declined: true,
+      },
+    }))
+  }, [send])
+
+  const leaveRoom = useCallback(() => {
+    send({ type: 'leave_room' })
+    setWsUrl(null)
+    setState(getInitialState())
+  }, [send])
+
   const restart = useCallback(() => {
     send({ type: 'confirm_restart' })
     setState((prev) => ({
@@ -187,6 +303,10 @@ export function useOnlineGame() {
     joinRoom,
     makeGuess,
     giveUp,
+    requestRestart,
+    acceptRestart,
+    declineRestart,
+    leaveRoom,
     restart,
     reset,
     changePlayerName,

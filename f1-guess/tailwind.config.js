@@ -9,6 +9,7 @@ export default {
           dark: '#15151E',
           green: '#38D1A8',
           yellow: '#FAB500',
+          blue: '#006F62',
           gray: '#38383F',
           text: '#F1F1F1',
         },

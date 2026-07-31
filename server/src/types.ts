@@ -45,6 +45,7 @@ export interface RoomState {
   duration: number
   winner: string | null
   createdAt: number
+  restartRequests: string[]
 }
 
 export type ClientMessage =
@@ -53,7 +54,9 @@ export type ClientMessage =
   | { type: 'make_guess'; driverId: string }
   | { type: 'give_up' }
   | { type: 'request_restart' }
-  | { type: 'confirm_restart' }
+  | { type: 'accept_restart' }
+  | { type: 'decline_restart' }
+  | { type: 'leave_room' }
   | { type: 'ping' }
 
 export type ServerMessage =
@@ -74,8 +77,11 @@ export type ServerMessage =
       targetDriverId: string
       duration: number
     }
-  | { type: 'opponent_request_restart' }
+  | { type: 'opponent_request_restart'; playerName: string }
+  | { type: 'restart_accepted'; acceptedBy: string }
+  | { type: 'restart_declined' }
   | { type: 'game_restart' }
   | { type: 'opponent_left' }
+  | { type: 'room_closed' }
   | { type: 'pong' }
   | { type: 'error'; code: string; message: string }

@@ -7,7 +7,15 @@ interface ResultModalProps {
   opponentGuesses: number
   targetDriver: Driver | null
   opponentName: string | null
-  onRestart: () => void
+  restartInvite: {
+    from: string | null
+    accepted: boolean
+    declined: boolean
+    iRequested: boolean
+  }
+  onRequestRestart: () => void
+  onAcceptRestart: () => void
+  onDeclineRestart: () => void
   onBackToLobby: () => void
 }
 
@@ -18,7 +26,10 @@ export function ResultModal({
   opponentGuesses,
   targetDriver,
   opponentName,
-  onRestart,
+  restartInvite,
+  onRequestRestart,
+  onAcceptRestart,
+  onDeclineRestart,
   onBackToLobby,
 }: ResultModalProps) {
   if (!isOpen || !result) return null
@@ -63,19 +74,75 @@ export function ResultModal({
           </div>
         )}
 
+        {/* 邀请状态显示 */}
+        {restartInvite.from && (
+          <div className="mb-4 p-3 bg-f1-green/20 border border-f1-green rounded-lg">
+            <p className="text-center text-sm">
+              <span className="font-medium">{restartInvite.from}</span> 邀请您再来一局
+            </p>
+          </div>
+        )}
+
+        {restartInvite.accepted && (
+          <div className="mb-4 p-3 bg-f1-green/20 border border-f1-green rounded-lg">
+            <p className="text-center text-sm">对手接受了邀请，即将开始...</p>
+          </div>
+        )}
+
+        {restartInvite.declined && (
+          <div className="mb-4 p-3 bg-f1-red/20 border border-f1-red rounded-lg">
+            <p className="text-center text-sm">对方拒绝了再来一局</p>
+          </div>
+        )}
+
+        {restartInvite.iRequested && !restartInvite.accepted && !restartInvite.declined && (
+          <div className="mb-4 p-3 bg-f1-blue/20 border border-f1-blue rounded-lg">
+            <p className="text-center text-sm">等待对方响应...</p>
+          </div>
+        )}
+
         <div className="flex gap-3">
-          <button
-            onClick={onBackToLobby}
-            className="flex-1 py-3 bg-gray-600 hover:bg-gray-500 rounded-lg font-medium transition-colors"
-          >
-            返回大厅
-          </button>
-          <button
-            onClick={onRestart}
-            className="flex-1 py-3 bg-f1-red hover:bg-red-700 rounded-lg font-medium transition-colors"
-          >
-            再来一局
-          </button>
+          {restartInvite.from ? (
+            // 收到邀请时，显示接受/拒绝按钮
+            <>
+              <button
+                onClick={onDeclineRestart}
+                className="flex-1 py-3 bg-gray-600 hover:bg-gray-500 rounded-lg font-medium transition-colors"
+              >
+                拒绝
+              </button>
+              <button
+                onClick={onAcceptRestart}
+                className="flex-1 py-3 bg-f1-green text-f1-dark hover:bg-green-400 rounded-lg font-medium transition-colors"
+              >
+                接受
+              </button>
+            </>
+          ) : restartInvite.iRequested && !restartInvite.accepted && !restartInvite.declined ? (
+            // 已发送邀请，等待响应时，只有返回大厅按钮
+            <button
+              onClick={onBackToLobby}
+              className="w-full py-3 bg-gray-600 hover:bg-gray-500 rounded-lg font-medium transition-colors"
+            >
+              返回大厅
+            </button>
+          ) : (
+            // 正常状态，显示返回大厅和再来一局按钮
+            <>
+              <button
+                onClick={onBackToLobby}
+                className="flex-1 py-3 bg-gray-600 hover:bg-gray-500 rounded-lg font-medium transition-colors"
+              >
+                返回大厅
+              </button>
+              <button
+                onClick={onRequestRestart}
+                className="flex-1 py-3 bg-f1-red hover:bg-red-700 rounded-lg font-medium transition-colors"
+              >
+                再来一局
+              </button>
+            </>
+          )}
         </div>
       </div>
     </div>

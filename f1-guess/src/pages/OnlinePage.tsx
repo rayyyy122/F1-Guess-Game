@@ -22,12 +22,15 @@ export function OnlinePage() {
     result,
     targetDriverId,
     error,
+    restartInvite,
     createRoom,
     joinRoom,
     makeGuess,
     giveUp,
-    restart,
-    reset,
+    requestRestart,
+    acceptRestart,
+    declineRestart,
+    leaveRoom,
     changePlayerName,
   } = useOnlineGame()
 
@@ -98,8 +101,11 @@ export function OnlinePage() {
             opponentGuesses={opponentGuessCount}
             targetDriver={targetDriver}
             opponentName={opponentName}
-            onRestart={restart}
-            onBackToLobby={reset}
+            restartInvite={restartInvite}
+            onRequestRestart={requestRestart}
+            onAcceptRestart={acceptRestart}
+            onDeclineRestart={declineRestart}
+            onBackToLobby={leaveRoom}
           />
         )}
       </main>
