@@ -531,14 +531,6 @@ export class GameRoom implements DurableObject {
     }
   }
 
-  broadcastExcept(playerId: string, message: ServerMessage) {
-    for (const [ws, pid] of this.sessions) {
-      if (pid !== playerId) {
-        this.send(ws, message)
-      }
-    }
-  }
-
   broadcastTo(excludeWs: WebSocket, message: ServerMessage) {
     for (const ws of this.sessions.keys()) {
       if (ws !== excludeWs) {

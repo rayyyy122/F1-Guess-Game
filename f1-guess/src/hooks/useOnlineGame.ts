@@ -56,6 +56,7 @@ export function useOnlineGame() {
   const [wsUrl, setWsUrl] = useState<string | null>(null)
   const stateRef = useRef(state)
   const isLeavingRef = useRef(false)
+  const closeWsRef = useRef<(() => void) | null>(null)
 
   useEffect(() => {
     stateRef.current = state
@@ -181,6 +182,7 @@ export function useOnlineGame() {
 
       case 'room_closed':
         // Opponent left after game finished, go back to lobby
+        closeWsRef.current?.()
         setWsUrl(null)
         // 完全重置状态，除了 playerName
         setState((prev) => {
@@ -203,7 +205,11 @@ export function useOnlineGame() {
     }
   }, [])
 
-  const { isConnected, send } = useWebSocket(wsUrl, { onMessage: handleMessage })
+  const { isConnected, send, close } = useWebSocket(wsUrl, { onMessage: handleMessage })
+
+  useEffect(() => {
+    closeWsRef.current = close
+  }, [close])
 
   const createRoom = useCallback(
     async (playerName: string) => {
@@ -293,7 +299,8 @@ export function useOnlineGame() {
       }
     })
 
-    // 关闭 WebSocket 连接
+    // 关闭 WebSocket 连接并禁用自动重连
+    closeWsRef.current?.()
     setWsUrl(null)
 
     // 重置离开标志

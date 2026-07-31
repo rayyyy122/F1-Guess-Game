@@ -13,16 +13,26 @@ export function useWebSocket(url: string | null, options: UseWebSocketOptions) {
   const optionsRef = useRef(options)
   const reconnectTimeoutRef = useRef<number | null>(null)
   const reconnectAttemptsRef = useRef(0)
+  const urlRef = useRef(url)
+  const manualCloseRef = useRef(false)
 
   useEffect(() => {
     optionsRef.current = options
   }, [options])
 
+  useEffect(() => {
+    urlRef.current = url
+    if (url) {
+      manualCloseRef.current = false
+    }
+  }, [url])
+
   const connect = useCallback(() => {
-    if (!url) return
+    const currentUrl = urlRef.current
+    if (!currentUrl) return
 
     try {
-      const ws = new WebSocket(url)
+      const ws = new WebSocket(currentUrl)
       wsRef.current = ws
 
       ws.onopen = () => {
@@ -44,6 +54,9 @@ export function useWebSocket(url: string | null, options: UseWebSocketOptions) {
         setIsConnected(false)
         optionsRef.current.onClose?.()
 
+        if (manualCloseRef.current) return
+        if (!urlRef.current) return
+
         if (reconnectAttemptsRef.current < 5) {
           const delay = Math.min(1000 * Math.pow(2, reconnectAttemptsRef.current), 10000)
           reconnectAttemptsRef.current++
@@ -59,7 +72,7 @@ export function useWebSocket(url: string | null, options: UseWebSocketOptions) {
     } catch (err) {
       console.error('WebSocket connection error:', err)
     }
-  }, [url])
+  }, [])
 
   useEffect(() => {
     connect()
@@ -67,13 +80,14 @@ export function useWebSocket(url: string | null, options: UseWebSocketOptions) {
     return () => {
       if (reconnectTimeoutRef.current) {
         clearTimeout(reconnectTimeoutRef.current)
+        reconnectTimeoutRef.current = null
       }
       if (wsRef.current) {
         wsRef.current.close()
         wsRef.current = null
       }
     }
-  }, [connect])
+  }, [connect, url])
 
   const send = useCallback((data: any) => {
     if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
@@ -81,5 +95,18 @@ export function useWebSocket(url: string | null, options: UseWebSocketOptions) {
     }
   }, [])
 
-  return { isConnected, send }
+  const close = useCallback(() => {
+    manualCloseRef.current = true
+    if (reconnectTimeoutRef.current) {
+      clearTimeout(reconnectTimeoutRef.current)
+      reconnectTimeoutRef.current = null
+    }
+    if (wsRef.current) {
+      wsRef.current.close()
+      wsRef.current = null
+    }
+    setIsConnected(false)
+  }, [])
+
+  return { isConnected, send, close }
 }
