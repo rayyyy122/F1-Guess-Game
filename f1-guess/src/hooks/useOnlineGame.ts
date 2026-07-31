@@ -208,6 +208,9 @@ export function useOnlineGame() {
   const createRoom = useCallback(
     async (playerName: string) => {
       try {
+        // 重置离开标志，允许处理新消息
+        isLeavingRef.current = false
+
         // 重置所有游戏状态，保留 playerName
         const initialState = getInitialState()
         setState({
@@ -233,6 +236,9 @@ export function useOnlineGame() {
   )
 
   const joinRoom = useCallback((roomId: string, playerName: string) => {
+    // 重置离开标志，允许处理新消息
+    isLeavingRef.current = false
+
     // 重置所有游戏状态，保留 playerName 和 roomId
     const initialState = getInitialState()
     setState({
@@ -277,9 +283,8 @@ export function useOnlineGame() {
   const leaveRoom = useCallback(() => {
     isLeavingRef.current = true
     send({ type: 'leave_room' })
-    // 先关闭 WebSocket，防止后续消息到达
-    setWsUrl(null)
-    // 重置状态，保留 playerName
+
+    // 立即重置状态到初始状态，清除所有游戏数据
     setState((prev) => {
       const initialState = getInitialState()
       return {
@@ -287,6 +292,12 @@ export function useOnlineGame() {
         playerName: prev.playerName,
       }
     })
+
+    // 关闭 WebSocket 连接
+    setWsUrl(null)
+
+    // 重置离开标志
+    isLeavingRef.current = false
   }, [send])
 
   const changePlayerName = useCallback((newName: string) => {
