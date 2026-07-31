@@ -2,6 +2,7 @@ import type { GameStats } from '../types'
 
 const STATS_KEY = 'f1-guess-stats'
 const HELP_SEEN_KEY = 'f1-guess-help-seen'
+const PLAYER_NAME_KEY = 'f1-guess-player-name'
 
 const defaultStats: GameStats = {
   totalGames: 0,
@@ -59,6 +60,59 @@ export function hasSeenHelp(): boolean {
 export function markHelpSeen(): void {
   try {
     localStorage.setItem(HELP_SEEN_KEY, 'true')
+  } catch {
+    // localStorage 不可用时静默失败
+  }
+}
+
+// F1 车队列表用于生成默认昵称
+const F1_TEAMS = [
+  'Ferrari', 'McLaren', 'Mercedes', 'RedBull', 'AstonMartin',
+  'Alpine', 'Williams', 'RB', 'Haas', 'Sauber', 'Audi', 'Cadillac',
+]
+
+// F1 相关的形容词
+const ADJECTIVES = [
+  'Speedy', 'Rapid', 'Swift', 'Turbo', 'Nitro', 'Apex', 'Pole', 'Chicane',
+  'Drift', 'Overtake', 'Podium', 'Champion', 'Racer', 'Pilot', 'Driver',
+  'Track', 'Pit', 'Lap', 'Sector', 'Pace', 'Grip', 'Aero', 'Engine',
+  'Brake', 'Accelerate', 'Corner', 'Straight', 'Checkered', 'Flag',
+]
+
+/**
+ * 生成随机 F1 风格默认昵称
+ * 格式: 形容词 + 车队 + 随机数字 (例如: SpeedyFerrari42)
+ */
+function generateDefaultName(): string {
+  const adj = ADJECTIVES[Math.floor(Math.random() * ADJECTIVES.length)]
+  const team = F1_TEAMS[Math.floor(Math.random() * F1_TEAMS.length)]
+  const num = Math.floor(Math.random() * 99) + 1
+  return `${adj}${team}${num}`
+}
+
+/**
+ * 加载玩家昵称，如果不存在则生成并保存默认昵称
+ */
+export function loadPlayerName(): string {
+  try {
+    const savedName = localStorage.getItem(PLAYER_NAME_KEY)
+    if (savedName) return savedName
+
+    // 生成并保存默认昵称
+    const defaultName = generateDefaultName()
+    savePlayerName(defaultName)
+    return defaultName
+  } catch {
+    return generateDefaultName()
+  }
+}
+
+/**
+ * 保存玩家昵称
+ */
+export function savePlayerName(name: string): void {
+  try {
+    localStorage.setItem(PLAYER_NAME_KEY, name)
   } catch {
     // localStorage 不可用时静默失败
   }

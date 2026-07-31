@@ -1,39 +1,55 @@
 import { useState } from 'react'
+import { User, Edit2 } from 'lucide-react'
 
 interface LobbyViewProps {
+  playerName: string
   onCreateRoom: (playerName: string) => void
   onJoinRoom: (roomId: string, playerName: string) => void
+  onChangeName: () => void
   error: string | null
 }
 
-export function LobbyView({ onCreateRoom, onJoinRoom, error }: LobbyViewProps) {
-  const [playerName, setPlayerName] = useState('')
+export function LobbyView({
+  playerName,
+  onCreateRoom,
+  onJoinRoom,
+  onChangeName,
+  error,
+}: LobbyViewProps) {
   const [roomId, setRoomId] = useState('')
 
   const handleCreateRoom = () => {
-    if (playerName.trim()) {
-      onCreateRoom(playerName.trim())
-    }
+    onCreateRoom(playerName)
   }
 
   const handleJoinRoom = () => {
-    if (playerName.trim() && roomId.trim()) {
-      onJoinRoom(roomId.trim().toUpperCase(), playerName.trim())
+    if (roomId.trim() && roomId.length === 6) {
+      onJoinRoom(roomId.trim().toUpperCase(), playerName)
     }
   }
 
   return (
     <div className="max-w-md mx-auto">
-      <div className="mb-6">
-        <label className="block text-sm font-medium mb-2">你的名字</label>
-        <input
-          type="text"
-          value={playerName}
-          onChange={(e) => setPlayerName(e.target.value)}
-          placeholder="输入昵称"
-          maxLength={20}
-          className="w-full px-4 py-3 rounded-lg bg-f1-gray text-f1-text placeholder-gray-400 border-2 border-transparent focus:border-f1-red focus:outline-none"
-        />
+      {/* 当前昵称显示 */}
+      <div className="mb-6 p-4 bg-f1-gray rounded-lg">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-f1-red rounded-full flex items-center justify-center">
+              <User size={20} className="text-white" />
+            </div>
+            <div>
+              <p className="text-xs text-gray-400">你的昵称</p>
+              <p className="font-medium">{playerName}</p>
+            </div>
+          </div>
+          <button
+            onClick={onChangeName}
+            className="p-2 hover:bg-f1-dark rounded-lg transition-colors"
+            title="修改昵称"
+          >
+            <Edit2 size={18} className="text-gray-400 hover:text-f1-red" />
+          </button>
+        </div>
       </div>
 
       {error && (
@@ -44,8 +60,7 @@ export function LobbyView({ onCreateRoom, onJoinRoom, error }: LobbyViewProps) {
 
       <button
         onClick={handleCreateRoom}
-        disabled={!playerName.trim()}
-        className="w-full py-3 mb-6 bg-f1-red hover:bg-red-700 disabled:bg-gray-600 disabled:cursor-not-allowed rounded-lg font-medium transition-colors"
+        className="w-full py-3 mb-6 bg-f1-red hover:bg-red-700 rounded-lg font-medium transition-colors"
       >
         创建新房间
       </button>
@@ -73,7 +88,7 @@ export function LobbyView({ onCreateRoom, onJoinRoom, error }: LobbyViewProps) {
 
       <button
         onClick={handleJoinRoom}
-        disabled={!playerName.trim() || roomId.length !== 6}
+        disabled={roomId.length !== 6}
         className="w-full py-3 bg-f1-green text-f1-dark hover:bg-green-400 disabled:bg-gray-600 disabled:text-gray-400 disabled:cursor-not-allowed rounded-lg font-medium transition-colors"
       >
         加入房间

@@ -1,9 +1,11 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useOnlineGame } from '../hooks/useOnlineGame'
 import { LobbyView } from '../components/online/LobbyView'
 import { RoomWaitView } from '../components/online/RoomWaitView'
 import { OnlineGameView } from '../components/online/OnlineGameView'
 import { ResultModal } from '../components/online/ResultModal'
+import { ChangeNameModal } from '../components/online/ChangeNameModal'
 import { getDriverById } from '../utils/drivers'
 import { drivers } from '../utils/drivers'
 
@@ -26,9 +28,17 @@ export function OnlinePage() {
     giveUp,
     restart,
     reset,
+    changePlayerName,
   } = useOnlineGame()
 
+  const [showChangeNameModal, setShowChangeNameModal] = useState(false)
+
   const targetDriver = targetDriverId ? (getDriverById(targetDriverId) ?? null) : null
+
+  const handleChangeName = (newName: string) => {
+    changePlayerName(newName)
+    setShowChangeNameModal(false)
+  }
 
   return (
     <div className="min-h-screen bg-f1-dark text-f1-text">
@@ -54,7 +64,13 @@ export function OnlinePage() {
         </div>
 
         {phase === 'lobby' && (
-          <LobbyView onCreateRoom={createRoom} onJoinRoom={joinRoom} error={error} />
+          <LobbyView
+            playerName={playerName}
+            onCreateRoom={createRoom}
+            onJoinRoom={joinRoom}
+            onChangeName={() => setShowChangeNameModal(true)}
+            error={error}
+          />
         )}
 
         {phase === 'waiting' && roomId && (
@@ -91,6 +107,13 @@ export function OnlinePage() {
       <footer className="w-full py-4 text-center text-xs text-gray-500">
         数据截止到 2026-07-27，匈牙利大奖赛，共 {drivers.length} 名车手
       </footer>
+
+      <ChangeNameModal
+        isOpen={showChangeNameModal}
+        currentName={playerName}
+        onClose={() => setShowChangeNameModal(false)}
+        onSave={handleChangeName}
+      />
     </div>
   )
 }

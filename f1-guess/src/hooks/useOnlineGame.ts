@@ -2,6 +2,7 @@ import { useState, useCallback, useEffect, useRef } from 'react'
 import { useWebSocket } from './useWebSocket'
 import type { Driver, Guess } from '../types'
 import { getDriverById } from '../utils/drivers'
+import { loadPlayerName, savePlayerName } from '../utils/storage'
 
 const API_BASE = 'https://api.f1-guess.online'
 
@@ -22,23 +23,23 @@ interface OnlineGameState {
   error: string | null
 }
 
-const initialState: OnlineGameState = {
-  phase: 'lobby',
-  roomId: null,
-  playerId: null,
-  playerName: '',
-  opponentName: null,
-  myGuesses: [],
+const getInitialState = () => ({
+  phase: 'lobby' as GamePhase,
+  roomId: null as string | null,
+  playerId: null as string | null,
+  playerName: loadPlayerName(),
+  opponentName: null as string | null,
+  myGuesses: [] as Guess[],
   opponentGuessCount: 0,
-  opponentLatestFeedback: null,
-  targetDriverId: null,
+  opponentLatestFeedback: null as Record<string, any> | null,
+  targetDriverId: null as string | null,
   remainingTime: 120,
-  result: null,
-  error: null,
-}
+  result: null as 'win' | 'lose' | 'tie' | null,
+  error: null as string | null,
+})
 
 export function useOnlineGame() {
-  const [state, setState] = useState<OnlineGameState>(initialState)
+  const [state, setState] = useState<OnlineGameState>(getInitialState)
   const [wsUrl, setWsUrl] = useState<string | null>(null)
   const stateRef = useRef(state)
 
@@ -170,8 +171,13 @@ export function useOnlineGame() {
   }, [send])
 
   const reset = useCallback(() => {
-    setState(initialState)
+    setState(getInitialState())
     setWsUrl(null)
+  }, [])
+
+  const changePlayerName = useCallback((newName: string) => {
+    savePlayerName(newName)
+    setState((prev) => ({ ...prev, playerName: newName }))
   }, [])
 
   return {
@@ -183,5 +189,6 @@ export function useOnlineGame() {
     giveUp,
     restart,
     reset,
+    changePlayerName,
   }
 }
