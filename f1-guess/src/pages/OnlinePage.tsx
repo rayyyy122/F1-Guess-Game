@@ -29,7 +29,6 @@ export function OnlinePage() {
     giveUp,
     requestRestart,
     acceptRestart,
-    declineRestart,
     leaveRoom,
     changePlayerName,
   } = useOnlineGame()
@@ -104,7 +103,6 @@ export function OnlinePage() {
             restartInvite={restartInvite}
             onRequestRestart={requestRestart}
             onAcceptRestart={acceptRestart}
-            onDeclineRestart={declineRestart}
             onBackToLobby={leaveRoom}
           />
         )}

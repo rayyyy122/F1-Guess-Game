@@ -255,41 +255,11 @@ export function useOnlineGame() {
     send({ type: 'accept_restart' })
   }, [send])
 
-  const declineRestart = useCallback(() => {
-    send({ type: 'decline_restart' })
-    setState((prev) => ({
-      ...prev,
-      restartInvite: {
-        ...prev.restartInvite,
-        declined: true,
-      },
-    }))
-  }, [send])
-
   const leaveRoom = useCallback(() => {
     send({ type: 'leave_room' })
     setWsUrl(null)
     setState(getInitialState())
   }, [send])
-
-  const restart = useCallback(() => {
-    send({ type: 'confirm_restart' })
-    setState((prev) => ({
-      ...prev,
-      phase: 'waiting',
-      myGuesses: [],
-      opponentGuessCount: 0,
-      opponentLatestFeedback: null,
-      result: null,
-      targetDriverId: null,
-      remainingTime: 120,
-    }))
-  }, [send])
-
-  const reset = useCallback(() => {
-    setState(getInitialState())
-    setWsUrl(null)
-  }, [])
 
   const changePlayerName = useCallback((newName: string) => {
     savePlayerName(newName)
@@ -305,10 +275,7 @@ export function useOnlineGame() {
     giveUp,
     requestRestart,
     acceptRestart,
-    declineRestart,
     leaveRoom,
-    restart,
-    reset,
     changePlayerName,
   }
 }

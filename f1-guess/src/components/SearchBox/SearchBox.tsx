@@ -74,7 +74,7 @@ export function SearchBox({ onSelect, disabled, guessedIds }: SearchBoxProps) {
         className="w-full px-4 py-3 rounded-lg bg-f1-gray text-f1-text placeholder-gray-400 border-2 border-transparent focus:border-f1-red focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
       />
       {isOpen && (
-        <ul className="absolute z-10 w-full mt-2 bg-f1-gray border border-gray-600 rounded-lg shadow-lg max-h-64 overflow-auto">
+        <ul className="absolute z-10 w-full mt-2 bg-f1-gray border border-gray-600 rounded-lg shadow-lg max-h-96 overflow-y-auto">
           {results.map((driver, idx) => (
             <li
               key={driver.id}

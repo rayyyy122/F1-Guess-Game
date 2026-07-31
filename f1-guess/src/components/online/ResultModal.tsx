@@ -15,7 +15,6 @@ interface ResultModalProps {
   }
   onRequestRestart: () => void
   onAcceptRestart: () => void
-  onDeclineRestart: () => void
   onBackToLobby: () => void
 }
 
@@ -29,7 +28,6 @@ export function ResultModal({
   restartInvite,
   onRequestRestart,
   onAcceptRestart,
-  onDeclineRestart,
   onBackToLobby,
 }: ResultModalProps) {
   if (!isOpen || !result) return null
@@ -103,13 +101,13 @@ export function ResultModal({
 
         <div className="flex gap-3">
           {restartInvite.from ? (
-            // 收到邀请时，显示接受/拒绝按钮
+            // 收到邀请时，显示接受/拒绝并退出按钮
             <>
               <button
-                onClick={onDeclineRestart}
+                onClick={onBackToLobby}
                 className="flex-1 py-3 bg-gray-600 hover:bg-gray-500 rounded-lg font-medium transition-colors"
               >
-                拒绝
+                拒绝并退出
               </button>
               <button
                 onClick={onAcceptRestart}
