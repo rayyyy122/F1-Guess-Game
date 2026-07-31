@@ -177,14 +177,16 @@ export function useOnlineGame() {
 
       case 'room_closed':
         // Opponent left after game finished, go back to lobby
-        setState((prev) => ({
-          ...prev,
-          phase: 'lobby',
-          roomId: null,
-          opponentName: null,
-          error: '对手已离开房间',
-        }))
         setWsUrl(null)
+        // 完全重置状态，除了 playerName
+        setState((prev) => {
+          const initialState = getInitialState()
+          return {
+            ...initialState,
+            playerName: prev.playerName,
+            error: '对手已离开房间',
+          }
+        })
         break
 
       case 'opponent_left':
@@ -202,7 +204,13 @@ export function useOnlineGame() {
   const createRoom = useCallback(
     async (playerName: string) => {
       try {
-        setState((prev) => ({ ...prev, playerName, error: null }))
+        // 重置所有游戏状态，保留 playerName
+        const initialState = getInitialState()
+        setState({
+          ...initialState,
+          playerName,
+          error: null,
+        })
         const response = await fetch(
           `${API_BASE}/create?playerName=${encodeURIComponent(playerName)}`,
           { method: 'POST' }
@@ -221,7 +229,14 @@ export function useOnlineGame() {
   )
 
   const joinRoom = useCallback((roomId: string, playerName: string) => {
-    setState((prev) => ({ ...prev, playerName, roomId, error: null }))
+    // 重置所有游戏状态，保留 playerName 和 roomId
+    const initialState = getInitialState()
+    setState({
+      ...initialState,
+      playerName,
+      roomId: roomId.toUpperCase(),
+      error: null,
+    })
     const wsUrl = `${API_BASE.replace('https', 'wss')}/room/${roomId.toUpperCase()}?playerName=${encodeURIComponent(playerName)}`
     setWsUrl(wsUrl)
   }, [])
