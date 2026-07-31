@@ -1,7 +1,23 @@
+import { useState, useEffect, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { drivers } from '../utils/drivers'
+import { HelpModal } from '../components/HelpModal/HelpModal'
+import { hasSeenHelp, markHelpSeen } from '../utils/storage'
 
 export function HomePage() {
+  const [isHelpOpen, setIsHelpOpen] = useState(false)
+
+  useEffect(() => {
+    if (!hasSeenHelp()) {
+      setIsHelpOpen(true)
+    }
+  }, [])
+
+  const handleCloseHelp = useCallback(() => {
+    setIsHelpOpen(false)
+    markHelpSeen()
+  }, [])
+
   return (
     <div className="min-h-screen bg-f1-dark text-f1-text flex flex-col">
       <header className="w-full border-b border-gray-700 py-4 px-4">
@@ -43,6 +59,8 @@ export function HomePage() {
       <footer className="w-full py-4 text-center text-xs text-gray-500">
         数据截止到 2026-07-27，匈牙利大奖赛，共 {drivers.length} 名车手
       </footer>
+
+      <HelpModal isOpen={isHelpOpen} onClose={handleCloseHelp} />
     </div>
   )
 }

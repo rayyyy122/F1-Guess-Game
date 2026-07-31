@@ -57,10 +57,24 @@ export function useOnlineGame() {
   const stateRef = useRef(state)
   const isLeavingRef = useRef(false)
   const closeWsRef = useRef<(() => void) | null>(null)
+  const errorTimerRef = useRef<number | null>(null)
 
   useEffect(() => {
     stateRef.current = state
   }, [state])
+
+  // 错误消息 3 秒后自动消失
+  useEffect(() => {
+    if (state.error) {
+      if (errorTimerRef.current) clearTimeout(errorTimerRef.current)
+      errorTimerRef.current = window.setTimeout(() => {
+        setState((prev) => ({ ...prev, error: null }))
+      }, 3000)
+    }
+    return () => {
+      if (errorTimerRef.current) clearTimeout(errorTimerRef.current)
+    }
+  }, [state.error])
 
   const handleMessage = useCallback((data: any) => {
     // 如果正在离开房间，忽略所有消息

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useOnlineGame } from '../hooks/useOnlineGame'
 import { Header } from '../components/Header/Header'
@@ -9,7 +9,6 @@ import { ResultModal } from '../components/online/ResultModal'
 import { ChangeNameModal } from '../components/online/ChangeNameModal'
 import { StatsModal } from '../components/StatsModal/StatsModal'
 import { HelpModal } from '../components/HelpModal/HelpModal'
-import { hasSeenHelp, markHelpSeen } from '../utils/storage'
 import { getDriverById } from '../utils/drivers'
 import { drivers } from '../utils/drivers'
 
@@ -41,16 +40,8 @@ export function OnlinePage() {
   const [isStatsOpen, setIsStatsOpen] = useState(false)
   const [isHelpOpen, setIsHelpOpen] = useState(false)
 
-  // 显示规则弹窗
-  useEffect(() => {
-    if (!hasSeenHelp('online-help-seen')) {
-      setIsHelpOpen(true)
-    }
-  }, [])
-
   const handleCloseHelp = () => {
     setIsHelpOpen(false)
-    markHelpSeen('online-help-seen')
   }
 
   const targetDriver = targetDriverId ? (getDriverById(targetDriverId) ?? null) : null

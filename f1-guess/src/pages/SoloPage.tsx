@@ -1,4 +1,4 @@
-import { useMemo, useState, useCallback, useEffect } from 'react'
+import { useMemo, useState, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { useGame } from '../hooks/useGame'
 import { useStats } from '../hooks/useStats'
@@ -10,7 +10,6 @@ import { StatsModal } from '../components/StatsModal/StatsModal'
 import { HelpModal } from '../components/HelpModal/HelpModal'
 import { ConfirmModal } from '../components/ConfirmModal/ConfirmModal'
 import { AnswerModal } from '../components/AnswerModal/AnswerModal'
-import { hasSeenHelp, markHelpSeen } from '../utils/storage'
 import { drivers } from '../utils/drivers'
 
 export function SoloPage() {
@@ -20,15 +19,8 @@ export function SoloPage() {
   const [isGiveUpConfirmOpen, setIsGiveUpConfirmOpen] = useState(false)
   const [isAnswerOpen, setIsAnswerOpen] = useState(false)
 
-  useEffect(() => {
-    if (!hasSeenHelp()) {
-      setIsHelpOpen(true)
-    }
-  }, [])
-
   const handleCloseHelp = useCallback(() => {
     setIsHelpOpen(false)
-    markHelpSeen()
   }, [])
 
   const handleWin = useCallback(
