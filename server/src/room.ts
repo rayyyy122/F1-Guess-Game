@@ -355,10 +355,19 @@ export class GameRoom implements DurableObject {
         this.send(remainingWs, {
           type: 'room_closed',
         })
-        // Close the WebSocket connection to prevent reconnection
-        remainingWs.close(1000, 'Room closed - opponent left')
-        // Remove from sessions
-        this.sessions.delete(remainingWs)
+      }
+
+      // Immediately remove from sessions to prevent any further messages
+      // This must happen before any other operations that might trigger broadcasts
+      this.sessions.clear()
+
+      // Now close the WebSocket
+      if (remainingWs) {
+        try {
+          remainingWs.close(1000, 'Room closed - opponent left')
+        } catch (err) {
+          // Ignore close errors
+        }
       }
 
       // Delete the remaining player from room state
@@ -491,7 +500,10 @@ export class GameRoom implements DurableObject {
 
   send(ws: WebSocket, message: ServerMessage) {
     try {
-      ws.send(JSON.stringify(message))
+      // 只对 OPEN 状态的 WebSocket 发送消息
+      if (ws.readyState === WebSocket.OPEN) {
+        ws.send(JSON.stringify(message))
+      }
     } catch (err) {
       console.error('Send error:', err)
     }
@@ -508,6 +520,14 @@ export class GameRoom implements DurableObject {
   broadcast(message: ServerMessage) {
     for (const ws of this.sessions.keys()) {
       this.send(ws, message)
+    }
+  }
+
+  broadcastExcept(playerId: string, message: ServerMessage) {
+    for (const [ws, pid] of this.sessions) {
+      if (pid !== playerId) {
+        this.send(ws, message)
+      }
     }
   }
 
