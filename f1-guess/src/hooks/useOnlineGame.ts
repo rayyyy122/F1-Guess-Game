@@ -55,12 +55,16 @@ export function useOnlineGame() {
   const [state, setState] = useState<OnlineGameState>(getInitialState)
   const [wsUrl, setWsUrl] = useState<string | null>(null)
   const stateRef = useRef(state)
+  const isLeavingRef = useRef(false)
 
   useEffect(() => {
     stateRef.current = state
   }, [state])
 
   const handleMessage = useCallback((data: any) => {
+    // 如果正在离开房间，忽略所有消息
+    if (isLeavingRef.current) return
+
     switch (data.type) {
       case 'room_joined':
         setState((prev) => ({
@@ -271,9 +275,18 @@ export function useOnlineGame() {
   }, [send])
 
   const leaveRoom = useCallback(() => {
+    isLeavingRef.current = true
     send({ type: 'leave_room' })
+    // 先关闭 WebSocket，防止后续消息到达
     setWsUrl(null)
-    setState(getInitialState())
+    // 重置状态，保留 playerName
+    setState((prev) => {
+      const initialState = getInitialState()
+      return {
+        ...initialState,
+        playerName: prev.playerName,
+      }
+    })
   }, [send])
 
   const changePlayerName = useCallback((newName: string) => {
