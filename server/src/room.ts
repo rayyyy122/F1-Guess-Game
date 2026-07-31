@@ -346,11 +346,27 @@ export class GameRoom implements DurableObject {
       await this.state.storage.delete('roomState')
       this.roomState = null
     } else {
-      // One player left, notify them to go back to waiting
+      // One player left, notify them to go back to waiting and close their connection
       const remainingPlayerId = remainingPlayers[0]
-      this.sendTo(remainingPlayerId, {
-        type: 'room_closed',
-      })
+      const remainingWs = this.getWebSocketForPlayer(remainingPlayerId)
+
+      if (remainingWs) {
+        // Send room_closed message
+        this.send(remainingWs, {
+          type: 'room_closed',
+        })
+        // Close the WebSocket connection to prevent reconnection
+        remainingWs.close(1000, 'Room closed - opponent left')
+        // Remove from sessions
+        this.sessions.delete(remainingWs)
+      }
+
+      // Delete the remaining player from room state
+      delete this.roomState.players[remainingPlayerId]
+
+      // Close the room completely
+      await this.state.storage.delete('roomState')
+      this.roomState = null
     }
   }
 
@@ -462,6 +478,15 @@ export class GameRoom implements DurableObject {
     if (!this.roomState) return undefined
     const opponentId = Object.keys(this.roomState.players).find((id) => id !== playerId)
     return opponentId ? this.roomState.players[opponentId] : undefined
+  }
+
+  getWebSocketForPlayer(playerId: string): WebSocket | undefined {
+    for (const [ws, pid] of this.sessions) {
+      if (pid === playerId) {
+        return ws
+      }
+    }
+    return undefined
   }
 
   send(ws: WebSocket, message: ServerMessage) {
