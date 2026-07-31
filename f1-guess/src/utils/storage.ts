@@ -49,17 +49,17 @@ export function recordGameResult(won: boolean, guessCount: number): GameStats {
   return newStats
 }
 
-export function hasSeenHelp(): boolean {
+export function hasSeenHelp(key = HELP_SEEN_KEY): boolean {
   try {
-    return localStorage.getItem(HELP_SEEN_KEY) === 'true'
+    return localStorage.getItem(key) === 'true'
   } catch {
     return false
   }
 }
 
-export function markHelpSeen(): void {
+export function markHelpSeen(key = HELP_SEEN_KEY): void {
   try {
-    localStorage.setItem(HELP_SEEN_KEY, 'true')
+    localStorage.setItem(key, 'true')
   } catch {
     // localStorage 不可用时静默失败
   }

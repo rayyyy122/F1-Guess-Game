@@ -1,10 +1,11 @@
 interface HeaderProps {
-  onNewGame: () => void
+  onNewGame?: () => void
   onShowStats: () => void
   onShowHelp: () => void
+  showNewGame?: boolean
 }
 
-export function Header({ onNewGame, onShowStats, onShowHelp }: HeaderProps) {
+export function Header({ onNewGame, onShowStats, onShowHelp, showNewGame = true }: HeaderProps) {
   return (
     <header className="w-full border-b border-gray-700 py-4 px-4">
       <div className="max-w-6xl mx-auto flex items-center justify-between">
@@ -25,12 +26,14 @@ export function Header({ onNewGame, onShowStats, onShowHelp }: HeaderProps) {
           >
             统计
           </button>
-          <button
-            onClick={onNewGame}
-            className="px-4 py-2 bg-f1-red hover:bg-red-700 rounded-lg font-medium transition-colors"
-          >
-            新游戏
-          </button>
+          {showNewGame && onNewGame && (
+            <button
+              onClick={onNewGame}
+              className="px-4 py-2 bg-f1-red hover:bg-red-700 rounded-lg font-medium transition-colors"
+            >
+              新游戏
+            </button>
+          )}
         </div>
       </div>
     </header>
