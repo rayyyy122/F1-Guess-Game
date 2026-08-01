@@ -36,7 +36,7 @@ export function OnlineGameView({
   const canGuess = myGuesses.length < maxGuesses && remainingTime > 0
 
   return (
-    <div className="max-w-6xl mx-auto">
+    <div className="max-w-7xl mx-auto">
       <div className="text-center mb-6">
         <Countdown remaining={remainingTime} />
       </div>

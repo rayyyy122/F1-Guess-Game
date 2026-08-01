@@ -59,7 +59,7 @@ export function OnlinePage() {
         showNewGame={false}
       />
 
-      <main className="max-w-6xl mx-auto px-4 py-8">
+      <main className="max-w-7xl mx-auto px-4 py-8">
         <div className="mb-4">
           <Link to="/" className="text-sm text-gray-400 hover:text-f1-red">
             ← 返回首页
