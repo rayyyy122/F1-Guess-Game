@@ -56,14 +56,12 @@ const getInitialState = () => ({
 export function useOnlineGame() {
   const [state, setState] = useState<OnlineGameState>(getInitialState)
   const [wsUrl, setWsUrl] = useState<string | null>(null)
-  const stateRef = useRef(state)
   const isLeavingRef = useRef(false)
+  // 游戏是否已结算。不能用 state 判断：game_end 和 room_closed 几乎同时到达，
+  // setState 是异步的，处理 room_closed 时 state 可能还没更新
+  const finishedRef = useRef(false)
   const closeWsRef = useRef<(() => void) | null>(null)
   const errorTimerRef = useRef<number | null>(null)
-
-  useEffect(() => {
-    stateRef.current = state
-  }, [state])
 
   // 错误消息 3 秒后自动消失
   useEffect(() => {
@@ -129,6 +127,7 @@ export function useOnlineGame() {
         break
 
       case 'game_end':
+        finishedRef.current = true
         setState((prev) => ({
           ...prev,
           phase: 'finished',
@@ -179,6 +178,7 @@ export function useOnlineGame() {
 
       case 'game_restart':
         // Reset game state for new round
+        finishedRef.current = false
         setState((prev) => ({
           ...prev,
           phase: 'playing',
@@ -205,7 +205,7 @@ export function useOnlineGame() {
         // 如果本局已结算（对手中途离开时我们会先收到 game_end），
         // 保留结算弹窗，不重置状态；但房间已销毁，标记对手离开
         // 让结算弹窗隐藏「再来一局」
-        if (stateRef.current.phase === 'finished') {
+        if (finishedRef.current) {
           setState((prev) => ({ ...prev, endReason: 'opponent_disconnect' }))
           break
         }
@@ -241,6 +241,7 @@ export function useOnlineGame() {
       try {
         // 重置离开标志，允许处理新消息
         isLeavingRef.current = false
+        finishedRef.current = false
 
         // 重置所有游戏状态，保留 playerName
         const initialState = getInitialState()
@@ -269,6 +270,7 @@ export function useOnlineGame() {
   const joinRoom = useCallback((roomId: string, playerName: string) => {
     // 重置离开标志，允许处理新消息
     isLeavingRef.current = false
+    finishedRef.current = false
 
     // 重置所有游戏状态，保留 playerName 和 roomId
     const initialState = getInitialState()
@@ -313,6 +315,7 @@ export function useOnlineGame() {
 
   const leaveRoom = useCallback(() => {
     isLeavingRef.current = true
+    finishedRef.current = false
     send({ type: 'leave_room' })
 
     // 立即重置状态到初始状态，清除所有游戏数据
