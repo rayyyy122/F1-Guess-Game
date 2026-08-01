@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useOnlineGame } from '../hooks/useOnlineGame'
 import { Header } from '../components/Header/Header'
 import { LobbyView } from '../components/online/LobbyView'
@@ -23,6 +23,7 @@ export function OnlinePage() {
     opponentGuesses,
     remainingTime,
     result,
+    endReason,
     targetDriverId,
     error,
     restartInvite,
@@ -39,6 +40,14 @@ export function OnlinePage() {
   const [showChangeNameModal, setShowChangeNameModal] = useState(false)
   const [isStatsOpen, setIsStatsOpen] = useState(false)
   const [isHelpOpen, setIsHelpOpen] = useState(false)
+  const navigate = useNavigate()
+
+  // 返回首页前必须先走 leaveRoom 流程通知服务端，
+  // 否则对方会卡在房间里等不到结算
+  const handleBackToHome = () => {
+    leaveRoom()
+    navigate('/')
+  }
 
   const handleCloseHelp = () => {
     setIsHelpOpen(false)
@@ -61,9 +70,9 @@ export function OnlinePage() {
 
       <main className="max-w-7xl mx-auto px-4 py-8">
         <div className="mb-4">
-          <Link to="/" className="text-sm text-gray-400 hover:text-f1-red">
+          <button onClick={handleBackToHome} className="text-sm text-gray-400 hover:text-f1-red">
             ← 返回首页
-          </Link>
+          </button>
         </div>
 
         <div className="text-center mb-8">
@@ -106,6 +115,7 @@ export function OnlinePage() {
             opponentGuesses={opponentGuessCount}
             targetDriver={targetDriver}
             opponentName={opponentName}
+            opponentLeft={endReason === 'opponent_disconnect'}
             restartInvite={restartInvite}
             onRequestRestart={requestRestart}
             onAcceptRestart={acceptRestart}

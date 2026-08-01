@@ -7,6 +7,7 @@ interface ResultModalProps {
   opponentGuesses: number
   targetDriver: Driver | null
   opponentName: string | null
+  opponentLeft?: boolean
   restartInvite: {
     from: string | null
     accepted: boolean
@@ -25,6 +26,7 @@ export function ResultModal({
   opponentGuesses,
   targetDriver,
   opponentName,
+  opponentLeft = false,
   restartInvite,
   onRequestRestart,
   onAcceptRestart,
@@ -73,6 +75,12 @@ export function ResultModal({
         )}
 
         {/* 邀请状态显示 */}
+        {opponentLeft && (
+          <div className="mb-4 p-3 bg-f1-dark border border-gray-600 rounded-lg">
+            <p className="text-center text-sm text-gray-400">对手已离开房间</p>
+          </div>
+        )}
+
         {restartInvite.from && (
           <div className="mb-4 p-3 bg-f1-green/20 border border-f1-green rounded-lg">
             <p className="text-center text-sm">
@@ -100,7 +108,15 @@ export function ResultModal({
         )}
 
         <div className="flex gap-3">
-          {restartInvite.from ? (
+          {opponentLeft ? (
+            // 对手已离开，房间不存在了，只能返回大厅
+            <button
+              onClick={onBackToLobby}
+              className="w-full py-3 bg-gray-600 hover:bg-gray-500 rounded-lg font-medium transition-colors"
+            >
+              返回大厅
+            </button>
+          ) : restartInvite.from ? (
             // 收到邀请时，显示接受/拒绝并退出按钮
             <>
               <button

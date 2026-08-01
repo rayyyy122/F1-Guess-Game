@@ -257,7 +257,9 @@ export class GameRoom implements DurableObject {
     setTimeout(async () => {
       await this.loadState()
       const p = this.roomState?.players[playerId]
-      if (p && !p.connected && Date.now() - p.lastSeen > RECONNECT_WINDOW) {
+      // 30 秒重连窗口内未回来即判负，直接结束游戏
+      // （不再检查 lastSeen，避免因最近有操作而导致永远不结算）
+      if (p && !p.connected) {
         if (this.roomState?.status === 'playing') {
           const opponent = this.getOpponent(playerId)
           if (opponent) {
@@ -334,6 +336,15 @@ export class GameRoom implements DurableObject {
     this.broadcastExcept(playerId, {
       type: 'opponent_left',
     })
+
+    // 游戏进行中有人离开，剩余玩家直接获胜（先结算再移除玩家，
+    // 这样结算数据完整，剩余玩家能看到胜利弹窗而不是仅仅被踢回大厅）
+    if (this.roomState.status === 'playing') {
+      const opponent = this.getOpponent(playerId)
+      if (opponent) {
+        await this.endGame(opponent.id, 'opponent_disconnect')
+      }
+    }
 
     // Remove this player from the room
     delete this.roomState.players[playerId]

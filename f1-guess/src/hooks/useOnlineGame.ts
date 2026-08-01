@@ -20,6 +20,7 @@ interface OnlineGameState {
   targetDriverId: string | null
   remainingTime: number
   result: 'win' | 'lose' | 'tie' | null
+  endReason: string | null
   error: string | null
   // 再来一局邀请状态
   restartInvite: {
@@ -42,6 +43,7 @@ const getInitialState = () => ({
   targetDriverId: null as string | null,
   remainingTime: 120,
   result: null as 'win' | 'lose' | 'tie' | null,
+  endReason: null as string | null,
   error: null as string | null,
   restartInvite: {
     from: null as string | null,
@@ -131,6 +133,7 @@ export function useOnlineGame() {
           ...prev,
           phase: 'finished',
           result: data.result,
+          endReason: data.reason ?? null,
           targetDriverId: data.targetDriverId,
           restartInvite: {
             from: null,
@@ -183,6 +186,7 @@ export function useOnlineGame() {
           opponentGuessCount: 0,
           opponentGuesses: [],
           result: null,
+          endReason: null,
           targetDriverId: null,
           remainingTime: data.duration || 120,
           restartInvite: {
@@ -195,9 +199,16 @@ export function useOnlineGame() {
         break
 
       case 'room_closed':
-        // Opponent left after game finished, go back to lobby
+        // 对手离开，房间被服务端关闭
         closeWsRef.current?.()
         setWsUrl(null)
+        // 如果本局已结算（对手中途离开时我们会先收到 game_end），
+        // 保留结算弹窗，不重置状态；但房间已销毁，标记对手离开
+        // 让结算弹窗隐藏「再来一局」
+        if (stateRef.current.phase === 'finished') {
+          setState((prev) => ({ ...prev, endReason: 'opponent_disconnect' }))
+          break
+        }
         // 完全重置状态，除了 playerName
         setState((prev) => {
           const initialState = getInitialState()
