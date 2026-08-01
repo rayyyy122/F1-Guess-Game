@@ -74,11 +74,16 @@ export function GuessTable({ guesses, targetDriverId, masked = false }: GuessTab
 
   return (
     <div className="w-full overflow-x-auto">
-      <table className="w-full border-separate border-spacing-1">
+      <table className="w-full table-fixed border-separate border-spacing-1">
         <thead>
           <tr>
             {columns.map((col) => (
-              <th key={col.key} className="text-xs text-gray-400 font-normal pb-2 px-1">
+              <th
+                key={col.key}
+                className={`text-xs text-gray-400 font-normal pb-2 px-1 ${
+                  col.key === 'name' ? 'w-[20%]' : ''
+                }`}
+              >
                 {col.label}
               </th>
             ))}
