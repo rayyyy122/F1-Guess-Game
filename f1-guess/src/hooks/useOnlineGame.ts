@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect, useRef } from 'react'
 import { useWebSocket } from './useWebSocket'
-import type { Driver, Guess } from '../types'
+import type { Driver, Guess, GuessFeedback } from '../types'
 import { getDriverById } from '../utils/drivers'
 import { loadPlayerName, savePlayerName } from '../utils/storage'
 
@@ -16,7 +16,7 @@ interface OnlineGameState {
   opponentName: string | null
   myGuesses: Guess[]
   opponentGuessCount: number
-  opponentLatestFeedback: Record<string, any> | null
+  opponentGuesses: GuessFeedback[]
   targetDriverId: string | null
   remainingTime: number
   result: 'win' | 'lose' | 'tie' | null
@@ -38,7 +38,7 @@ const getInitialState = () => ({
   opponentName: null as string | null,
   myGuesses: [] as Guess[],
   opponentGuessCount: 0,
-  opponentLatestFeedback: null as Record<string, any> | null,
+  opponentGuesses: [] as GuessFeedback[],
   targetDriverId: null as string | null,
   remainingTime: 120,
   result: null as 'win' | 'lose' | 'tie' | null,
@@ -118,7 +118,7 @@ export function useOnlineGame() {
         setState((prev) => ({
           ...prev,
           opponentGuessCount: data.guessCount,
-          opponentLatestFeedback: data.feedback,
+          opponentGuesses: [...prev.opponentGuesses, data.feedback],
         }))
         break
 
@@ -181,7 +181,7 @@ export function useOnlineGame() {
           phase: 'playing',
           myGuesses: [],
           opponentGuessCount: 0,
-          opponentLatestFeedback: null,
+          opponentGuesses: [],
           result: null,
           targetDriverId: null,
           remainingTime: data.duration || 120,

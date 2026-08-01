@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import type { Driver, Guess } from '../../types'
+import type { Driver, Guess, GuessFeedback } from '../../types'
 import { SearchBox } from '../SearchBox/SearchBox'
 import { GuessTable } from '../GuessTable/GuessTable'
 import { Countdown } from './Countdown'
@@ -8,7 +8,7 @@ import { ConfirmModal } from '../ConfirmModal/ConfirmModal'
 interface OnlineGameViewProps {
   myGuesses: Guess[]
   opponentGuessCount: number
-  opponentLatestFeedback: Record<string, any> | null
+  opponentGuesses: GuessFeedback[]
   remainingTime: number
   playerName: string
   opponentName: string | null
@@ -16,24 +16,10 @@ interface OnlineGameViewProps {
   onGiveUp: () => void
 }
 
-function FeedbackRow({ feedback }: { feedback: Record<string, any> }) {
-  const keys = ['nationality', 'team', 'number', 'championships', 'podiums', 'wins', 'debutYear', 'status']
-  return (
-    <div className="flex gap-1 justify-center">
-      {keys.map((key) => {
-        const value = feedback[key]
-        const type = typeof value === 'object' && value !== null ? value.type : value
-        const emoji = type === 'correct' ? '🟩' : type === 'close' ? '🟨' : '⬜'
-        return <span key={key} className="text-xl">{emoji}</span>
-      })}
-    </div>
-  )
-}
-
 export function OnlineGameView({
   myGuesses,
   opponentGuessCount,
-  opponentLatestFeedback,
+  opponentGuesses,
   remainingTime,
   playerName,
   opponentName,
@@ -42,6 +28,10 @@ export function OnlineGameView({
 }: OnlineGameViewProps) {
   const [showGiveUpConfirm, setShowGiveUpConfirm] = useState(false)
   const guessedIds = useMemo(() => new Set(myGuesses.map((g) => g.driver.id)), [myGuesses])
+  const maskedOpponentGuesses = useMemo(
+    () => opponentGuesses.map((feedback) => ({ feedback })),
+    [opponentGuesses]
+  )
   const maxGuesses = 8
   const canGuess = myGuesses.length < maxGuesses && remainingTime > 0
 
@@ -51,14 +41,14 @@ export function OnlineGameView({
         <Countdown remaining={remainingTime} />
       </div>
 
-      <div className="flex justify-between items-center mb-6 px-4">
-        <div className="text-center">
-          <div className="text-sm text-gray-400">你 ({playerName})</div>
+      <div className="flex justify-center items-center gap-8 sm:gap-16 mb-6">
+        <div className="text-center w-28">
+          <div className="text-sm text-gray-400 truncate">你 ({playerName})</div>
           <div className="text-2xl font-bold text-f1-red">{myGuesses.length} / {maxGuesses}</div>
         </div>
         <div className="text-3xl font-bold text-gray-600">VS</div>
-        <div className="text-center">
-          <div className="text-sm text-gray-400">{opponentName || '对手'}</div>
+        <div className="text-center w-28">
+          <div className="text-sm text-gray-400 truncate">{opponentName || '对手'}</div>
           <div className="text-2xl font-bold">{opponentGuessCount} / {maxGuesses}</div>
         </div>
       </div>
@@ -67,14 +57,19 @@ export function OnlineGameView({
         <SearchBox onSelect={onGuess} disabled={!canGuess} guessedIds={guessedIds} />
       </div>
 
-      {opponentLatestFeedback && (
-        <div className="mb-6 p-4 bg-f1-gray rounded-lg">
-          <p className="text-sm text-gray-400 mb-2 text-center">对手最新猜测</p>
-          <FeedbackRow feedback={opponentLatestFeedback} />
+      {myGuesses.length > 0 && (
+        <p className="text-sm text-gray-400 mb-2 text-center">你的猜测</p>
+      )}
+      <GuessTable guesses={myGuesses} />
+
+      {opponentGuesses.length > 0 && (
+        <div className="mt-6">
+          <p className="text-sm text-gray-400 mb-2 text-center">
+            {opponentName || '对手'}的猜测
+          </p>
+          <GuessTable guesses={maskedOpponentGuesses} masked />
         </div>
       )}
-
-      <GuessTable guesses={myGuesses} />
 
       {canGuess && myGuesses.length > 0 && (
         <div className="mt-8 text-center">

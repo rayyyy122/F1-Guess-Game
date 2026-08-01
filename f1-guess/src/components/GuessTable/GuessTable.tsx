@@ -1,8 +1,14 @@
-import type { Guess, FeedbackType, NumericFeedback } from '../../types'
+import type { Guess, GuessFeedback, FeedbackType, NumericFeedback } from '../../types'
+
+// 联机模式下对手的猜测只有反馈没有车手信息
+export interface MaskedGuess {
+  feedback: GuessFeedback
+}
 
 interface GuessTableProps {
-  guesses: Guess[]
+  guesses: Array<Guess | MaskedGuess>
   targetDriverId?: string
+  masked?: boolean
 }
 
 const columns = [
@@ -63,7 +69,7 @@ function NumericCell({ value, feedback }: { value: number; feedback: NumericFeed
   )
 }
 
-export function GuessTable({ guesses, targetDriverId }: GuessTableProps) {
+export function GuessTable({ guesses, targetDriverId, masked = false }: GuessTableProps) {
   if (guesses.length === 0) return null
 
   return (
@@ -79,7 +85,21 @@ export function GuessTable({ guesses, targetDriverId }: GuessTableProps) {
           </tr>
         </thead>
         <tbody>
-          {guesses.map((guess) => (
+          {masked
+            ? (guesses as MaskedGuess[]).map((guess, index) => (
+                <tr key={index}>
+                  <Cell value="***" />
+                  <Cell value="***" feedback={guess.feedback.nationality} />
+                  <Cell value="***" feedback={guess.feedback.team} />
+                  <Cell value="***" feedback={guess.feedback.number.type} />
+                  <Cell value="***" feedback={guess.feedback.championships.type} />
+                  <Cell value="***" feedback={guess.feedback.podiums.type} />
+                  <Cell value="***" feedback={guess.feedback.wins.type} />
+                  <Cell value="***" feedback={guess.feedback.debutYear.type} />
+                  <Cell value="***" feedback={guess.feedback.status} />
+                </tr>
+              ))
+            : (guesses as Guess[]).map((guess) => (
             <tr key={guess.driver.id}>
               <Cell
                 value={

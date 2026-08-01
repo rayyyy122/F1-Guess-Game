@@ -20,7 +20,7 @@ export function OnlinePage() {
     opponentName,
     myGuesses,
     opponentGuessCount,
-    opponentLatestFeedback,
+    opponentGuesses,
     remainingTime,
     result,
     targetDriverId,
@@ -89,7 +89,7 @@ export function OnlinePage() {
           <OnlineGameView
             myGuesses={myGuesses}
             opponentGuessCount={opponentGuessCount}
-            opponentLatestFeedback={opponentLatestFeedback}
+            opponentGuesses={opponentGuesses}
             remainingTime={remainingTime}
             playerName={playerName}
             opponentName={opponentName}
