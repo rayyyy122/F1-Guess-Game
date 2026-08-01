@@ -81,7 +81,7 @@ export function GuessTable({ guesses, targetDriverId, masked = false }: GuessTab
               <th
                 key={col.key}
                 className={`text-xs text-gray-400 font-normal pb-2 px-1 ${
-                  col.key === 'name' ? 'w-[20%]' : ''
+                  col.key === 'name' || col.key === 'team' ? 'w-[22%]' : ''
                 }`}
               >
                 {col.label}
