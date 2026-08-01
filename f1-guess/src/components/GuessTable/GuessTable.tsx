@@ -29,6 +29,13 @@ const statusText: Record<string, string> = {
   retired: '退役',
 }
 
+// 长文本列加宽，纯数字列收窄（未指定的列均分剩余宽度）
+const columnWidths: Record<string, string> = {
+  name: 'w-[30%]',
+  team: 'w-[22%]',
+  nationality: 'w-[8%]',
+}
+
 function getCellColor(feedback: FeedbackType): string {
   switch (feedback) {
     case 'correct':
@@ -81,7 +88,7 @@ export function GuessTable({ guesses, targetDriverId, masked = false }: GuessTab
               <th
                 key={col.key}
                 className={`text-xs text-gray-400 font-normal pb-2 px-1 ${
-                  col.key === 'name' || col.key === 'team' ? 'w-[22%]' : ''
+                  columnWidths[col.key] ?? ''
                 }`}
               >
                 {col.label}
