@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { drivers } from '../utils/drivers'
+import { Logo } from '../components/Logo'
 import { HelpModal } from '../components/HelpModal/HelpModal'
 import { hasSeenHelp, markHelpSeen } from '../utils/storage'
 
@@ -22,10 +23,7 @@ export function HomePage() {
     <div className="min-h-screen text-f1-text flex flex-col">
       <header className="w-full border-b border-white/10 py-4 px-4">
         <div className="max-w-6xl mx-auto flex items-center justify-center">
-          <div className="flex items-center gap-2">
-            <span className="text-2xl font-black italic tracking-tight text-f1-red">F1</span>
-            <span className="text-xl font-black italic tracking-tight">GUESS</span>
-          </div>
+          <Logo />
         </div>
       </header>
 
