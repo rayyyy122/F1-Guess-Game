@@ -89,6 +89,47 @@ body::before {
   animation: countdown-urgent 1s ease-in-out infinite;
 }
 
+/* ===== 细节打磨 ===== */
+
+/* 选中文字：红底白字 */
+::selection {
+  background: rgba(225, 6, 0, 0.85);
+  color: #fff;
+}
+
+/* 深色主题滚动条 */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #38383f transparent;
+}
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #38383f;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #4a4a52;
+}
+
+/* 输入框 focus：红色光晕 */
+input:focus,
+textarea:focus {
+  box-shadow: 0 0 0 3px rgba(225, 6, 0, 0.25);
+}
+
+/* 键盘导航焦点框 */
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid rgba(225, 6, 0, 0.6);
+  outline-offset: 2px;
+}
+
 /* 尊重系统的减弱动效设置 */
 @media (prefers-reduced-motion: reduce) {
   .cell-flip,
