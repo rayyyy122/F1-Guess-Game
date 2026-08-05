@@ -40,8 +40,8 @@ export function ResultModal({
     result === 'win' ? 'text-f1-green' : result === 'lose' ? 'text-f1-red' : 'text-f1-yellow'
 
   return (
-    <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
-      <div className="bg-f1-card rounded-xl p-6 max-w-md w-full" onClick={(e) => e.stopPropagation()}>
+    <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4 modal-overlay">
+      <div className="bg-f1-card rounded-xl p-6 max-w-md w-full modal-panel" onClick={(e) => e.stopPropagation()}>
         <h2 className={`text-3xl font-bold mb-6 text-center ${titleColor}`}>{title}</h2>
 
         <div className="grid grid-cols-2 gap-4 mb-6">

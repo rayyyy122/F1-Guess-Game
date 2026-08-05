@@ -47,12 +47,23 @@ function getCellColor(feedback: FeedbackType): string {
   }
 }
 
-function Cell({ value, feedback }: { value: string | number; feedback?: FeedbackType }) {
+function Cell({
+  value,
+  feedback,
+  delay,
+}: {
+  value: string | number
+  feedback?: FeedbackType
+  delay?: number
+}) {
   const colorClass = feedback ? getCellColor(feedback) : 'bg-f1-gray'
   return (
     <td className="p-1">
       <div
-        className={`${colorClass} rounded px-2 py-2 text-xs font-medium text-center min-h-[2.5rem] flex items-center justify-center break-words leading-tight`}
+        className={`${colorClass} rounded px-2 py-2 text-xs font-medium text-center min-h-[2.5rem] flex items-center justify-center break-words leading-tight ${
+          delay != null ? 'cell-flip' : ''
+        }`}
+        style={delay != null ? { animationDelay: `${delay}ms` } : undefined}
       >
         {value}
       </div>
@@ -60,14 +71,25 @@ function Cell({ value, feedback }: { value: string | number; feedback?: Feedback
   )
 }
 
-function NumericCell({ value, feedback }: { value: number; feedback: NumericFeedback }) {
+function NumericCell({
+  value,
+  feedback,
+  delay,
+}: {
+  value: number
+  feedback: NumericFeedback
+  delay?: number
+}) {
   const colorClass = getCellColor(feedback.type)
   const arrow =
     feedback.direction === 'up' ? ' ↑' : feedback.direction === 'down' ? ' ↓' : ''
   return (
     <td className="p-1">
       <div
-        className={`${colorClass} rounded px-2 py-2 text-xs font-medium text-center min-h-[2.5rem] flex items-center justify-center break-words leading-tight`}
+        className={`${colorClass} rounded px-2 py-2 text-xs font-medium text-center min-h-[2.5rem] flex items-center justify-center break-words leading-tight ${
+          delay != null ? 'cell-flip' : ''
+        }`}
+        style={delay != null ? { animationDelay: `${delay}ms` } : undefined}
       >
         {value}
         {arrow}
@@ -98,20 +120,27 @@ export function GuessTable({ guesses, targetDriverId, masked = false }: GuessTab
         </thead>
         <tbody>
           {masked
-            ? (guesses as MaskedGuess[]).map((guess, index) => (
-                <tr key={index}>
-                  <Cell value="***" />
-                  <Cell value="***" feedback={guess.feedback.nationality} />
-                  <Cell value="***" feedback={guess.feedback.team} />
-                  <Cell value="***" feedback={guess.feedback.number.type} />
-                  <Cell value="***" feedback={guess.feedback.championships.type} />
-                  <Cell value="***" feedback={guess.feedback.podiums.type} />
-                  <Cell value="***" feedback={guess.feedback.wins.type} />
-                  <Cell value="***" feedback={guess.feedback.debutYear.type} />
-                  <Cell value="***" feedback={guess.feedback.status} />
-                </tr>
-              ))
-            : (guesses as Guess[]).map((guess) => (
+            ? (guesses as MaskedGuess[]).map((guess, index) => {
+                const d = (i: number) =>
+                  index === guesses.length - 1 ? i * 80 : undefined
+                return (
+                  <tr key={index}>
+                    <Cell value="***" delay={d(0)} />
+                    <Cell value="***" feedback={guess.feedback.nationality} delay={d(1)} />
+                    <Cell value="***" feedback={guess.feedback.team} delay={d(2)} />
+                    <Cell value="***" feedback={guess.feedback.number.type} delay={d(3)} />
+                    <Cell value="***" feedback={guess.feedback.championships.type} delay={d(4)} />
+                    <Cell value="***" feedback={guess.feedback.podiums.type} delay={d(5)} />
+                    <Cell value="***" feedback={guess.feedback.wins.type} delay={d(6)} />
+                    <Cell value="***" feedback={guess.feedback.debutYear.type} delay={d(7)} />
+                    <Cell value="***" feedback={guess.feedback.status} delay={d(8)} />
+                  </tr>
+                )
+              })
+            : (guesses as Guess[]).map((guess, index) => {
+                const d = (i: number) =>
+                  index === guesses.length - 1 ? i * 80 : undefined
+                return (
             <tr key={guess.driver.id}>
               <Cell
                 value={
@@ -120,8 +149,9 @@ export function GuessTable({ guesses, targetDriverId, masked = false }: GuessTab
                     : guess.driver.name
                 }
                 feedback={guess.driver.id === targetDriverId ? 'correct' : undefined}
+                delay={d(0)}
               />
-              <Cell value={guess.driver.nationality} feedback={guess.feedback.nationality} />
+              <Cell value={guess.driver.nationality} feedback={guess.feedback.nationality} delay={d(1)} />
               <Cell
                 value={
                   guess.driver.teamCn
@@ -129,21 +159,25 @@ export function GuessTable({ guesses, targetDriverId, masked = false }: GuessTab
                     : guess.driver.team
                 }
                 feedback={guess.feedback.team}
+                delay={d(2)}
               />
-              <NumericCell value={guess.driver.number} feedback={guess.feedback.number} />
+              <NumericCell value={guess.driver.number} feedback={guess.feedback.number} delay={d(3)} />
               <NumericCell
                 value={guess.driver.championships}
                 feedback={guess.feedback.championships}
+                delay={d(4)}
               />
-              <NumericCell value={guess.driver.podiums} feedback={guess.feedback.podiums} />
-              <NumericCell value={guess.driver.wins} feedback={guess.feedback.wins} />
-              <NumericCell value={guess.driver.debutYear} feedback={guess.feedback.debutYear} />
+              <NumericCell value={guess.driver.podiums} feedback={guess.feedback.podiums} delay={d(5)} />
+              <NumericCell value={guess.driver.wins} feedback={guess.feedback.wins} delay={d(6)} />
+              <NumericCell value={guess.driver.debutYear} feedback={guess.feedback.debutYear} delay={d(7)} />
               <Cell
                 value={statusText[guess.driver.status] ?? guess.driver.status}
                 feedback={guess.feedback.status}
+                delay={d(8)}
               />
             </tr>
-          ))}
+                )
+              })}
         </tbody>
       </table>
     </div>

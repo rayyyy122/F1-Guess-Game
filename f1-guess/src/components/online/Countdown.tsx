@@ -11,8 +11,8 @@ export function Countdown({ remaining }: CountdownProps) {
   let bgClass = 'bg-f1-card border-2 border-white/10'
 
   if (remaining <= 10) {
-    colorClass = 'text-f1-red animate-pulse'
-    bgClass = 'bg-f1-red/20 border-2 border-f1-red'
+    colorClass = 'text-f1-red'
+    bgClass = 'bg-f1-red/20 border-2 border-f1-red countdown-urgent'
   } else if (remaining <= 30) {
     colorClass = 'text-f1-yellow'
     bgClass = 'bg-f1-yellow/20 border-2 border-f1-yellow'

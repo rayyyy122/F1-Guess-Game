@@ -32,6 +32,73 @@ body::before {
   background: radial-gradient(ellipse 90% 45% at 50% -5%, rgba(225, 6, 0, 0.12), transparent 70%);
 }
 
+/* ===== 动效 ===== */
+
+/* 猜测格子翻牌揭示（配合逐列 animation-delay） */
+@keyframes flip-in {
+  0% {
+    transform: rotateX(-90deg);
+    opacity: 0;
+  }
+  100% {
+    transform: rotateX(0);
+    opacity: 1;
+  }
+}
+.cell-flip {
+  animation: flip-in 0.4s ease-out both;
+}
+
+/* 模态框：遮罩淡入 + 面板弹出 */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes modal-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+.modal-overlay {
+  animation: fade-in 0.15s ease-out;
+}
+.modal-panel {
+  animation: modal-pop 0.2s ease-out;
+}
+
+/* 倒计时告急：红色光晕脉冲 */
+@keyframes countdown-urgent {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(225, 6, 0, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 24px 4px rgba(225, 6, 0, 0.3);
+  }
+}
+.countdown-urgent {
+  animation: countdown-urgent 1s ease-in-out infinite;
+}
+
+/* 尊重系统的减弱动效设置 */
+@media (prefers-reduced-motion: reduce) {
+  .cell-flip,
+  .modal-overlay,
+  .modal-panel,
+  .countdown-urgent {
+    animation: none;
+  }
+}
+
 #root {
   min-height: 100vh;
 }

@@ -31,11 +31,11 @@ export function HelpModal({ isOpen, onClose }: HelpModalProps) {
 
   return (
     <div
-      className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4"
+      className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4 modal-overlay"
       onClick={onClose}
     >
       <div
-        className="bg-f1-card rounded-xl p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto"
+        className="bg-f1-card rounded-xl p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto modal-panel"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex justify-between items-center mb-6">
