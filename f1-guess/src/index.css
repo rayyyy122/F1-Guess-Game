@@ -22,6 +22,37 @@ body {
   margin: 0;
 }
 
+/* 背景氛围层 1：顶部红色光晕 + 斜向碳纤维纹理 */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 90% 45% at 50% -5%, rgba(225, 6, 0, 0.12), transparent 70%),
+    repeating-linear-gradient(
+      45deg,
+      rgba(255, 255, 255, 0.012) 0 2px,
+      transparent 2px 8px
+    );
+}
+
+/* 背景氛围层 2：底部方格旗细条（终点线元素） */
+body::after {
+  content: '';
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 10px;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.05;
+  background: repeating-conic-gradient(#fff 0% 25%, transparent 0% 50%);
+  background-size: 10px 10px;
+}
+
 #root {
   min-height: 100vh;
 }

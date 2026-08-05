@@ -19,7 +19,7 @@ export function HomePage() {
   }, [])
 
   return (
-    <div className="min-h-screen bg-f1-dark text-f1-text flex flex-col">
+    <div className="min-h-screen text-f1-text flex flex-col">
       <header className="w-full border-b border-white/10 py-4 px-4">
         <div className="max-w-6xl mx-auto flex items-center justify-center">
           <div className="flex items-center gap-2">

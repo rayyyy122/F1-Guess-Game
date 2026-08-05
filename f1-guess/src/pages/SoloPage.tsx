@@ -70,7 +70,7 @@ export function SoloPage() {
   const isPlaying = status === 'playing'
 
   return (
-    <div className="min-h-screen bg-f1-dark text-f1-text">
+    <div className="min-h-screen text-f1-text">
       <Header
         onNewGame={resetGame}
         onShowStats={() => setIsStatsOpen(true)}

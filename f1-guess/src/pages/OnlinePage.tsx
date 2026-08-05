@@ -61,7 +61,7 @@ export function OnlinePage() {
   }
 
   return (
-    <div className="min-h-screen bg-f1-dark text-f1-text">
+    <div className="min-h-screen text-f1-text">
       <Header
         onShowStats={() => setIsStatsOpen(true)}
         onShowHelp={() => setIsHelpOpen(true)}
