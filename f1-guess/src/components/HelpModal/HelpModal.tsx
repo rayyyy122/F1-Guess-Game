@@ -35,7 +35,7 @@ export function HelpModal({ isOpen, onClose }: HelpModalProps) {
       onClick={onClose}
     >
       <div
-        className="bg-f1-gray rounded-lg p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto"
+        className="bg-f1-card rounded-lg p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex justify-between items-center mb-6">
@@ -80,7 +80,7 @@ export function HelpModal({ isOpen, onClose }: HelpModalProps) {
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="border-b border-gray-600">
+                  <tr className="border-b border-white/15">
                     <th className="text-left py-2 pr-4">属性</th>
                     <th className="text-left py-2 pr-4 text-f1-green">🟩 正确</th>
                     <th className="text-left py-2 pr-4 text-f1-yellow">🟨 接近</th>
@@ -89,7 +89,7 @@ export function HelpModal({ isOpen, onClose }: HelpModalProps) {
                 </thead>
                 <tbody>
                   {rules.map((rule) => (
-                    <tr key={rule.label} className="border-b border-gray-700">
+                    <tr key={rule.label} className="border-b border-white/10">
                       <td className="py-2 pr-4 font-medium">{rule.label}</td>
                       <td className="py-2 pr-4 text-gray-300">{rule.correct}</td>
                       <td className="py-2 pr-4 text-gray-300">{rule.close}</td>

@@ -35,7 +35,7 @@ export function ChangeNameModal({ isOpen, currentName, onClose, onSave }: Change
 
   return (
     <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
-      <div className="bg-f1-gray rounded-xl p-6 max-w-md w-full">
+      <div className="bg-f1-card rounded-xl p-6 max-w-md w-full">
         <h2 className="text-xl font-bold mb-4 text-center">修改昵称</h2>
 
         <div className="mb-4">
@@ -53,7 +53,7 @@ export function ChangeNameModal({ isOpen, currentName, onClose, onSave }: Change
 
         <button
           onClick={handleRandom}
-          className="w-full mb-4 py-2 bg-f1-dark hover:bg-gray-700 border border-gray-600 rounded-lg text-sm transition-colors"
+          className="w-full mb-4 py-2 bg-f1-dark hover:bg-f1-elevated border border-white/15 rounded-lg text-sm transition-colors"
         >
           🎲 随机生成
         </button>

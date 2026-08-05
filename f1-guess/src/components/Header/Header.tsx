@@ -7,7 +7,7 @@ interface HeaderProps {
 
 export function Header({ onNewGame, onShowStats, onShowHelp, showNewGame = true }: HeaderProps) {
   return (
-    <header className="w-full border-b border-gray-700 py-4 px-4">
+    <header className="w-full border-b border-white/10 py-4 px-4">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         <div className="flex items-center gap-2">
           <span className="text-2xl font-black italic tracking-tight text-f1-red">F1</span>

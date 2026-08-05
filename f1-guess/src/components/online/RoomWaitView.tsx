@@ -33,7 +33,7 @@ export function RoomWaitView({ roomId, playerName, opponentName }: RoomWaitViewP
       <div className="mb-8">
         <p className="text-sm text-gray-400 mb-3">房间号</p>
         <div className="flex items-center justify-center gap-3">
-          <div className="px-6 py-3 bg-f1-gray rounded-lg text-3xl font-mono font-bold tracking-widest">
+          <div className="px-6 py-3 bg-f1-card border border-white/10 rounded-lg text-3xl font-mono font-bold tracking-widest">
             {roomId}
           </div>
           <button
@@ -46,18 +46,18 @@ export function RoomWaitView({ roomId, playerName, opponentName }: RoomWaitViewP
       </div>
 
       <div className="space-y-3 mb-8">
-        <div className="p-4 bg-f1-gray rounded-lg flex items-center justify-between">
+        <div className="p-4 bg-f1-card border border-white/10 rounded-lg flex items-center justify-between">
           <span className="font-medium">{playerName} (你)</span>
           <span className="text-f1-green">✓ 已就绪</span>
         </div>
 
         {opponentName ? (
-          <div className="p-4 bg-f1-gray rounded-lg flex items-center justify-between">
+          <div className="p-4 bg-f1-card border border-white/10 rounded-lg flex items-center justify-between">
             <span className="font-medium">{opponentName}</span>
             <span className="text-f1-green">✓ 已就绪</span>
           </div>
         ) : (
-          <div className="p-4 bg-f1-gray/50 rounded-lg flex items-center justify-center text-gray-400">
+          <div className="p-4 border border-dashed border-white/15 rounded-lg flex items-center justify-center text-gray-400">
             <span className="animate-pulse">等待对手加入...</span>
           </div>
         )}

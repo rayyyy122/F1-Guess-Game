@@ -31,7 +31,7 @@ export function LobbyView({
   return (
     <div className="max-w-md mx-auto">
       {/* 当前昵称显示 */}
-      <div className="mb-6 p-4 bg-f1-gray rounded-lg">
+      <div className="mb-6 p-4 bg-f1-card border border-white/10 rounded-lg">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-f1-red rounded-full flex items-center justify-center">
@@ -67,7 +67,7 @@ export function LobbyView({
 
       <div className="relative mb-6">
         <div className="absolute inset-0 flex items-center">
-          <div className="w-full border-t border-gray-700"></div>
+          <div className="w-full border-t border-white/10"></div>
         </div>
         <div className="relative flex justify-center text-sm">
           <span className="px-4 bg-f1-dark text-gray-400">或</span>
@@ -82,7 +82,7 @@ export function LobbyView({
           onChange={(e) => setRoomId(e.target.value.toUpperCase())}
           placeholder="输入 6 位字母房间号"
           maxLength={6}
-          className="w-full px-4 py-3 rounded-lg bg-f1-gray text-f1-text placeholder-gray-400 border-2 border-transparent focus:border-f1-red focus:outline-none uppercase tracking-widest text-center text-lg font-mono"
+          className="w-full px-4 py-3 rounded-lg bg-f1-card border border-white/10 text-f1-text placeholder-gray-400 focus:border-f1-red focus:outline-none uppercase tracking-widest text-center text-lg font-mono transition-colors"
         />
       </div>
 

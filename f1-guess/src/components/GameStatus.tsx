@@ -19,7 +19,7 @@ export function GameStatusBanner({
 
   if (status === 'lost') {
     return (
-      <div className="w-full max-w-xl mx-auto mb-6 p-6 bg-f1-gray border-2 border-f1-red rounded-lg text-center">
+      <div className="w-full max-w-xl mx-auto mb-6 p-6 bg-f1-card border-2 border-f1-red rounded-lg text-center">
         <h2 className="text-2xl font-bold mb-2">😔 游戏结束</h2>
         <p className="mb-4">8 次机会已用完</p>
         <div className="flex flex-col gap-3">

@@ -46,7 +46,7 @@ export function StatsModal({ isOpen, onClose }: StatsModalProps) {
       onClick={onClose}
     >
       <div
-        className="bg-f1-gray rounded-lg p-6 max-w-md w-full"
+        className="bg-f1-card rounded-lg p-6 max-w-md w-full"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex justify-between items-center mb-6">

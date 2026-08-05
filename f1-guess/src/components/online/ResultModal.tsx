@@ -41,7 +41,7 @@ export function ResultModal({
 
   return (
     <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
-      <div className="bg-f1-gray rounded-lg p-6 max-w-md w-full" onClick={(e) => e.stopPropagation()}>
+      <div className="bg-f1-card rounded-lg p-6 max-w-md w-full" onClick={(e) => e.stopPropagation()}>
         <h2 className={`text-3xl font-bold mb-6 text-center ${titleColor}`}>{title}</h2>
 
         <div className="grid grid-cols-2 gap-4 mb-6">
@@ -76,7 +76,7 @@ export function ResultModal({
 
         {/* 邀请状态显示 */}
         {opponentLeft && (
-          <div className="mb-4 p-3 bg-f1-dark border border-gray-600 rounded-lg">
+          <div className="mb-4 p-3 bg-f1-dark border border-white/15 rounded-lg">
             <p className="text-center text-sm text-gray-400">对手已离开房间</p>
           </div>
         )}

@@ -8,7 +8,7 @@ export function Countdown({ remaining }: CountdownProps) {
   const timeText = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`
 
   let colorClass = 'text-f1-text'
-  let bgClass = 'bg-f1-gray'
+  let bgClass = 'bg-f1-card border-2 border-white/10'
 
   if (remaining <= 10) {
     colorClass = 'text-f1-red animate-pulse'

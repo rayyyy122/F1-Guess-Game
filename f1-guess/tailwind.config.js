@@ -16,7 +16,9 @@ export default {
       colors: {
         f1: {
           red: '#E10600',
-          dark: '#15151E',
+          dark: '#0F0F15',
+          card: '#1D1D27',
+          elevated: '#262630',
           green: '#38D1A8',
           yellow: '#FAB500',
           blue: '#006F62',

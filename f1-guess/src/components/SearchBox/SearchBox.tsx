@@ -71,10 +71,10 @@ export function SearchBox({ onSelect, disabled, guessedIds }: SearchBoxProps) {
         onKeyDown={handleKeyDown}
         disabled={disabled}
         placeholder="输入车手名字(中文或英文)..."
-        className="w-full px-4 py-3 rounded-lg bg-f1-gray text-f1-text placeholder-gray-400 border-2 border-transparent focus:border-f1-red focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
+        className="w-full px-4 py-3 rounded-lg bg-f1-card border border-white/10 text-f1-text placeholder-gray-400 focus:border-f1-red focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
       />
       {isOpen && (
-        <ul className="absolute z-10 w-full mt-2 bg-f1-gray border border-gray-600 rounded-lg shadow-lg max-h-96 overflow-y-auto">
+        <ul className="absolute z-10 w-full mt-2 bg-f1-card border border-white/15 rounded-lg shadow-lg max-h-96 overflow-y-auto">
           {results.map((driver, idx) => (
             <li
               key={driver.id}

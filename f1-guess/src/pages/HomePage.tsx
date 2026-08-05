@@ -20,7 +20,7 @@ export function HomePage() {
 
   return (
     <div className="min-h-screen bg-f1-dark text-f1-text flex flex-col">
-      <header className="w-full border-b border-gray-700 py-4 px-4">
+      <header className="w-full border-b border-white/10 py-4 px-4">
         <div className="max-w-6xl mx-auto flex items-center justify-center">
           <div className="flex items-center gap-2">
             <span className="text-2xl font-black italic tracking-tight text-f1-red">F1</span>
@@ -37,7 +37,7 @@ export function HomePage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Link
               to="/solo"
-              className="block p-8 bg-f1-gray hover:bg-gray-600 rounded-xl transition-colors border-2 border-transparent hover:border-f1-red"
+              className="block p-8 bg-f1-card hover:bg-f1-elevated rounded-xl transition-colors border-2 border-transparent hover:border-f1-red"
             >
               <div className="text-4xl mb-4">🎮</div>
               <h2 className="text-xl font-bold mb-2">单机模式</h2>
@@ -46,7 +46,7 @@ export function HomePage() {
 
             <Link
               to="/online"
-              className="block p-8 bg-f1-gray hover:bg-gray-600 rounded-xl transition-colors border-2 border-transparent hover:border-f1-red"
+              className="block p-8 bg-f1-card hover:bg-f1-elevated rounded-xl transition-colors border-2 border-transparent hover:border-f1-red"
             >
               <div className="text-4xl mb-4">⚔️</div>
               <h2 className="text-xl font-bold mb-2">联机模式</h2>
