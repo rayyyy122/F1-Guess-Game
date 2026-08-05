@@ -27,7 +27,7 @@ export function HomePage() {
         </div>
       </header>
 
-      <main className="flex-1 flex items-center justify-center px-4">
+      <main className="flex-1 flex items-start justify-center px-4 pt-20 sm:pt-28">
         <div className="max-w-2xl w-full text-center">
           <h1 className="text-4xl font-black italic tracking-tight mb-3">F1 车手猜谜游戏</h1>
           <p className="text-gray-400 mb-12">选择游戏模式开始挑战</p>
