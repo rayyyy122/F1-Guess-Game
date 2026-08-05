@@ -41,7 +41,7 @@ export function ResultModal({
 
   return (
     <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
-      <div className="bg-f1-card rounded-lg p-6 max-w-md w-full" onClick={(e) => e.stopPropagation()}>
+      <div className="bg-f1-card rounded-xl p-6 max-w-md w-full" onClick={(e) => e.stopPropagation()}>
         <h2 className={`text-3xl font-bold mb-6 text-center ${titleColor}`}>{title}</h2>
 
         <div className="grid grid-cols-2 gap-4 mb-6">
@@ -112,7 +112,7 @@ export function ResultModal({
             // 对手已离开，房间不存在了，只能返回大厅
             <button
               onClick={onBackToLobby}
-              className="w-full py-3 bg-gray-600 hover:bg-gray-500 rounded-lg font-medium transition-colors"
+              className="w-full py-3 btn-secondary"
             >
               返回大厅
             </button>
@@ -121,13 +121,13 @@ export function ResultModal({
             <>
               <button
                 onClick={onBackToLobby}
-                className="flex-1 py-3 bg-gray-600 hover:bg-gray-500 rounded-lg font-medium transition-colors"
+                className="flex-1 py-3 btn-secondary"
               >
                 拒绝并退出
               </button>
               <button
                 onClick={onAcceptRestart}
-                className="flex-1 py-3 bg-f1-green text-f1-dark hover:bg-green-400 rounded-lg font-medium transition-colors"
+                className="flex-1 py-3 btn-success"
               >
                 接受
               </button>
@@ -136,7 +136,7 @@ export function ResultModal({
             // 已发送邀请，等待响应时，只有返回大厅按钮
             <button
               onClick={onBackToLobby}
-              className="w-full py-3 bg-gray-600 hover:bg-gray-500 rounded-lg font-medium transition-colors"
+              className="w-full py-3 btn-secondary"
             >
               返回大厅
             </button>
@@ -145,13 +145,13 @@ export function ResultModal({
             <>
               <button
                 onClick={onBackToLobby}
-                className="flex-1 py-3 bg-gray-600 hover:bg-gray-500 rounded-lg font-medium transition-colors"
+                className="flex-1 py-3 btn-secondary"
               >
                 返回大厅
               </button>
               <button
                 onClick={onRequestRestart}
-                className="flex-1 py-3 bg-f1-red hover:bg-red-700 rounded-lg font-medium transition-colors"
+                className="flex-1 py-3 btn-primary"
               >
                 再来一局
               </button>

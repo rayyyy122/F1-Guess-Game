@@ -38,7 +38,7 @@ export function RoomWaitView({ roomId, playerName, opponentName }: RoomWaitViewP
           </div>
           <button
             onClick={handleCopy}
-            className="px-4 py-3 bg-f1-red hover:bg-red-700 rounded-lg font-medium transition-colors"
+            className="px-4 py-3 btn-primary"
           >
             {copied ? '已复制!' : '复制'}
           </button>

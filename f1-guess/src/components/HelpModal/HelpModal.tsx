@@ -35,7 +35,7 @@ export function HelpModal({ isOpen, onClose }: HelpModalProps) {
       onClick={onClose}
     >
       <div
-        className="bg-f1-card rounded-lg p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto"
+        className="bg-f1-card rounded-xl p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex justify-between items-center mb-6">

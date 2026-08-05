@@ -42,7 +42,7 @@ export function AnswerModal({ isOpen, driver, guessCount, onNewGame }: AnswerMod
       onClick={onNewGame}
     >
       <div
-        className="bg-f1-card rounded-lg p-6 max-w-md w-full"
+        className="bg-f1-card rounded-xl p-6 max-w-md w-full"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="text-center mb-6">
@@ -74,7 +74,7 @@ export function AnswerModal({ isOpen, driver, guessCount, onNewGame }: AnswerMod
 
         <button
           onClick={onNewGame}
-          className="w-full py-3 bg-f1-red hover:bg-red-700 rounded-lg font-medium transition-colors"
+          className="w-full py-3 btn-primary"
         >
           开始新游戏
         </button>

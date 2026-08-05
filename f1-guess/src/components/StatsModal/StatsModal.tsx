@@ -46,7 +46,7 @@ export function StatsModal({ isOpen, onClose }: StatsModalProps) {
       onClick={onClose}
     >
       <div
-        className="bg-f1-card rounded-lg p-6 max-w-md w-full"
+        className="bg-f1-card rounded-xl p-6 max-w-md w-full"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex justify-between items-center mb-6">
@@ -67,7 +67,7 @@ export function StatsModal({ isOpen, onClose }: StatsModalProps) {
 
         <button
           onClick={onClose}
-          className="w-full py-2 bg-f1-red hover:bg-red-700 rounded-lg font-medium transition-colors"
+          className="w-full py-2 btn-primary"
         >
           关闭
         </button>

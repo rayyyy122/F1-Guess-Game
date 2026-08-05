@@ -39,7 +39,7 @@ export function ConfirmModal({
       onClick={onCancel}
     >
       <div
-        className="bg-f1-card rounded-lg p-6 max-w-sm w-full"
+        className="bg-f1-card rounded-xl p-6 max-w-sm w-full"
         onClick={(e) => e.stopPropagation()}
       >
         <h2 className="text-xl font-bold mb-3">{title}</h2>
@@ -47,15 +47,13 @@ export function ConfirmModal({
         <div className="flex gap-3">
           <button
             onClick={onCancel}
-            className="flex-1 py-2 bg-gray-600 hover:bg-gray-500 rounded-lg font-medium transition-colors"
+            className="flex-1 py-2 btn-secondary"
           >
             {cancelText}
           </button>
           <button
             onClick={onConfirm}
-            className={`flex-1 py-2 rounded-lg font-medium transition-colors ${
-              danger ? 'bg-f1-red hover:bg-red-700' : 'bg-f1-green text-f1-dark hover:bg-green-400'
-            }`}
+            className={`flex-1 py-2 ${danger ? 'btn-primary' : 'btn-success'}`}
           >
             {confirmText}
           </button>

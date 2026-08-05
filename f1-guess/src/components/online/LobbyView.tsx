@@ -60,7 +60,7 @@ export function LobbyView({
 
       <button
         onClick={handleCreateRoom}
-        className="w-full py-3 mb-6 bg-f1-red hover:bg-red-700 rounded-lg font-medium transition-colors"
+        className="w-full py-3 mb-6 btn-primary"
       >
         创建新房间
       </button>
@@ -89,7 +89,7 @@ export function LobbyView({
       <button
         onClick={handleJoinRoom}
         disabled={roomId.length !== 6}
-        className="w-full py-3 bg-f1-green text-f1-dark hover:bg-green-400 disabled:bg-gray-600 disabled:text-gray-400 disabled:cursor-not-allowed rounded-lg font-medium transition-colors"
+        className="w-full py-3 btn-success"
       >
         加入房间
       </button>

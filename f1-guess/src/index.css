@@ -2,6 +2,21 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+  /* 主按钮：红色渐变 + 发光 + 上浮 */
+  .btn-primary {
+    @apply bg-gradient-to-br from-f1-red to-[#A80400] hover:from-red-500 hover:to-f1-red shadow-lg shadow-f1-red/25 hover:shadow-f1-red/40 hover:-translate-y-0.5 active:translate-y-0 rounded-lg font-semibold transition-all disabled:from-gray-600 disabled:to-gray-600 disabled:text-gray-400 disabled:shadow-none disabled:translate-y-0 disabled:cursor-not-allowed;
+  }
+  /* 成功按钮：绿色渐变 */
+  .btn-success {
+    @apply bg-gradient-to-br from-f1-green to-[#2AA386] text-f1-dark hover:from-[#4BE0B8] hover:to-f1-green shadow-lg shadow-f1-green/25 hover:shadow-f1-green/40 hover:-translate-y-0.5 active:translate-y-0 rounded-lg font-semibold transition-all disabled:from-gray-600 disabled:to-gray-600 disabled:text-gray-400 disabled:shadow-none disabled:translate-y-0 disabled:cursor-not-allowed;
+  }
+  /* 次要按钮：悬浮色 + 细边框 */
+  .btn-secondary {
+    @apply bg-f1-elevated border border-white/10 hover:bg-f1-gray hover:border-white/20 rounded-lg font-medium transition-all;
+  }
+}
+
 body {
   @apply bg-f1-dark text-f1-text min-h-screen font-sans;
   margin: 0;

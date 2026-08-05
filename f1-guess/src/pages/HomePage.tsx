@@ -37,7 +37,7 @@ export function HomePage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Link
               to="/solo"
-              className="block p-8 bg-f1-card hover:bg-f1-elevated rounded-xl transition-colors border-2 border-transparent hover:border-f1-red"
+              className="block p-8 bg-f1-card hover:bg-f1-elevated rounded-xl transition-all border-2 border-transparent hover:border-f1-red hover:-translate-y-1 hover:shadow-2xl hover:shadow-f1-red/10"
             >
               <div className="text-4xl mb-4">🎮</div>
               <h2 className="text-xl font-bold mb-2">单机模式</h2>
@@ -46,7 +46,7 @@ export function HomePage() {
 
             <Link
               to="/online"
-              className="block p-8 bg-f1-card hover:bg-f1-elevated rounded-xl transition-colors border-2 border-transparent hover:border-f1-red"
+              className="block p-8 bg-f1-card hover:bg-f1-elevated rounded-xl transition-all border-2 border-transparent hover:border-f1-red hover:-translate-y-1 hover:shadow-2xl hover:shadow-f1-red/10"
             >
               <div className="text-4xl mb-4">⚔️</div>
               <h2 className="text-xl font-bold mb-2">联机模式</h2>

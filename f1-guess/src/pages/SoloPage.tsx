@@ -117,7 +117,7 @@ export function SoloPage() {
           <div className="mt-8 text-center">
             <button
               onClick={() => setIsGiveUpConfirmOpen(true)}
-              className="px-6 py-2 text-gray-400 hover:text-f1-red border border-gray-600 hover:border-f1-red rounded-lg font-medium transition-colors"
+              className="px-6 py-2 text-gray-400 hover:text-f1-red border border-white/20 hover:border-f1-red rounded-lg font-medium transition-colors"
             >
               放弃看答案
             </button>

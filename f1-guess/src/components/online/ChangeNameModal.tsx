@@ -61,14 +61,14 @@ export function ChangeNameModal({ isOpen, currentName, onClose, onSave }: Change
         <div className="flex gap-3">
           <button
             onClick={onClose}
-            className="flex-1 py-3 bg-f1-dark hover:bg-gray-700 rounded-lg font-medium transition-colors"
+            className="flex-1 py-3 btn-secondary"
           >
             取消
           </button>
           <button
             onClick={handleSave}
             disabled={!name.trim() || name.trim() === currentName}
-            className="flex-1 py-3 bg-f1-red hover:bg-red-700 disabled:bg-gray-600 disabled:cursor-not-allowed rounded-lg font-medium transition-colors"
+            className="flex-1 py-3 btn-primary"
           >
             保存
           </button>
