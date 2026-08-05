@@ -85,7 +85,7 @@ export function SoloPage() {
         </div>
 
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold mb-2">单机模式</h1>
+          <h1 className="text-3xl font-black italic tracking-tight mb-2">单机模式</h1>
           <p className="text-gray-400">
             {isPlaying
               ? `剩余 ${remainingGuesses} / ${maxGuesses} 次机会`

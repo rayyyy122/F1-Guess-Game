@@ -10,8 +10,8 @@ export function Header({ onNewGame, onShowStats, onShowHelp, showNewGame = true 
     <header className="w-full border-b border-gray-700 py-4 px-4">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <span className="text-2xl font-bold text-f1-red">F1</span>
-          <span className="text-xl font-bold">GUESS</span>
+          <span className="text-2xl font-black italic tracking-tight text-f1-red">F1</span>
+          <span className="text-xl font-black italic tracking-tight">GUESS</span>
         </div>
         <div className="flex gap-2">
           <button

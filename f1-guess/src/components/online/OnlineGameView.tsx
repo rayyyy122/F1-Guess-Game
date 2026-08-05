@@ -44,12 +44,12 @@ export function OnlineGameView({
       <div className="flex justify-center items-center gap-8 sm:gap-16 mb-6">
         <div className="text-center w-28">
           <div className="text-sm text-gray-400 truncate">你 ({playerName})</div>
-          <div className="text-2xl font-bold text-f1-red">{myGuesses.length} / {maxGuesses}</div>
+          <div className="text-2xl font-black italic tabular-nums text-f1-red">{myGuesses.length} / {maxGuesses}</div>
         </div>
-        <div className="text-3xl font-bold text-gray-600">VS</div>
+        <div className="text-3xl font-black italic text-gray-600">VS</div>
         <div className="text-center w-28">
           <div className="text-sm text-gray-400 truncate">{opponentName || '对手'}</div>
-          <div className="text-2xl font-bold">{opponentGuessCount} / {maxGuesses}</div>
+          <div className="text-2xl font-black italic tabular-nums">{opponentGuessCount} / {maxGuesses}</div>
         </div>
       </div>
 

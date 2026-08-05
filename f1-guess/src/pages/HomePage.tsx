@@ -23,15 +23,15 @@ export function HomePage() {
       <header className="w-full border-b border-gray-700 py-4 px-4">
         <div className="max-w-6xl mx-auto flex items-center justify-center">
           <div className="flex items-center gap-2">
-            <span className="text-2xl font-bold text-f1-red">F1</span>
-            <span className="text-xl font-bold">GUESS</span>
+            <span className="text-2xl font-black italic tracking-tight text-f1-red">F1</span>
+            <span className="text-xl font-black italic tracking-tight">GUESS</span>
           </div>
         </div>
       </header>
 
       <main className="flex-1 flex items-center justify-center px-4">
         <div className="max-w-2xl w-full text-center">
-          <h1 className="text-4xl font-bold mb-3">F1 车手猜谜游戏</h1>
+          <h1 className="text-4xl font-black italic tracking-tight mb-3">F1 车手猜谜游戏</h1>
           <p className="text-gray-400 mb-12">选择游戏模式开始挑战</p>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

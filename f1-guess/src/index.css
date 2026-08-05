@@ -3,14 +3,8 @@
 @tailwind utilities;
 
 body {
-  @apply bg-f1-dark text-f1-text min-h-screen;
+  @apply bg-f1-dark text-f1-text min-h-screen font-sans;
   margin: 0;
-  font-family:
-    system-ui,
-    -apple-system,
-    'Segoe UI',
-    Roboto,
-    sans-serif;
 }
 
 #root {

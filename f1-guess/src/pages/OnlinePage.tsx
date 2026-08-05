@@ -76,7 +76,7 @@ export function OnlinePage() {
         </div>
 
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold mb-2">联机模式</h1>
+          <h1 className="text-3xl font-black italic tracking-tight mb-2">联机模式</h1>
           <p className="text-gray-400">1v1 实时对战，2 分钟内分出胜负</p>
         </div>
 

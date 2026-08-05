@@ -20,7 +20,7 @@ export function Countdown({ remaining }: CountdownProps) {
 
   return (
     <div className={`inline-block px-6 py-3 rounded-lg ${bgClass}`}>
-      <div className={`text-4xl font-mono font-bold ${colorClass}`}>{timeText}</div>
+      <div className={`text-4xl font-black italic tabular-nums tracking-wide ${colorClass}`}>{timeText}</div>
     </div>
   )
 }
