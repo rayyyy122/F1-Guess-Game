@@ -119,8 +119,8 @@ export function HelpModal({ isOpen, onClose }: HelpModalProps) {
                 <strong>现役车手</strong>：显示当前效力车队
               </li>
               <li>
-                <strong>储备车手</strong>：显示最后效力车队
-                <span className="text-gray-400 text-sm">（如周冠宇现为法拉利储备，但显示索伯）</span>
+                <strong>储备车手</strong>：显示当前所属车队
+                <span className="text-gray-400 text-sm">（如周冠宇现为凯迪拉克储备，显示凯迪拉克）</span>
               </li>
               <li>
                 <strong>退役车手</strong>：显示最后效力车队
