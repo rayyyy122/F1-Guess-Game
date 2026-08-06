@@ -886,7 +886,7 @@
     "podiums": 32,
     "wins": 8,
     "debutYear": 2011,
-    "status": "reserve",
+    "status": "retired",
     "country": "AU"
   },
   {
@@ -981,8 +981,8 @@
     "name": "Zhou Guanyu",
     "nameCn": "周冠宇",
     "nationality": "中国",
-    "team": "Sauber",
-    "teamCn": "索伯",
+    "team": "Cadillac",
+    "teamCn": "凯迪拉克",
     "teams": [
       "Alfa Romeo",
       "Sauber"
