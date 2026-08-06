@@ -1,4 +1,4 @@
-import { useMemo, useState, useCallback } from 'react'
+import { useMemo, useState, useCallback, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useGame } from '../hooks/useGame'
 import { useStats } from '../hooks/useStats'
@@ -69,6 +69,17 @@ export function SoloPage() {
 
   const isPlaying = status === 'playing'
 
+  // 胜利/失败横幅延迟到最后一行翻牌动画结束后再弹出
+  // 翻牌总时长 = 8 列 × 80ms 延迟 + 400ms 动画 ≈ 1040ms
+  const [bannerStatus, setBannerStatus] = useState(status)
+  useEffect(() => {
+    if (status === 'won' || status === 'lost') {
+      const timer = window.setTimeout(() => setBannerStatus(status), 1100)
+      return () => clearTimeout(timer)
+    }
+    setBannerStatus(status)
+  }, [status])
+
   return (
     <div className="min-h-screen text-f1-text">
       <Header
@@ -94,7 +105,7 @@ export function SoloPage() {
         </div>
 
         <GameStatusBanner
-          status={status}
+          status={bannerStatus}
           targetDriver={targetDriver}
           guessCount={guessCount}
           onNewGame={resetGame}
