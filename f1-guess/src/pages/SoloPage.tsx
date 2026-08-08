@@ -10,7 +10,7 @@ import { StatsModal } from '../components/StatsModal/StatsModal'
 import { HelpModal } from '../components/HelpModal/HelpModal'
 import { ConfirmModal } from '../components/ConfirmModal/ConfirmModal'
 import { AnswerModal } from '../components/AnswerModal/AnswerModal'
-import { drivers } from '../utils/drivers'
+import { Footer } from '../components/Footer'
 
 export function SoloPage() {
   const { recordWin, recordGiveUp, recordLoss } = useStats()
@@ -136,9 +136,7 @@ export function SoloPage() {
         )}
       </main>
 
-      <footer className="w-full py-4 text-center text-xs text-gray-500">
-        数据截止到 2026-07-27，匈牙利大奖赛，共 {drivers.length} 名车手
-      </footer>
+      <Footer />
 
       <StatsModal isOpen={isStatsOpen} onClose={() => setIsStatsOpen(false)} />
       <HelpModal isOpen={isHelpOpen} onClose={handleCloseHelp} />
