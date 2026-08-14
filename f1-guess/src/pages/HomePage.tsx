@@ -5,20 +5,23 @@ import { drivers, easyDrivers } from '../utils/drivers'
 import { Logo } from '../components/Logo'
 import { Footer } from '../components/Footer'
 import { HelpModal } from '../components/HelpModal/HelpModal'
-import { hasSeenHelp, markHelpSeen } from '../utils/storage'
+
+// 模块级标记：只在本次页面加载后首次进入首页时弹规则。
+// SPA 内从游戏页返回首页标记仍在（不弹），刷新页面模块重建（弹出）。
+let hasEnteredHome = false
 
 export function HomePage() {
   const [isHelpOpen, setIsHelpOpen] = useState(false)
 
   useEffect(() => {
-    if (!hasSeenHelp()) {
+    if (!hasEnteredHome) {
+      hasEnteredHome = true
       setIsHelpOpen(true)
     }
   }, [])
 
   const handleCloseHelp = useCallback(() => {
     setIsHelpOpen(false)
-    markHelpSeen()
   }, [])
 
   return (
