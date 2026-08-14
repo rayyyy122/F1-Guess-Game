@@ -74,7 +74,7 @@ export function OnlineGameView({
 
       <RulesHint />
 
-      {canGuess && myGuesses.length > 0 && (
+      {canGuess && (
         <div className="mt-8 text-center">
           <button
             onClick={() => setShowGiveUpConfirm(true)}

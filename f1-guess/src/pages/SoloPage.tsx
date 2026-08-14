@@ -139,7 +139,7 @@ function SoloGame({ mode }: { mode: SoloMode }) {
 
         <RulesHint />
 
-        {isPlaying && guesses.length > 0 && (
+        {isPlaying && (
           <div className="mt-8 text-center">
             <button
               onClick={() => setIsGiveUpConfirmOpen(true)}
