@@ -5,6 +5,7 @@ import { useStats } from '../hooks/useStats'
 import { Header } from '../components/Header/Header'
 import { SearchBox } from '../components/SearchBox/SearchBox'
 import { GuessTable } from '../components/GuessTable/GuessTable'
+import { RulesHint } from '../components/RulesHint'
 import { GameStatusBanner } from '../components/GameStatus'
 import { StatsModal } from '../components/StatsModal/StatsModal'
 import { HelpModal } from '../components/HelpModal/HelpModal'
@@ -114,6 +115,7 @@ export function SoloPage() {
 
         <div className="mb-8">
           <SearchBox onSelect={makeGuess} disabled={!isPlaying} guessedIds={guessedIds} />
+          <RulesHint />
         </div>
 
         {guesses.length > 0 && (

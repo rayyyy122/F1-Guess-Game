@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import type { Driver, Guess, GuessFeedback } from '../../types'
 import { SearchBox } from '../SearchBox/SearchBox'
+import { RulesHint } from '../RulesHint'
 import { GuessTable } from '../GuessTable/GuessTable'
 import { Countdown } from './Countdown'
 import { ConfirmModal } from '../ConfirmModal/ConfirmModal'
@@ -55,6 +56,7 @@ export function OnlineGameView({
 
       <div className="mb-6">
         <SearchBox onSelect={onGuess} disabled={!canGuess} guessedIds={guessedIds} />
+        <RulesHint />
       </div>
 
       {myGuesses.length > 0 && (
