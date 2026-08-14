@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { Link } from 'react-router-dom'
+import { Gamepad2, Swords } from 'lucide-react'
 import { Logo } from '../components/Logo'
 import { Footer } from '../components/Footer'
 import { HelpModal } from '../components/HelpModal/HelpModal'
@@ -37,7 +38,9 @@ export function HomePage() {
               to="/solo"
               className="block p-8 bg-f1-card hover:bg-f1-elevated rounded-xl transition-all border-2 border-transparent hover:border-f1-red hover:-translate-y-1 hover:shadow-2xl hover:shadow-f1-red/10"
             >
-              <div className="text-4xl mb-4">🎮</div>
+              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-f1-red/10 flex items-center justify-center">
+                <Gamepad2 size={32} className="text-f1-red" />
+              </div>
               <h2 className="text-xl font-bold mb-2">单机模式</h2>
               <p className="text-sm text-gray-400">独自挑战，8 次机会猜出车手</p>
             </Link>
@@ -46,7 +49,9 @@ export function HomePage() {
               to="/online"
               className="block p-8 bg-f1-card hover:bg-f1-elevated rounded-xl transition-all border-2 border-transparent hover:border-f1-red hover:-translate-y-1 hover:shadow-2xl hover:shadow-f1-red/10"
             >
-              <div className="text-4xl mb-4">⚔️</div>
+              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-f1-red/10 flex items-center justify-center">
+                <Swords size={32} className="text-f1-red" />
+              </div>
               <h2 className="text-xl font-bold mb-2">联机模式</h2>
               <p className="text-sm text-gray-400">1v1 实时对战，2 分钟限时</p>
             </Link>

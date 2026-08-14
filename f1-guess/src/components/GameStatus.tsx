@@ -1,4 +1,5 @@
 import type { GameStatus, Driver } from '../types'
+import { Trophy, XCircle } from 'lucide-react'
 
 interface GameStatusProps {
   status: GameStatus
@@ -20,7 +21,10 @@ export function GameStatusBanner({
   if (status === 'lost') {
     return (
       <div className="w-full max-w-xl mx-auto mb-6 p-6 bg-f1-card border-2 border-f1-red rounded-lg text-center modal-panel">
-        <h2 className="text-2xl font-bold mb-2">😔 游戏结束</h2>
+        <h2 className="text-2xl font-bold mb-2 flex items-center justify-center gap-2">
+          <XCircle size={24} className="text-f1-red" />
+          游戏结束
+        </h2>
         <p className="mb-4">8 次机会已用完</p>
         <div className="flex flex-col gap-3">
           <button
@@ -42,7 +46,10 @@ export function GameStatusBanner({
 
   return (
     <div className="w-full max-w-xl mx-auto mb-6 p-6 bg-f1-green text-f1-dark rounded-lg text-center modal-panel">
-      <h2 className="text-2xl font-bold mb-2">🎉 恭喜你猜对了！</h2>
+      <h2 className="text-2xl font-bold mb-2 flex items-center justify-center gap-2">
+        <Trophy size={24} />
+        恭喜你猜对了！
+      </h2>
       <p className="mb-1">
         答案是{' '}
         <strong>

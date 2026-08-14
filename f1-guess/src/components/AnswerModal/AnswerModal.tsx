@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import { Flag } from 'lucide-react'
 import type { Driver } from '../../types'
 
 interface AnswerModalProps {
@@ -46,7 +47,9 @@ export function AnswerModal({ isOpen, driver, guessCount, onNewGame }: AnswerMod
         onClick={(e) => e.stopPropagation()}
       >
         <div className="text-center mb-6">
-          <div className="text-4xl mb-2">🏁</div>
+          <div className="mb-2 flex justify-center">
+            <Flag size={36} className="text-f1-red" />
+          </div>
           <h2 className="text-2xl font-bold mb-1">正确答案</h2>
           <p className="text-gray-400 text-sm">你猜了 {guessCount} 次</p>
         </div>

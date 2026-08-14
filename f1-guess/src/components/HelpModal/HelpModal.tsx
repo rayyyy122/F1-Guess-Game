@@ -61,15 +61,15 @@ export function HelpModal({ isOpen, onClose }: HelpModalProps) {
             <h3 className="text-lg font-bold mb-3 text-f1-red">颜色含义</h3>
             <div className="space-y-2">
               <div className="flex items-center gap-3">
-                <span className="text-2xl leading-none">🟩</span>
+                <span className="w-6 h-6 rounded bg-f1-green" />
                 <span>正确 - 属性完全匹配</span>
               </div>
               <div className="flex items-center gap-3">
-                <span className="text-2xl leading-none">🟨</span>
+                <span className="w-6 h-6 rounded bg-f1-yellow" />
                 <span>接近 - 属性相近（数值差距小或同一大洲）</span>
               </div>
               <div className="flex items-center gap-3">
-                <span className="text-2xl leading-none">⬜</span>
+                <span className="w-6 h-6 rounded bg-f1-gray" />
                 <span>错误 - 属性不匹配</span>
               </div>
             </div>
@@ -82,9 +82,24 @@ export function HelpModal({ isOpen, onClose }: HelpModalProps) {
                 <thead>
                   <tr className="border-b border-white/15">
                     <th className="text-left py-2 pr-4">属性</th>
-                    <th className="text-left py-2 pr-4 text-f1-green">🟩 正确</th>
-                    <th className="text-left py-2 pr-4 text-f1-yellow">🟨 接近</th>
-                    <th className="text-left py-2">⬜ 错误</th>
+                    <th className="text-left py-2 pr-4">
+                      <span className="inline-flex items-center gap-1.5 text-f1-green">
+                        <span className="w-3.5 h-3.5 rounded-sm bg-f1-green" />
+                        正确
+                      </span>
+                    </th>
+                    <th className="text-left py-2 pr-4">
+                      <span className="inline-flex items-center gap-1.5 text-f1-yellow">
+                        <span className="w-3.5 h-3.5 rounded-sm bg-f1-yellow" />
+                        接近
+                      </span>
+                    </th>
+                    <th className="text-left py-2">
+                      <span className="inline-flex items-center gap-1.5">
+                        <span className="w-3.5 h-3.5 rounded-sm bg-f1-gray" />
+                        错误
+                      </span>
+                    </th>
                   </tr>
                 </thead>
                 <tbody>

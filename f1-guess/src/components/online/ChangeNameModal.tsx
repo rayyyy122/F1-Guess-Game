@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { Dices } from 'lucide-react'
 
 interface ChangeNameModalProps {
   isOpen: boolean
@@ -53,9 +54,10 @@ export function ChangeNameModal({ isOpen, currentName, onClose, onSave }: Change
 
         <button
           onClick={handleRandom}
-          className="w-full mb-4 py-2 bg-f1-dark hover:bg-f1-elevated border border-white/15 rounded-lg text-sm transition-colors"
+          className="w-full mb-4 py-2 bg-f1-dark hover:bg-f1-elevated border border-white/15 rounded-lg text-sm transition-colors flex items-center justify-center gap-2"
         >
-          🎲 随机生成
+          <Dices size={16} />
+          随机生成
         </button>
 
         <div className="flex gap-3">

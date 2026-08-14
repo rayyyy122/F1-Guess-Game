@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Check } from 'lucide-react'
 
 interface RoomWaitViewProps {
   roomId: string
@@ -48,13 +49,19 @@ export function RoomWaitView({ roomId, playerName, opponentName }: RoomWaitViewP
       <div className="space-y-3 mb-8">
         <div className="p-4 bg-f1-card border border-white/10 rounded-lg flex items-center justify-between">
           <span className="font-medium">{playerName} (你)</span>
-          <span className="text-f1-green">✓ 已就绪</span>
+          <span className="text-f1-green flex items-center gap-1">
+            <Check size={16} />
+            已就绪
+          </span>
         </div>
 
         {opponentName ? (
           <div className="p-4 bg-f1-card border border-white/10 rounded-lg flex items-center justify-between">
             <span className="font-medium">{opponentName}</span>
-            <span className="text-f1-green">✓ 已就绪</span>
+            <span className="text-f1-green flex items-center gap-1">
+              <Check size={16} />
+              已就绪
+            </span>
           </div>
         ) : (
           <div className="p-4 border border-dashed border-white/15 rounded-lg flex items-center justify-center text-gray-400">

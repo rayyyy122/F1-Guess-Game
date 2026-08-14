@@ -1,4 +1,5 @@
 import type { Driver } from '../../types'
+import { Trophy, XCircle, Handshake } from 'lucide-react'
 
 interface ResultModalProps {
   isOpen: boolean
@@ -34,15 +35,18 @@ export function ResultModal({
 }: ResultModalProps) {
   if (!isOpen || !result) return null
 
-  const title =
-    result === 'win' ? '🎉 你赢了！' : result === 'lose' ? '😔 你输了' : '🤝 平局'
+  const title = result === 'win' ? '你赢了！' : result === 'lose' ? '你输了' : '平局'
   const titleColor =
     result === 'win' ? 'text-f1-green' : result === 'lose' ? 'text-f1-red' : 'text-f1-yellow'
+  const TitleIcon = result === 'win' ? Trophy : result === 'lose' ? XCircle : Handshake
 
   return (
     <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4 modal-overlay">
       <div className="bg-f1-card rounded-xl p-6 max-w-md w-full modal-panel" onClick={(e) => e.stopPropagation()}>
-        <h2 className={`text-3xl font-bold mb-6 text-center ${titleColor}`}>{title}</h2>
+        <h2 className={`text-3xl font-bold mb-6 flex items-center justify-center gap-3 ${titleColor}`}>
+          <TitleIcon size={30} />
+          {title}
+        </h2>
 
         <div className="grid grid-cols-2 gap-4 mb-6">
           <div className="text-center p-4 bg-f1-dark rounded-lg">
