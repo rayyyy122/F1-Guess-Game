@@ -1,6 +1,11 @@
 import type { GameStats } from '../types'
+import type { SoloMode } from './drivers'
 
-const STATS_KEY = 'f1-guess-stats'
+// 经典版沿用旧 key，兼容已有统计数据
+const STATS_KEYS: Record<SoloMode, string> = {
+  classic: 'f1-guess-stats',
+  easy: 'f1-guess-stats-easy',
+}
 const HELP_SEEN_KEY = 'f1-guess-help-seen'
 const PLAYER_NAME_KEY = 'f1-guess-player-name'
 
@@ -13,9 +18,9 @@ const defaultStats: GameStats = {
   bestGame: null,
 }
 
-export function loadStats(): GameStats {
+export function loadStats(mode: SoloMode = 'classic'): GameStats {
   try {
-    const data = localStorage.getItem(STATS_KEY)
+    const data = localStorage.getItem(STATS_KEYS[mode])
     if (!data) return defaultStats
     return { ...defaultStats, ...JSON.parse(data) }
   } catch {
@@ -23,16 +28,20 @@ export function loadStats(): GameStats {
   }
 }
 
-export function saveStats(stats: GameStats): void {
+export function saveStats(stats: GameStats, mode: SoloMode = 'classic'): void {
   try {
-    localStorage.setItem(STATS_KEY, JSON.stringify(stats))
+    localStorage.setItem(STATS_KEYS[mode], JSON.stringify(stats))
   } catch {
     // localStorage 不可用时静默失败
   }
 }
 
-export function recordGameResult(won: boolean, guessCount: number): GameStats {
-  const stats = loadStats()
+export function recordGameResult(
+  won: boolean,
+  guessCount: number,
+  mode: SoloMode = 'classic'
+): GameStats {
+  const stats = loadStats(mode)
   const newStats: GameStats = {
     totalGames: stats.totalGames + 1,
     wins: won ? stats.wins + 1 : stats.wins,
@@ -45,7 +54,7 @@ export function recordGameResult(won: boolean, guessCount: number): GameStats {
         : Math.min(stats.bestGame, guessCount)
       : stats.bestGame,
   }
-  saveStats(newStats)
+  saveStats(newStats, mode)
   return newStats
 }
 

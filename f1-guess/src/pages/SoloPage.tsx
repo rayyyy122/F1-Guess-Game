@@ -1,7 +1,8 @@
 import { useMemo, useState, useCallback, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import { useGame } from '../hooks/useGame'
 import { useStats } from '../hooks/useStats'
+import { getDriversByMode, type SoloMode } from '../utils/drivers'
 import { Header } from '../components/Header/Header'
 import { SearchBox } from '../components/SearchBox/SearchBox'
 import { GuessTable } from '../components/GuessTable/GuessTable'
@@ -14,7 +15,15 @@ import { AnswerModal } from '../components/AnswerModal/AnswerModal'
 import { Footer } from '../components/Footer'
 
 export function SoloPage() {
-  const { recordWin, recordGiveUp, recordLoss } = useStats()
+  const [searchParams] = useSearchParams()
+  const mode: SoloMode = searchParams.get('mode') === 'easy' ? 'easy' : 'classic'
+  // mode 变化时通过 key 整体重挂载，保证目标车手和统计都切换到对应池子
+  return <SoloGame key={mode} mode={mode} />
+}
+
+function SoloGame({ mode }: { mode: SoloMode }) {
+  const pool = useMemo(() => getDriversByMode(mode), [mode])
+  const { recordWin, recordGiveUp, recordLoss } = useStats(mode)
   const [isStatsOpen, setIsStatsOpen] = useState(false)
   const [isHelpOpen, setIsHelpOpen] = useState(false)
   const [isGiveUpConfirmOpen, setIsGiveUpConfirmOpen] = useState(false)
@@ -51,7 +60,7 @@ export function SoloPage() {
     guessCount,
     remainingGuesses,
     maxGuesses,
-  } = useGame({
+  } = useGame(pool, {
     onWin: handleWin,
     onGiveUp: handleGiveUp,
     onLose: handleLose,
@@ -98,6 +107,9 @@ export function SoloPage() {
 
         <div className="text-center mb-8">
           <h1 className="text-3xl font-black italic tracking-tight mb-2">单机模式</h1>
+          <p className="text-sm text-f1-red font-medium mb-1">
+            {mode === 'easy' ? `简单版 · ${pool.length} 位车手` : `经典版 · ${pool.length} 位车手`}
+          </p>
           <p className="text-gray-400">
             {isPlaying
               ? `剩余 ${remainingGuesses} / ${maxGuesses} 次机会`
@@ -114,7 +126,7 @@ export function SoloPage() {
         />
 
         <div className="mb-8">
-          <SearchBox onSelect={makeGuess} disabled={!isPlaying} guessedIds={guessedIds} />
+          <SearchBox onSelect={makeGuess} disabled={!isPlaying} guessedIds={guessedIds} pool={pool} />
         </div>
 
         {guesses.length > 0 && (

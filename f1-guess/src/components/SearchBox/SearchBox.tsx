@@ -6,9 +6,10 @@ interface SearchBoxProps {
   onSelect: (driver: Driver) => void
   disabled?: boolean
   guessedIds: Set<string>
+  pool?: Driver[]
 }
 
-export function SearchBox({ onSelect, disabled, guessedIds }: SearchBoxProps) {
+export function SearchBox({ onSelect, disabled, guessedIds, pool }: SearchBoxProps) {
   const [query, setQuery] = useState('')
   const [results, setResults] = useState<Driver[]>([])
   const [isOpen, setIsOpen] = useState(false)
@@ -17,11 +18,11 @@ export function SearchBox({ onSelect, disabled, guessedIds }: SearchBoxProps) {
   const containerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    const filtered = searchDrivers(query).filter((d) => !guessedIds.has(d.id))
+    const filtered = searchDrivers(query, 8, pool).filter((d) => !guessedIds.has(d.id))
     setResults(filtered)
     setSelectedIndex(-1)
     setIsOpen(filtered.length > 0 && query.trim().length > 0)
-  }, [query, guessedIds])
+  }, [query, guessedIds, pool])
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {

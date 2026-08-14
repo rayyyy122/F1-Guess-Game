@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { Link } from 'react-router-dom'
-import { Gamepad2, Swords } from 'lucide-react'
+import { Gamepad2, Swords, Zap, Sparkles } from 'lucide-react'
+import { drivers, easyDrivers } from '../utils/drivers'
 import { Logo } from '../components/Logo'
 import { Footer } from '../components/Footer'
 import { HelpModal } from '../components/HelpModal/HelpModal'
@@ -42,7 +43,20 @@ export function HomePage() {
                 <Gamepad2 size={32} className="text-f1-red" />
               </div>
               <h2 className="text-xl font-bold mb-2">单机模式</h2>
-              <p className="text-sm text-gray-400">独自挑战，8 次机会猜出车手</p>
+              <p className="text-sm text-gray-400">经典玩法，{drivers.length} 位车手</p>
+            </Link>
+
+            <Link
+              to="/solo?mode=easy"
+              className="block p-8 bg-f1-card hover:bg-f1-elevated rounded-xl transition-all border-2 border-transparent hover:border-f1-red hover:-translate-y-1 hover:shadow-2xl hover:shadow-f1-red/10"
+            >
+              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-f1-red/10 flex items-center justify-center">
+                <Zap size={32} className="text-f1-red" />
+              </div>
+              <h2 className="text-xl font-bold mb-2">简单模式</h2>
+              <p className="text-sm text-gray-400">
+                近年车手 + 世界冠军传奇，共 {easyDrivers.length} 位
+              </p>
             </Link>
 
             <Link
@@ -55,6 +69,14 @@ export function HomePage() {
               <h2 className="text-xl font-bold mb-2">联机模式</h2>
               <p className="text-sm text-gray-400">1v1 实时对战，2 分钟限时</p>
             </Link>
+
+            <div className="block p-8 rounded-xl border-2 border-dashed border-white/15 text-gray-500 cursor-not-allowed">
+              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-white/5 flex items-center justify-center">
+                <Sparkles size={32} />
+              </div>
+              <h2 className="text-xl font-bold mb-2">敬请期待</h2>
+              <p className="text-sm">更多玩法开发中</p>
+            </div>
           </div>
         </div>
       </main>

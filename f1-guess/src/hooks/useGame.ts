@@ -10,8 +10,8 @@ interface UseGameOptions {
   onLose?: (guessCount: number) => void
 }
 
-export function useGame(options?: UseGameOptions) {
-  const [targetDriver, setTargetDriver] = useState<Driver>(() => getRandomDriver())
+export function useGame(pool: Driver[], options?: UseGameOptions) {
+  const [targetDriver, setTargetDriver] = useState<Driver>(() => getRandomDriver(pool))
   const [guesses, setGuesses] = useState<Guess[]>([])
   const [status, setStatus] = useState<GameStatus>('playing')
 
@@ -44,10 +44,10 @@ export function useGame(options?: UseGameOptions) {
   }, [status, guesses.length, options])
 
   const resetGame = useCallback(() => {
-    setTargetDriver((prev) => getRandomDriver(prev.id))
+    setTargetDriver((prev) => getRandomDriver(pool, prev.id))
     setGuesses([])
     setStatus('playing')
-  }, [])
+  }, [pool])
 
   const remainingGuesses = MAX_GUESSES - guesses.length
 

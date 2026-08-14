@@ -13,6 +13,7 @@ export interface Driver {
   podiums: number
   wins: number
   debutYear: number
+  lastYear?: number  // 最后参赛年份（退役车手可选，用于简单版池子筛选）
   status: DriverStatus
   country: string
 }

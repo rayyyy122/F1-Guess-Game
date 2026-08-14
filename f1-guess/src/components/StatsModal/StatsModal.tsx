@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import type { GameStats } from '../../types'
+import type { SoloMode } from '../../utils/drivers'
 import { loadStats } from '../../utils/storage'
 
 interface StatsModalProps {
@@ -17,13 +18,14 @@ function StatItem({ label, value }: { label: string; value: string | number }) {
 }
 
 export function StatsModal({ isOpen, onClose }: StatsModalProps) {
-  const [stats, setStats] = useState<GameStats>(loadStats)
+  const [mode, setMode] = useState<SoloMode>('classic')
+  const [stats, setStats] = useState<GameStats>(() => loadStats(mode))
 
   useEffect(() => {
     if (isOpen) {
-      setStats(loadStats())
+      setStats(loadStats(mode))
     }
-  }, [isOpen])
+  }, [isOpen, mode])
 
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
@@ -49,11 +51,25 @@ export function StatsModal({ isOpen, onClose }: StatsModalProps) {
         className="bg-f1-card rounded-xl p-6 max-w-md w-full modal-panel"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex justify-between items-center mb-6">
+        <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-bold">游戏统计</h2>
           <button onClick={onClose} className="text-gray-400 hover:text-white text-2xl leading-none">
             ×
           </button>
+        </div>
+
+        <div className="flex gap-1 p-1 mb-6 bg-f1-dark rounded-lg">
+          {(['classic', 'easy'] as const).map((m) => (
+            <button
+              key={m}
+              onClick={() => setMode(m)}
+              className={`flex-1 py-1.5 rounded-md text-sm font-medium transition-colors ${
+                mode === m ? 'bg-f1-red text-white' : 'text-gray-400 hover:text-white'
+              }`}
+            >
+              {m === 'classic' ? '经典版' : '简单版'}
+            </button>
+          ))}
         </div>
 
         <div className="grid grid-cols-2 gap-6 mb-6">
