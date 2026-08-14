@@ -56,7 +56,6 @@ export function OnlineGameView({
 
       <div className="mb-6">
         <SearchBox onSelect={onGuess} disabled={!canGuess} guessedIds={guessedIds} />
-        <RulesHint />
       </div>
 
       {myGuesses.length > 0 && (
@@ -72,6 +71,8 @@ export function OnlineGameView({
           <GuessTable guesses={maskedOpponentGuesses} masked />
         </div>
       )}
+
+      <RulesHint />
 
       {canGuess && myGuesses.length > 0 && (
         <div className="mt-8 text-center">

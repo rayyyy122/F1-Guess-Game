@@ -115,7 +115,6 @@ export function SoloPage() {
 
         <div className="mb-8">
           <SearchBox onSelect={makeGuess} disabled={!isPlaying} guessedIds={guessedIds} />
-          <RulesHint />
         </div>
 
         {guesses.length > 0 && (
@@ -125,6 +124,8 @@ export function SoloPage() {
         )}
 
         <GuessTable guesses={guesses} targetDriverId={targetDriver.id} />
+
+        <RulesHint />
 
         {isPlaying && guesses.length > 0 && (
           <div className="mt-8 text-center">
