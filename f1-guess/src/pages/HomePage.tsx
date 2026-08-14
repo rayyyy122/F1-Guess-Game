@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { Link } from 'react-router-dom'
-import { Gamepad2, Swords, Zap, Sparkles } from 'lucide-react'
+import { Gamepad2, Swords, Zap, Sparkles, BookOpen } from 'lucide-react'
 import { drivers, easyDrivers } from '../utils/drivers'
 import { Logo } from '../components/Logo'
 import { Footer } from '../components/Footer'
@@ -32,7 +32,7 @@ export function HomePage() {
       <main className="flex-1 flex items-start justify-center px-4 pt-20 sm:pt-28">
         <div className="max-w-2xl w-full text-center">
           <h1 className="text-4xl font-black italic tracking-tight mb-3">F1 车手猜谜游戏</h1>
-          <p className="text-gray-400 mb-12">选择游戏模式开始挑战</p>
+          <p className="text-gray-400 mb-8">选择游戏模式开始挑战</p>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Link
@@ -78,6 +78,14 @@ export function HomePage() {
               <p className="text-sm">更多玩法开发中</p>
             </div>
           </div>
+
+          <button
+            onClick={() => setIsHelpOpen(true)}
+            className="mt-8 inline-flex items-center gap-2 px-5 py-2.5 btn-secondary text-sm"
+          >
+            <BookOpen size={16} />
+            查看游戏规则
+          </button>
         </div>
       </main>
 

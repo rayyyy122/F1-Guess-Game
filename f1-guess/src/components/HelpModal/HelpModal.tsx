@@ -35,11 +35,11 @@ export function HelpModal({ isOpen, onClose }: HelpModalProps) {
       onClick={onClose}
     >
       <div
-        className="bg-f1-card rounded-xl p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto modal-panel"
+        className="bg-f1-card rounded-xl p-5 max-w-2xl w-full max-h-[90vh] overflow-y-auto modal-panel"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-bold">游戏规则</h2>
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-xl font-bold">游戏规则</h2>
           <button
             onClick={onClose}
             className="text-gray-400 hover:text-white text-3xl leading-none"
@@ -48,106 +48,95 @@ export function HelpModal({ isOpen, onClose }: HelpModalProps) {
           </button>
         </div>
 
-        <div className="space-y-6">
-          <section>
-            <h3 className="text-lg font-bold mb-2 text-f1-red">玩法</h3>
-            <p className="text-gray-300">
-              系统会随机选择一位 F1 车手（现役或传奇），你需要在 <strong className="text-f1-red">8 次机会</strong> 内猜出答案。
-              每次猜测后，系统会用颜色提示你与目标的接近程度。
-            </p>
-          </section>
+        <p className="text-sm text-gray-300 mb-4">
+          系统随机选择一位 F1 车手，你需要在 <strong className="text-f1-red">8 次机会</strong>内猜出答案，每次猜测后系统会用颜色提示接近程度。
+        </p>
 
-          <section>
-            <h3 className="text-lg font-bold mb-3 text-f1-red">颜色含义</h3>
-            <div className="space-y-2">
-              <div className="flex items-center gap-3">
-                <span className="w-6 h-6 rounded bg-f1-green" />
-                <span>正确 - 属性完全匹配</span>
+        <div className="grid sm:grid-cols-[1fr_1.4fr] gap-5">
+          {/* 左栏：颜色含义 + 车队说明 */}
+          <div className="space-y-4">
+            <section>
+              <h3 className="text-sm font-bold mb-2 text-f1-red">颜色含义</h3>
+              <div className="space-y-1.5 text-sm">
+                <div className="flex items-center gap-2">
+                  <span className="w-4 h-4 rounded bg-f1-green shrink-0" />
+                  <span>正确 - 属性完全匹配</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="w-4 h-4 rounded bg-f1-yellow shrink-0" />
+                  <span>接近 - 属性相近</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="w-4 h-4 rounded bg-f1-gray shrink-0" />
+                  <span>错误 - 属性不匹配</span>
+                </div>
               </div>
-              <div className="flex items-center gap-3">
-                <span className="w-6 h-6 rounded bg-f1-yellow" />
-                <span>接近 - 属性相近（数值差距小或同一大洲）</span>
-              </div>
-              <div className="flex items-center gap-3">
-                <span className="w-6 h-6 rounded bg-f1-gray" />
-                <span>错误 - 属性不匹配</span>
-              </div>
-            </div>
-          </section>
+            </section>
 
+            <section>
+              <h3 className="text-sm font-bold mb-2 text-f1-red">车队说明</h3>
+              <ul className="space-y-1.5 text-xs text-gray-300">
+                <li><strong>现役</strong>：显示当前效力车队</li>
+                <li>
+                  <strong>储备</strong>：显示当前所属车队
+                  <span className="text-gray-500">（周冠宇 → 凯迪拉克）</span>
+                </li>
+                <li>
+                  <strong>退役</strong>：显示最后效力车队
+                  <span className="text-gray-500">（舒马赫 → 梅赛德斯）</span>
+                </li>
+              </ul>
+            </section>
+          </div>
+
+          {/* 右栏：反馈规则表 */}
           <section>
-            <h3 className="text-lg font-bold mb-3 text-f1-red">反馈规则</h3>
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b border-white/15">
-                    <th className="text-left py-2 pr-4">属性</th>
-                    <th className="text-left py-2 pr-4">
-                      <span className="inline-flex items-center gap-1.5 text-f1-green">
-                        <span className="w-3.5 h-3.5 rounded-sm bg-f1-green" />
-                        正确
-                      </span>
-                    </th>
-                    <th className="text-left py-2 pr-4">
-                      <span className="inline-flex items-center gap-1.5 text-f1-yellow">
-                        <span className="w-3.5 h-3.5 rounded-sm bg-f1-yellow" />
-                        接近
-                      </span>
-                    </th>
-                    <th className="text-left py-2">
-                      <span className="inline-flex items-center gap-1.5">
-                        <span className="w-3.5 h-3.5 rounded-sm bg-f1-gray" />
-                        错误
-                      </span>
-                    </th>
+            <h3 className="text-sm font-bold mb-2 text-f1-red">反馈规则</h3>
+            <table className="w-full text-xs">
+              <thead>
+                <tr className="border-b border-white/15">
+                  <th className="text-left py-1.5 pr-2">属性</th>
+                  <th className="text-left py-1.5 pr-2">
+                    <span className="inline-flex items-center gap-1 text-f1-green">
+                      <span className="w-3 h-3 rounded-sm bg-f1-green" />
+                      正确
+                    </span>
+                  </th>
+                  <th className="text-left py-1.5 pr-2">
+                    <span className="inline-flex items-center gap-1 text-f1-yellow">
+                      <span className="w-3 h-3 rounded-sm bg-f1-yellow" />
+                      接近
+                    </span>
+                  </th>
+                  <th className="text-left py-1.5">
+                    <span className="inline-flex items-center gap-1">
+                      <span className="w-3 h-3 rounded-sm bg-f1-gray" />
+                      错误
+                    </span>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {rules.map((rule) => (
+                  <tr key={rule.label} className="border-b border-white/10">
+                    <td className="py-1.5 pr-2 font-medium">{rule.label}</td>
+                    <td className="py-1.5 pr-2 text-gray-300">{rule.correct}</td>
+                    <td className="py-1.5 pr-2 text-gray-300">{rule.close}</td>
+                    <td className="py-1.5 text-gray-300">{rule.wrong}</td>
                   </tr>
-                </thead>
-                <tbody>
-                  {rules.map((rule) => (
-                    <tr key={rule.label} className="border-b border-white/10">
-                      <td className="py-2 pr-4 font-medium">{rule.label}</td>
-                      <td className="py-2 pr-4 text-gray-300">{rule.correct}</td>
-                      <td className="py-2 pr-4 text-gray-300">{rule.close}</td>
-                      <td className="py-2 text-gray-300">{rule.wrong}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </section>
-
-          <section>
-            <h3 className="text-lg font-bold mb-2 text-f1-red">提示</h3>
-            <ul className="list-disc list-inside space-y-1 text-gray-300">
-              <li>最多可以猜 8 次，猜对即获胜</li>
-              <li>不能重复猜测同一位车手</li>
-              <li>数值旁的 ↑ ↓ 表示目标值比你猜的更大或更小</li>
-              <li>连胜纪录和最佳成绩会被记录</li>
-              <li>点击"新游戏"可以随时开始下一局</li>
-            </ul>
-          </section>
-
-          <section>
-            <h3 className="text-lg font-bold mb-2 text-f1-red">车队说明</h3>
-            <ul className="list-disc list-inside space-y-1 text-gray-300">
-              <li>
-                <strong>现役车手</strong>：显示当前效力车队
-              </li>
-              <li>
-                <strong>储备车手</strong>：显示当前所属车队
-                <span className="text-gray-400 text-sm">（如周冠宇现为凯迪拉克储备，显示凯迪拉克）</span>
-              </li>
-              <li>
-                <strong>退役车手</strong>：显示最后效力车队
-                <span className="text-gray-400 text-sm">（如舒马赫显示梅赛德斯，而非法拉利）</span>
-              </li>
-            </ul>
+                ))}
+              </tbody>
+            </table>
           </section>
         </div>
 
+        <p className="mt-4 text-xs text-gray-500 text-center">
+          不可重复猜测 · ↑↓ 表示目标值更大/更小 · 战绩自动记录
+        </p>
+
         <button
           onClick={onClose}
-          className="w-full mt-6 py-3 bg-f1-red hover:bg-red-700 rounded-lg font-medium transition-colors"
+          className="w-full mt-4 py-2.5 btn-primary"
         >
           开始游戏
         </button>
