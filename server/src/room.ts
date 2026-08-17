@@ -5,6 +5,7 @@ import type {
   ServerMessage,
   Driver,
 } from './types'
+import type { Env } from './index'
 import { generatePlayerId, getRandomDriver } from './utils'
 import { compareDrivers } from './compare'
 import driversData from './drivers.json'
@@ -15,12 +16,30 @@ const RECONNECT_WINDOW = 30_000
 
 export class GameRoom implements DurableObject {
   private state: DurableObjectState
+  private env: Env
   private roomState: RoomState | null = null
   private sessions: Map<WebSocket, string> = new Map()
   private timerInterval: number | null = null
 
-  constructor(state: DurableObjectState) {
+  constructor(state: DurableObjectState, env: Env) {
     this.state = state
+    this.env = env
+  }
+
+  // 向全局统计 DO 上报计数（异步不阻塞主流程）
+  private track(key: string, delta = 1) {
+    try {
+      const id = this.env.STATS.idFromName('global')
+      const stub = this.env.STATS.get(id)
+      this.state.waitUntil(
+        stub.fetch('https://stats.internal/incr', {
+          method: 'POST',
+          body: JSON.stringify({ key, delta }),
+        })
+      )
+    } catch {
+      // 统计失败不影响游戏
+    }
   }
 
   async fetch(request: Request): Promise<Response> {
@@ -203,6 +222,7 @@ export class GameRoom implements DurableObject {
 
     player.guessCount++
     player.guesses.push({ driverId, feedback, timestamp: Date.now() })
+    this.track('totalGuesses')
 
     this.sendTo(playerId, {
       type: 'guess_result',
@@ -398,6 +418,7 @@ export class GameRoom implements DurableObject {
     this.roomState.startTime = Date.now()
     this.roomState.endTime = Date.now() + GAME_DURATION * 1000
     this.roomState.restartRequests = []
+    this.track('gamesStarted')
 
     this.broadcast({
       type: 'game_start',
@@ -435,6 +456,7 @@ export class GameRoom implements DurableObject {
 
     this.roomState.status = 'finished'
     this.roomState.winner = winnerId
+    this.track('gamesFinished')
 
     if (this.timerInterval !== null) {
       clearInterval(this.timerInterval)

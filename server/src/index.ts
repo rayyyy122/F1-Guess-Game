@@ -1,10 +1,12 @@
 import { GameRoom } from './room'
+import { GlobalStats } from './stats'
 import { generateRoomId } from './utils'
 
-export { GameRoom }
+export { GameRoom, GlobalStats }
 
 export interface Env {
   ROOMS: DurableObjectNamespace
+  STATS: DurableObjectNamespace
 }
 
 const CORS_HEADERS = {
@@ -24,8 +26,19 @@ function jsonResponse(data: unknown, status = 200) {
   })
 }
 
+function track(env: Env, ctx: ExecutionContext, key: string, delta = 1) {
+  const id = env.STATS.idFromName('global')
+  const stub = env.STATS.get(id)
+  ctx.waitUntil(
+    stub.fetch('https://stats.internal/incr', {
+      method: 'POST',
+      body: JSON.stringify({ key, delta }),
+    })
+  )
+}
+
 export default {
-  async fetch(request: Request, env: Env): Promise<Response> {
+  async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     if (request.method === 'OPTIONS') {
       return handleOptions()
     }
@@ -34,7 +47,19 @@ export default {
 
     if (url.pathname === '/create' && request.method === 'POST') {
       const roomId = generateRoomId()
+      track(env, ctx, 'roomsCreated')
       return jsonResponse({ roomId })
+    }
+
+    // 统计数据只读接口
+    if (url.pathname === '/stats' && request.method === 'GET') {
+      const id = env.STATS.idFromName('global')
+      const stub = env.STATS.get(id)
+      const res = await stub.fetch('https://stats.internal/get')
+      const data = await res.text()
+      return new Response(data, {
+        headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' },
+      })
     }
 
     const roomMatch = url.pathname.match(/^\/room\/([A-Z]{6})$/)
