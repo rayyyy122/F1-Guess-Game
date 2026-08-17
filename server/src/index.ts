@@ -1,5 +1,7 @@
 import { GameRoom } from './room'
 import { GlobalStats } from './stats'
+import type { GlobalStatsData } from './stats'
+import { renderStatsPage } from './statsPage'
 import { generateRoomId } from './utils'
 
 export { GameRoom, GlobalStats }
@@ -51,12 +53,20 @@ export default {
       return jsonResponse({ roomId })
     }
 
-    // 统计数据只读接口
+    // 统计数据只读接口：浏览器访问返回可视化页面，程序访问返回 JSON
     if (url.pathname === '/stats' && request.method === 'GET') {
       const id = env.STATS.idFromName('global')
       const stub = env.STATS.get(id)
       const res = await stub.fetch('https://stats.internal/get')
       const data = await res.text()
+
+      if (request.headers.get('Accept')?.includes('text/html')) {
+        const html = renderStatsPage(JSON.parse(data) as GlobalStatsData)
+        return new Response(html, {
+          headers: { 'Content-Type': 'text/html; charset=utf-8' },
+        })
+      }
+
       return new Response(data, {
         headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' },
       })
