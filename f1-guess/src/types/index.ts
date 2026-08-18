@@ -45,6 +45,12 @@ export interface Guess {
 
 export type GameStatus = 'playing' | 'won' | 'givenUp' | 'lost'
 
+export interface Announcement {
+  date: string
+  title: string
+  content: string
+}
+
 export const MAX_GUESSES = 8
 
 export interface GameStats {

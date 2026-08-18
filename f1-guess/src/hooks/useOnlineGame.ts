@@ -3,8 +3,7 @@ import { useWebSocket } from './useWebSocket'
 import type { Driver, Guess, GuessFeedback } from '../types'
 import { getDriverById } from '../utils/drivers'
 import { loadPlayerName, savePlayerName } from '../utils/storage'
-
-const API_BASE = 'https://api.f1-guess.online'
+import { API_BASE } from '../utils/api'
 
 type GamePhase = 'lobby' | 'waiting' | 'playing' | 'finished'
 

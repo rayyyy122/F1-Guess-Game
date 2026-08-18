@@ -9,6 +9,7 @@ export { GameRoom, GlobalStats }
 export interface Env {
   ROOMS: DurableObjectNamespace
   STATS: DurableObjectNamespace
+  ANNOUNCE_TOKEN?: string
 }
 
 const CORS_HEADERS = {
@@ -68,6 +69,17 @@ export default {
       }
 
       return new Response(data, {
+        headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' },
+      })
+    }
+
+    // 公告：GET 公开 / POST 发布（DO 内鉴权）
+    if (url.pathname === '/announcements') {
+      const id = env.STATS.idFromName('global')
+      const stub = env.STATS.get(id)
+      const res = await stub.fetch('https://stats.internal/announcements', request)
+      return new Response(res.body, {
+        status: res.status,
         headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' },
       })
     }

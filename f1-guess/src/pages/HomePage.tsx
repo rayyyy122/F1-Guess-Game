@@ -12,16 +12,23 @@ let hasEnteredHome = false
 
 export function HomePage() {
   const [isHelpOpen, setIsHelpOpen] = useState(false)
+  const [helpTab, setHelpTab] = useState<'announcements' | 'rules'>('announcements')
 
   useEffect(() => {
     if (!hasEnteredHome) {
       hasEnteredHome = true
+      setHelpTab('announcements')
       setIsHelpOpen(true)
     }
   }, [])
 
   const handleCloseHelp = useCallback(() => {
     setIsHelpOpen(false)
+  }, [])
+
+  const handleShowRules = useCallback(() => {
+    setHelpTab('rules')
+    setIsHelpOpen(true)
   }, [])
 
   return (
@@ -83,7 +90,7 @@ export function HomePage() {
           </div>
 
           <button
-            onClick={() => setIsHelpOpen(true)}
+            onClick={handleShowRules}
             className="mt-8 inline-flex items-center gap-2 px-5 py-2.5 btn-secondary text-sm"
           >
             <BookOpen size={16} />
@@ -94,7 +101,7 @@ export function HomePage() {
 
       <Footer />
 
-      <HelpModal isOpen={isHelpOpen} onClose={handleCloseHelp} />
+      <HelpModal isOpen={isHelpOpen} onClose={handleCloseHelp} defaultTab={helpTab} />
     </div>
   )
 }

@@ -1,3 +1,5 @@
+import type { Env } from './index'
+
 export interface GlobalStatsData {
   roomsCreated: number
   gamesStarted: number
@@ -5,6 +7,14 @@ export interface GlobalStatsData {
   totalGuesses: number
   updatedAt: number
 }
+
+export interface Announcement {
+  date: string
+  title: string
+  content: string
+}
+
+const MAX_ANNOUNCEMENTS = 50
 
 const DEFAULT_STATS: Omit<GlobalStatsData, 'updatedAt'> = {
   roomsCreated: 0,
@@ -27,10 +37,12 @@ type TrackableKey = (typeof TRACKABLE_KEYS)[number]
 
 export class GlobalStats implements DurableObject {
   private state: DurableObjectState
+  private env: Env
   private data: GlobalStatsData | null = null
 
-  constructor(state: DurableObjectState) {
+  constructor(state: DurableObjectState, env: Env) {
     this.state = state
+    this.env = env
   }
 
   private async load() {
@@ -65,6 +77,41 @@ export class GlobalStats implements DurableObject {
       return new Response(JSON.stringify(this.data), {
         headers: { 'Content-Type': 'application/json' },
       })
+    }
+
+    // 公告：GET 公开读取，POST 需令牌鉴权发布（整体替换列表）
+    if (url.pathname === '/announcements') {
+      if (request.method === 'GET') {
+        const list =
+          (await this.state.storage.get<Announcement[]>('announcements')) || []
+        return new Response(JSON.stringify({ announcements: list }), {
+          headers: { 'Content-Type': 'application/json' },
+        })
+      }
+
+      if (request.method === 'POST') {
+        const body = (await request.json()) as {
+          token?: string
+          announcements?: Announcement[]
+        }
+        if (!this.env.ANNOUNCE_TOKEN || body.token !== this.env.ANNOUNCE_TOKEN) {
+          return new Response('Forbidden', { status: 403 })
+        }
+        if (!Array.isArray(body.announcements)) {
+          return new Response('Invalid announcements', { status: 400 })
+        }
+        const valid = body.announcements.every(
+          (a) =>
+            a && typeof a.date === 'string' && typeof a.title === 'string' &&
+            typeof a.content === 'string' &&
+            a.date.length <= 20 && a.title.length <= 100 && a.content.length <= 2000
+        )
+        if (!valid || body.announcements.length > MAX_ANNOUNCEMENTS) {
+          return new Response('Invalid announcements', { status: 400 })
+        }
+        await this.state.storage.put('announcements', body.announcements)
+        return new Response('ok')
+      }
     }
 
     return new Response('Not found', { status: 404 })
