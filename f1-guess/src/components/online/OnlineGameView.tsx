@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import type { Driver, Guess, GuessFeedback } from '../../types'
+import { getDriversByMode } from '../../utils/drivers'
 import { SearchBox } from '../SearchBox/SearchBox'
 import { RulesHint } from '../RulesHint'
 import { GuessTable } from '../GuessTable/GuessTable'
@@ -13,6 +14,7 @@ interface OnlineGameViewProps {
   remainingTime: number
   playerName: string
   opponentName: string | null
+  mode: 'classic' | 'easy'
   onGuess: (driver: Driver) => void
   onGiveUp: () => void
 }
@@ -24,6 +26,7 @@ export function OnlineGameView({
   remainingTime,
   playerName,
   opponentName,
+  mode,
   onGuess,
   onGiveUp,
 }: OnlineGameViewProps) {
@@ -33,14 +36,18 @@ export function OnlineGameView({
     () => opponentGuesses.map((feedback) => ({ feedback })),
     [opponentGuesses]
   )
+  const pool = useMemo(() => getDriversByMode(mode), [mode])
   const maxGuesses = 8
   const canGuess = myGuesses.length < maxGuesses && remainingTime > 0
 
   return (
     <div className="max-w-7xl mx-auto">
-      <div className="text-center mb-6">
+      <div className="text-center mb-2">
         <Countdown remaining={remainingTime} />
       </div>
+      <p className="text-center text-xs text-gray-500 mb-4">
+        {mode === 'easy' ? `简单版 · ${pool.length} 位车手` : `经典版 · ${pool.length} 位车手`}
+      </p>
 
       <div className="flex justify-center items-center gap-8 sm:gap-16 mb-6">
         <div className="text-center w-28">
@@ -55,7 +62,7 @@ export function OnlineGameView({
       </div>
 
       <div className="mb-6">
-        <SearchBox onSelect={onGuess} disabled={!canGuess} guessedIds={guessedIds} />
+        <SearchBox onSelect={onGuess} disabled={!canGuess} guessedIds={guessedIds} pool={pool} />
       </div>
 
       {myGuesses.length > 0 && (

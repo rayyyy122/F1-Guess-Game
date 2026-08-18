@@ -886,6 +886,7 @@
     "podiums": 32,
     "wins": 8,
     "debutYear": 2011,
+    "lastYear": 2024,
     "status": "retired",
     "country": "AU"
   },
@@ -1065,6 +1066,7 @@
     "podiums": 0,
     "wins": 0,
     "debutYear": 2020,
+    "lastYear": 2022,
     "status": "retired",
     "country": "CA"
   },
@@ -1083,6 +1085,7 @@
     "podiums": 0,
     "wins": 0,
     "debutYear": 2021,
+    "lastYear": 2022,
     "status": "retired",
     "country": "DE"
   },
@@ -1120,6 +1123,7 @@
     "podiums": 0,
     "wins": 0,
     "debutYear": 2023,
+    "lastYear": 2023,
     "status": "retired",
     "country": "NL"
   },
@@ -1138,6 +1142,7 @@
     "podiums": 0,
     "wins": 0,
     "debutYear": 2023,
+    "lastYear": 2024,
     "status": "retired",
     "country": "US"
   },
@@ -1956,6 +1961,7 @@
     "podiums": 1,
     "wins": 0,
     "debutYear": 2014,
+    "lastYear": 2024,
     "status": "retired",
     "country": "DK"
   },
