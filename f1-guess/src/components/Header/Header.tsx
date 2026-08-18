@@ -1,4 +1,5 @@
 import { Logo } from '../Logo'
+import { HelpCircle, BarChart3, RotateCcw } from 'lucide-react'
 
 interface HeaderProps {
   onNewGame?: () => void
@@ -15,22 +16,28 @@ export function Header({ onNewGame, onShowStats, onShowHelp, showNewGame = true 
         <div className="flex gap-2">
           <button
             onClick={onShowHelp}
-            className="px-4 py-2 btn-secondary"
+            className="p-2 sm:px-4 sm:py-2 btn-secondary"
+            title="规则"
           >
-            规则
+            <HelpCircle size={18} className="sm:hidden" />
+            <span className="hidden sm:inline">规则</span>
           </button>
           <button
             onClick={onShowStats}
-            className="px-4 py-2 btn-secondary"
+            className="p-2 sm:px-4 sm:py-2 btn-secondary"
+            title="统计"
           >
-            统计
+            <BarChart3 size={18} className="sm:hidden" />
+            <span className="hidden sm:inline">统计</span>
           </button>
           {showNewGame && onNewGame && (
             <button
               onClick={onNewGame}
-              className="px-4 py-2 btn-primary"
+              className="p-2 sm:px-4 sm:py-2 btn-primary"
+              title="新游戏"
             >
-              新游戏
+              <RotateCcw size={18} className="sm:hidden" />
+              <span className="hidden sm:inline">新游戏</span>
             </button>
           )}
         </div>
