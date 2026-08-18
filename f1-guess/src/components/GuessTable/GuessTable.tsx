@@ -98,11 +98,152 @@ function NumericCell({
   )
 }
 
+/* ===== 手机端卡片视图 ===== */
+
+function CardNameBanner({
+  value,
+  feedback,
+  delay,
+}: {
+  value: string
+  feedback?: FeedbackType
+  delay?: number
+}) {
+  const colorClass = feedback ? getCellColor(feedback) : 'bg-f1-gray text-f1-text'
+  return (
+    <div
+      className={`${colorClass} rounded px-2 py-2 text-sm font-medium text-center ${
+        delay != null ? 'cell-flip' : ''
+      }`}
+      style={delay != null ? { animationDelay: `${delay}ms` } : undefined}
+    >
+      {value}
+    </div>
+  )
+}
+
+function AttrCell({
+  label,
+  value,
+  feedback,
+  delay,
+  className = '',
+}: {
+  label: string
+  value: string | number
+  feedback?: FeedbackType
+  delay?: number
+  className?: string
+}) {
+  const colorClass = feedback ? getCellColor(feedback) : 'bg-f1-gray text-f1-text'
+  return (
+    <div
+      className={`${colorClass} rounded px-1.5 py-1.5 text-center min-h-[2.75rem] flex flex-col items-center justify-center ${className} ${
+        delay != null ? 'cell-flip' : ''
+      }`}
+      style={delay != null ? { animationDelay: `${delay}ms` } : undefined}
+    >
+      <div className="text-[10px] opacity-70 leading-tight">{label}</div>
+      <div className="text-xs font-medium leading-tight break-words">{value}</div>
+    </div>
+  )
+}
+
+function arrowOf(feedback: NumericFeedback): string {
+  return feedback.direction === 'up' ? ' ↑' : feedback.direction === 'down' ? ' ↓' : ''
+}
+
+function GuessCard({
+  guess,
+  targetDriverId,
+  isLatest,
+}: {
+  guess: Guess
+  targetDriverId?: string
+  isLatest: boolean
+}) {
+  const d = (i: number) => (isLatest ? i * 80 : undefined)
+  const { driver, feedback } = guess
+  return (
+    <div>
+      <CardNameBanner
+        value={driver.nameCn ? `${driver.nameCn} (${driver.name})` : driver.name}
+        feedback={driver.id === targetDriverId ? 'correct' : undefined}
+        delay={d(0)}
+      />
+      <div className="grid grid-cols-3 gap-[3px] mt-[3px]">
+        <AttrCell label="国籍" value={driver.nationality} feedback={feedback.nationality} delay={d(1)} />
+        <AttrCell
+          label="车队"
+          value={driver.teamCn ? `${driver.teamCn} (${driver.team})` : driver.team}
+          feedback={feedback.team}
+          delay={d(2)}
+          className="col-span-2"
+        />
+        <AttrCell label="车号" value={`${driver.number}${arrowOf(feedback.number)}`} feedback={feedback.number.type} delay={d(3)} />
+        <AttrCell label="世界冠军" value={`${driver.championships}${arrowOf(feedback.championships)}`} feedback={feedback.championships.type} delay={d(4)} />
+        <AttrCell label="领奖台" value={`${driver.podiums}${arrowOf(feedback.podiums)}`} feedback={feedback.podiums.type} delay={d(5)} />
+        <AttrCell label="分站冠军" value={`${driver.wins}${arrowOf(feedback.wins)}`} feedback={feedback.wins.type} delay={d(6)} />
+        <AttrCell label="首秀" value={`${driver.debutYear}${arrowOf(feedback.debutYear)}`} feedback={feedback.debutYear.type} delay={d(7)} />
+        <AttrCell label="状态" value={statusText[driver.status] ?? driver.status} feedback={feedback.status} delay={d(8)} />
+      </div>
+    </div>
+  )
+}
+
+function MaskedGuessCard({
+  guess,
+  isLatest,
+}: {
+  guess: MaskedGuess
+  isLatest: boolean
+}) {
+  const d = (i: number) => (isLatest ? i * 80 : undefined)
+  const { feedback } = guess
+  return (
+    <div>
+      <CardNameBanner value="***" delay={d(0)} />
+      <div className="grid grid-cols-3 gap-[3px] mt-[3px]">
+        <AttrCell label="国籍" value="***" feedback={feedback.nationality} delay={d(1)} />
+        <AttrCell label="车队" value="***" feedback={feedback.team} delay={d(2)} className="col-span-2" />
+        <AttrCell label="车号" value="***" feedback={feedback.number.type} delay={d(3)} />
+        <AttrCell label="世界冠军" value="***" feedback={feedback.championships.type} delay={d(4)} />
+        <AttrCell label="领奖台" value="***" feedback={feedback.podiums.type} delay={d(5)} />
+        <AttrCell label="分站冠军" value="***" feedback={feedback.wins.type} delay={d(6)} />
+        <AttrCell label="首秀" value="***" feedback={feedback.debutYear.type} delay={d(7)} />
+        <AttrCell label="状态" value="***" feedback={feedback.status} delay={d(8)} />
+      </div>
+    </div>
+  )
+}
+
 export function GuessTable({ guesses, targetDriverId, masked = false }: GuessTableProps) {
   if (guesses.length === 0) return null
 
   return (
-    <div className="w-full overflow-x-auto">
+    <>
+      {/* 手机端：卡片布局 */}
+      <div className="sm:hidden space-y-4">
+        {masked
+          ? (guesses as MaskedGuess[]).map((guess, index) => (
+              <MaskedGuessCard
+                key={index}
+                guess={guess}
+                isLatest={index === guesses.length - 1}
+              />
+            ))
+          : (guesses as Guess[]).map((guess, index) => (
+              <GuessCard
+                key={guess.driver.id}
+                guess={guess}
+                targetDriverId={targetDriverId}
+                isLatest={index === guesses.length - 1}
+              />
+            ))}
+      </div>
+
+      {/* 桌面端：表格布局 */}
+      <div className="hidden sm:block w-full overflow-x-auto">
       <table className="w-full table-fixed border-separate border-spacing-1">
         <thead>
           <tr>
@@ -180,6 +321,7 @@ export function GuessTable({ guesses, targetDriverId, masked = false }: GuessTab
               })}
         </tbody>
       </table>
-    </div>
+      </div>
+    </>
   )
 }
