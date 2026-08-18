@@ -2,7 +2,7 @@
 name: f1-guess-project
 description: |
   F1 Guess 项目记忆与上下文恢复技能。当用户提到 F1 Guess、f1-guess、F1 车手猜谜、F1 猜车手游戏、联机猜车手等项目相关关键词时触发。用于快速回顾项目架构、技术栈、部署信息、当前进展和待办事项，帮助 Claude 在新会话中迅速进入项目状态。
-version: "2.1.0"
+version: "2.3.0"
 author: "taodingrui"
 license: MIT
 allowed-tools:
@@ -63,7 +63,7 @@ cd "/Users/taodingrui/Desktop/F1 Guess" && git log --oneline -10 && git status
 - 后端: Cloudflare Workers + Durable Objects + WebSocket (原生)
 - 包管理: pnpm (前端), npm (后端)
 
-**当前版本**: v2.1 (单机 + 联机模式)
+**当前版本**: v2.3 (单机经典/简单 + 联机模式 + 公告系统)
 
 ## 核心功能
 
@@ -158,38 +158,67 @@ F1 Guess/
 
 ## 部署流程
 
-### 前端部署（自动）
+### 预览-确认流程（默认，2026-08-18 起）
+
+游戏已上线有真实玩家，**改动不直接推 main**。默认走 `preview` 分支：
+
 ```bash
-cd "/Users/taodingrui/Desktop/F1 Guess"
-git add -A
-git commit -m "..."
-git push origin main
-# Cloudflare Pages 自动部署
+git checkout preview          # 长期复用的预览分支
+# ...改代码...
+cd f1-guess && pnpm run build # 本地构建验证
+git add -A && git commit -m "..."
+git push origin preview       # 触发 Cloudflare 预览部署
+# 预览地址: https://preview.f1-guess-game.pages.dev
+# 用户验收确认后才合并：
+git checkout main && git merge preview && git push origin main
 ```
 
-### 后端部署
+- `main` 分支 = 生产环境（f1-guess.online），玩家可见
+- `preview` 分支 = 预览环境，只有开发者知道地址，玩家无感
+- **未经用户确认，不得 merge 到 main**
+
+### 后端部署（改动时手动）
+
 ```bash
 cd server
 npx wrangler deploy
 ```
 
+后端无分支预览，改动先在本地 `npx wrangler dev` 验证再部署。
+
 ### 部署配置
 - **Worker 名称**: `f1-guess-game-api`
-- **Durable Objects**: `ROOMS` → `GameRoom`
+- **Durable Objects**: `ROOMS` → `GameRoom`，`STATS` → `GlobalStats`
 - **兼容日期**: `2024-12-30`
 - **兼容标志**: `nodejs_compat`
-- **迁移**: `new_sqlite_classes = ["GameRoom"]`
+- **迁移**: v1 `GameRoom`，v2 `GlobalStats`
+- **Secrets**: `ANNOUNCE_TOKEN`（公告发布令牌，用户自行保管，勿写入仓库）
 
-## 自动部署策略
+## 发布公告
 
-完成代码更改后，我会自动执行：
-1. 构建前端: `cd f1-guess && pnpm run build`
-2. 提交代码: `git add -A && git commit && git push`
-3. 部署后端: `cd server && npx wrangler deploy`
+无需部署，两步：
 
-前端会自动部署，后端需要手动部署。
+1. 编辑 `server/announcements.json`（数组，最新的放最前，`content` 用 `\n` 换行）
+2. `cd server && npm run publish -- <ANNOUNCE_TOKEN>`
+
+公告在前端规则弹窗的「更新公告」标签展示，进入首页自动弹出。
+限制：最多 50 条，标题 ≤100 字，正文 ≤2000 字。
+
+## 数据监测
+
+- **访客数据**: Cloudflare Dashboard → Web Analytics（已自动注入，含实时在线、来源）
+- **对局数据**: https://api.f1-guess.online/stats （浏览器为可视化面板，程序访问返回 JSON）
+- **指标**: 创建房间数 / 累计开局 / 累计完局 / 总猜测次数
 
 ## 最近重要更新
+
+### v2.3 (2026-08)
+- 新增简单版单机模式（54 位车手：2022 年后出场 + 世界冠军传奇），战绩分开统计
+- 全站视觉升级：Titillium Web 斜体字体、三层色彩、翻牌动效、图标体系、品牌化 favicon
+- 更新公告系统（HelpModal 双标签：公告/规则，首开自动弹公告）
+- 手机端猜测结果卡片布局 + 顶栏图标化
+- 游戏数据统计接口 /stats + 可视化面板
+- 建立 preview 分支预览-确认部署流程
 
 ### v2.1 (2026-07-31)
 - 优化昵称系统：默认 F1 风格昵称，支持修改和随机生成
