@@ -3,14 +3,12 @@ import type {
   RoomState,
   ClientMessage,
   ServerMessage,
-  Driver,
+  GameMode,
 } from './types'
 import type { Env } from './index'
-import { generatePlayerId, getRandomDriver } from './utils'
+import { generatePlayerId, getRandomDriver, getDriversByMode } from './utils'
 import { compareDrivers } from './compare'
-import driversData from './drivers.json'
 
-const drivers = driversData as Driver[]
 const GAME_DURATION = 120
 const RECONNECT_WINDOW = 30_000
 
@@ -52,8 +50,9 @@ export class GameRoom implements DurableObject {
       const playerId = url.searchParams.get('playerId')
       const playerName = url.searchParams.get('playerName') || 'Player'
       const roomId = url.searchParams.get('roomId') || this.state.id.toString()
+      const mode: GameMode = url.searchParams.get('mode') === 'easy' ? 'easy' : 'classic'
 
-      await this.handleSession(server, playerId, playerName, roomId)
+      await this.handleSession(server, playerId, playerName, roomId, mode)
 
       return new Response(null, { status: 101, webSocket: client })
     }
@@ -68,7 +67,7 @@ export class GameRoom implements DurableObject {
     return new Response('Not found', { status: 404 })
   }
 
-  async handleSession(ws: WebSocket, playerId: string | null, playerName: string, roomId: string) {
+  async handleSession(ws: WebSocket, playerId: string | null, playerName: string, roomId: string, mode: GameMode) {
     ws.accept()
     await this.loadState()
 
@@ -78,6 +77,7 @@ export class GameRoom implements DurableObject {
       this.roomState = {
         id: roomId,
         status: 'waiting',
+        mode,
         players: {},
         targetDriverId: null,
         startTime: null,
@@ -88,6 +88,9 @@ export class GameRoom implements DurableObject {
         restartRequests: [],
       }
     }
+
+    // 兼容旧房间（无 mode 字段），默认经典版
+    this.roomState.mode ??= 'classic'
 
     if (!currentPlayerId || !this.roomState.players[currentPlayerId]) {
       if (Object.keys(this.roomState.players).length >= 2) {
@@ -119,6 +122,7 @@ export class GameRoom implements DurableObject {
         opponent: opponentId
           ? { name: this.roomState.players[opponentId].name }
           : { name: '' },
+        mode: this.roomState.mode,
       })
 
       if (opponentId) {
@@ -144,12 +148,14 @@ export class GameRoom implements DurableObject {
         opponent: opponentId
           ? { name: this.roomState.players[opponentId].name }
           : { name: '' },
+        mode: this.roomState.mode,
       })
 
       if (this.roomState.status === 'playing') {
         this.send(ws, {
           type: 'game_start',
           duration: Math.max(0, Math.floor((this.roomState.endTime! - Date.now()) / 1000)),
+          mode: this.roomState.mode,
         })
       }
     }
@@ -213,8 +219,10 @@ export class GameRoom implements DurableObject {
     const player = this.roomState.players[playerId]
     if (!player || player.status !== 'playing') return
 
-    const targetDriver = drivers.find((d) => d.id === this.roomState!.targetDriverId)
-    const guessDriver = drivers.find((d) => d.id === driverId)
+    const pool = getDriversByMode(this.roomState.mode ?? 'classic')
+    const targetDriver = pool.find((d) => d.id === this.roomState!.targetDriverId)
+    // 猜测必须在房间模式池子内，池外猜测直接拒绝
+    const guessDriver = pool.find((d) => d.id === driverId)
     if (!targetDriver || !guessDriver) return
 
     const feedback = compareDrivers(guessDriver, targetDriver)
@@ -414,7 +422,8 @@ export class GameRoom implements DurableObject {
     if (!this.roomState || this.roomState.status !== 'waiting') return
 
     this.roomState.status = 'playing'
-    this.roomState.targetDriverId = getRandomDriver(drivers).id
+    const pool = getDriversByMode(this.roomState.mode ?? 'classic')
+    this.roomState.targetDriverId = getRandomDriver(pool).id
     this.roomState.startTime = Date.now()
     this.roomState.endTime = Date.now() + GAME_DURATION * 1000
     this.roomState.restartRequests = []
@@ -423,6 +432,7 @@ export class GameRoom implements DurableObject {
     this.broadcast({
       type: 'game_start',
       duration: GAME_DURATION,
+      mode: this.roomState.mode ?? 'classic',
     })
 
     this.startTimer()

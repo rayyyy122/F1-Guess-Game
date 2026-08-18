@@ -13,6 +13,7 @@ export interface Driver {
   podiums: number
   wins: number
   debutYear: number
+  lastYear?: number
   status: 'active' | 'reserve' | 'retired'
   country: string
 }
@@ -35,9 +36,12 @@ export interface PlayerGuess {
 
 export type RoomStatus = 'waiting' | 'playing' | 'finished'
 
+export type GameMode = 'classic' | 'easy'
+
 export interface RoomState {
   id: string
   status: RoomStatus
+  mode: GameMode
   players: Record<string, Player>
   targetDriverId: string | null
   startTime: number | null
@@ -61,9 +65,9 @@ export type ClientMessage =
 
 export type ServerMessage =
   | { type: 'room_created'; roomId: string; playerId: string }
-  | { type: 'room_joined'; roomId: string; playerId: string; opponent: { name: string } }
+  | { type: 'room_joined'; roomId: string; playerId: string; opponent: { name: string }; mode?: GameMode }
   | { type: 'opponent_joined'; opponent: { name: string } }
-  | { type: 'game_start'; duration: number }
+  | { type: 'game_start'; duration: number; mode?: GameMode }
   | { type: 'guess_result'; driverId: string; feedback: Record<string, string>; isCorrect: boolean }
   | { type: 'opponent_guess'; guessCount: number; feedback: Record<string, string> }
   | { type: 'opponent_finished'; status: PlayerStatus; guessCount: number }

@@ -1,9 +1,10 @@
 import { useState } from 'react'
 import { User, Edit2 } from 'lucide-react'
+import { drivers, easyDrivers } from '../../utils/drivers'
 
 interface LobbyViewProps {
   playerName: string
-  onCreateRoom: (playerName: string) => void
+  onCreateRoom: (playerName: string, mode: 'classic' | 'easy') => void
   onJoinRoom: (roomId: string, playerName: string) => void
   onChangeName: () => void
   error: string | null
@@ -17,9 +18,10 @@ export function LobbyView({
   error,
 }: LobbyViewProps) {
   const [roomId, setRoomId] = useState('')
+  const [mode, setMode] = useState<'classic' | 'easy'>('classic')
 
   const handleCreateRoom = () => {
-    onCreateRoom(playerName)
+    onCreateRoom(playerName, mode)
   }
 
   const handleJoinRoom = () => {
@@ -57,6 +59,20 @@ export function LobbyView({
           {error}
         </div>
       )}
+
+      <div className="flex gap-1 p-1 mb-3 bg-f1-dark rounded-lg">
+        {(['classic', 'easy'] as const).map((m) => (
+          <button
+            key={m}
+            onClick={() => setMode(m)}
+            className={`flex-1 py-1.5 rounded-md text-sm font-medium transition-colors ${
+              mode === m ? 'bg-f1-red text-white' : 'text-gray-400 hover:text-white'
+            }`}
+          >
+            {m === 'classic' ? `经典版 · ${drivers.length} 人` : `简单版 · ${easyDrivers.length} 人`}
+          </button>
+        ))}
+      </div>
 
       <button
         onClick={handleCreateRoom}

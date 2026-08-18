@@ -7,12 +7,15 @@ import { API_BASE } from '../utils/api'
 
 type GamePhase = 'lobby' | 'waiting' | 'playing' | 'finished'
 
+type GameMode = 'classic' | 'easy'
+
 interface OnlineGameState {
   phase: GamePhase
   roomId: string | null
   playerId: string | null
   playerName: string
   opponentName: string | null
+  mode: GameMode
   myGuesses: Guess[]
   opponentGuessCount: number
   opponentGuesses: GuessFeedback[]
@@ -36,6 +39,7 @@ const getInitialState = () => ({
   playerId: null as string | null,
   playerName: loadPlayerName(),
   opponentName: null as string | null,
+  mode: 'classic' as GameMode,
   myGuesses: [] as Guess[],
   opponentGuessCount: 0,
   opponentGuesses: [] as GuessFeedback[],
@@ -87,6 +91,7 @@ export function useOnlineGame() {
           roomId: data.roomId,
           playerId: data.playerId,
           opponentName: data.opponent.name || null,
+          mode: data.mode === 'easy' ? 'easy' : 'classic',
         }))
         break
 
@@ -99,6 +104,7 @@ export function useOnlineGame() {
           ...prev,
           phase: 'playing',
           remainingTime: data.duration,
+          mode: data.mode === 'easy' ? 'easy' : prev.mode,
         }))
         break
 
@@ -236,7 +242,7 @@ export function useOnlineGame() {
   }, [close])
 
   const createRoom = useCallback(
-    async (playerName: string) => {
+    async (playerName: string, mode: GameMode = 'classic') => {
       try {
         // 重置离开标志，允许处理新消息
         isLeavingRef.current = false
@@ -247,6 +253,7 @@ export function useOnlineGame() {
         setState({
           ...initialState,
           playerName,
+          mode,
           error: null,
         })
         const response = await fetch(
@@ -257,7 +264,7 @@ export function useOnlineGame() {
         const data = await response.json()
 
         setState((prev) => ({ ...prev, roomId: data.roomId }))
-        const wsUrl = `${API_BASE.replace('https', 'wss')}/room/${data.roomId}?playerName=${encodeURIComponent(playerName)}`
+        const wsUrl = `${API_BASE.replace('https', 'wss')}/room/${data.roomId}?playerName=${encodeURIComponent(playerName)}&mode=${mode}`
         setWsUrl(wsUrl)
       } catch (err) {
         setState((prev) => ({ ...prev, error: '创建房间失败，请重试' }))

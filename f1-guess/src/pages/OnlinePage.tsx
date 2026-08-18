@@ -25,6 +25,7 @@ export function OnlinePage() {
     result,
     endReason,
     targetDriverId,
+    mode,
     error,
     restartInvite,
     createRoom,
@@ -91,7 +92,7 @@ export function OnlinePage() {
         )}
 
         {phase === 'waiting' && roomId && (
-          <RoomWaitView roomId={roomId} playerName={playerName} opponentName={opponentName} />
+          <RoomWaitView roomId={roomId} playerName={playerName} opponentName={opponentName} mode={mode} />
         )}
 
         {phase === 'playing' && (
@@ -102,6 +103,7 @@ export function OnlinePage() {
             remainingTime={remainingTime}
             playerName={playerName}
             opponentName={opponentName}
+            mode={mode}
             onGuess={makeGuess}
             onGiveUp={giveUp}
           />

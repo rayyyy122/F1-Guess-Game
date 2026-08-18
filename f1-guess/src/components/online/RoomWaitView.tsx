@@ -1,13 +1,15 @@
 import { useState } from 'react'
 import { Check } from 'lucide-react'
+import { drivers, easyDrivers } from '../../utils/drivers'
 
 interface RoomWaitViewProps {
   roomId: string
   playerName: string
   opponentName: string | null
+  mode: 'classic' | 'easy'
 }
 
-export function RoomWaitView({ roomId, playerName, opponentName }: RoomWaitViewProps) {
+export function RoomWaitView({ roomId, playerName, opponentName, mode }: RoomWaitViewProps) {
   const [copied, setCopied] = useState(false)
 
   const handleCopy = async () => {
@@ -29,7 +31,10 @@ export function RoomWaitView({ roomId, playerName, opponentName }: RoomWaitViewP
 
   return (
     <div className="max-w-md mx-auto text-center">
-      <h2 className="text-2xl font-bold mb-6">等待对手加入</h2>
+      <h2 className="text-2xl font-bold mb-2">等待对手加入</h2>
+      <p className="text-sm text-f1-red font-medium mb-6">
+        {mode === 'easy' ? `简单版 · ${easyDrivers.length} 位车手` : `经典版 · ${drivers.length} 位车手`}
+      </p>
 
       <div className="mb-8">
         <p className="text-sm text-gray-400 mb-3">房间号</p>
