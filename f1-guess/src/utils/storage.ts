@@ -8,6 +8,42 @@ const STATS_KEYS: Record<SoloMode, string> = {
 }
 const HELP_SEEN_KEY = 'f1-guess-help-seen'
 const PLAYER_NAME_KEY = 'f1-guess-player-name'
+const ONLINE_SESSION_KEY = 'f1-guess-online-session'
+
+export interface OnlineSession {
+  roomId: string
+  playerId: string
+  playerName: string
+}
+
+// 联机会话存 sessionStorage：刷新页面保留（可自动重连），关闭标签页清除
+export function saveOnlineSession(session: OnlineSession): void {
+  try {
+    sessionStorage.setItem(ONLINE_SESSION_KEY, JSON.stringify(session))
+  } catch {
+    // 静默失败
+  }
+}
+
+export function loadOnlineSession(): OnlineSession | null {
+  try {
+    const data = sessionStorage.getItem(ONLINE_SESSION_KEY)
+    if (!data) return null
+    const parsed = JSON.parse(data)
+    if (parsed?.roomId && parsed?.playerId) return parsed
+    return null
+  } catch {
+    return null
+  }
+}
+
+export function clearOnlineSession(): void {
+  try {
+    sessionStorage.removeItem(ONLINE_SESSION_KEY)
+  } catch {
+    // 静默失败
+  }
+}
 
 const defaultStats: GameStats = {
   totalGames: 0,

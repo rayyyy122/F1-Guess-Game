@@ -91,6 +91,10 @@ export function OnlinePage() {
           />
         )}
 
+        {phase === 'reconnecting' && (
+          <div className="text-center py-16 text-gray-400">正在恢复对局...</div>
+        )}
+
         {phase === 'waiting' && roomId && (
           <RoomWaitView roomId={roomId} playerName={playerName} opponentName={opponentName} mode={mode} />
         )}

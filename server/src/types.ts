@@ -48,6 +48,7 @@ export interface RoomState {
   endTime: number | null
   duration: number
   winner: string | null
+  endReason?: string | null
   createdAt: number
   restartRequests: string[]
 }
@@ -72,6 +73,14 @@ export type ServerMessage =
   | { type: 'opponent_guess'; guessCount: number; feedback: Record<string, string> }
   | { type: 'opponent_finished'; status: PlayerStatus; guessCount: number }
   | { type: 'timer_sync'; remaining: number }
+  | {
+      type: 'state_sync'
+      phase: RoomStatus
+      mode?: GameMode
+      yourGuesses: { driverId: string; feedback: Record<string, any> }[]
+      // 只发颜色反馈，不发 driverId（防泄露对方猜测）
+      opponentGuesses: Record<string, any>[]
+    }
   | {
       type: 'game_end'
       result: 'win' | 'lose' | 'tie'

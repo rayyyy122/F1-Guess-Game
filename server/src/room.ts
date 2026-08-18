@@ -51,8 +51,9 @@ export class GameRoom implements DurableObject {
       const playerName = url.searchParams.get('playerName') || 'Player'
       const roomId = url.searchParams.get('roomId') || this.state.id.toString()
       const mode: GameMode = url.searchParams.get('mode') === 'easy' ? 'easy' : 'classic'
+      const isReconnect = url.searchParams.get('reconnect') === '1'
 
-      await this.handleSession(server, playerId, playerName, roomId, mode)
+      await this.handleSession(server, playerId, playerName, roomId, mode, isReconnect)
 
       return new Response(null, { status: 101, webSocket: client })
     }
@@ -67,13 +68,26 @@ export class GameRoom implements DurableObject {
     return new Response('Not found', { status: 404 })
   }
 
-  async handleSession(ws: WebSocket, playerId: string | null, playerName: string, roomId: string, mode: GameMode) {
+  async handleSession(
+    ws: WebSocket,
+    playerId: string | null,
+    playerName: string,
+    roomId: string,
+    mode: GameMode,
+    isReconnect: boolean
+  ) {
     ws.accept()
     await this.loadState()
 
     let currentPlayerId = playerId
 
     if (!this.roomState) {
+      if (isReconnect) {
+        // 房间已销毁，会话过期
+        this.send(ws, { type: 'error', code: 'ROOM_EXPIRED', message: '房间已过期，请重新加入' })
+        ws.close(1008, 'Room expired')
+        return
+      }
       this.roomState = {
         id: roomId,
         status: 'waiting',
@@ -93,13 +107,20 @@ export class GameRoom implements DurableObject {
     this.roomState.mode ??= 'classic'
 
     if (!currentPlayerId || !this.roomState.players[currentPlayerId]) {
+      if (isReconnect) {
+        // 重连但房间里没有该玩家，会话过期
+        this.send(ws, { type: 'error', code: 'ROOM_EXPIRED', message: '房间已过期，请重新加入' })
+        ws.close(1008, 'Room expired')
+        return
+      }
       if (Object.keys(this.roomState.players).length >= 2) {
         this.send(ws, { type: 'error', code: 'ROOM_FULL', message: '房间已满' })
         ws.close(1008, 'Room full')
         return
       }
 
-      currentPlayerId = generatePlayerId()
+      // 优先使用客户端带来的 playerId（刷新/断线后才能以同一身份重连）
+      currentPlayerId = currentPlayerId || generatePlayerId()
       const player: Player = {
         id: currentPlayerId,
         name: playerName,
@@ -133,6 +154,7 @@ export class GameRoom implements DurableObject {
         await this.startGame()
       }
     } else {
+      // 重连：恢复连接并同步完整对局状态
       const player = this.roomState.players[currentPlayerId]
       player.connected = true
       player.lastSeen = Date.now()
@@ -140,6 +162,7 @@ export class GameRoom implements DurableObject {
       this.sessions.set(ws, currentPlayerId)
 
       const opponentId = Object.keys(this.roomState.players).find((id) => id !== currentPlayerId)
+      const opponent = opponentId ? this.roomState.players[opponentId] : undefined
 
       this.send(ws, {
         type: 'room_joined',
@@ -151,11 +174,45 @@ export class GameRoom implements DurableObject {
         mode: this.roomState.mode,
       })
 
+      this.send(ws, {
+        type: 'state_sync',
+        phase: this.roomState.status,
+        mode: this.roomState.mode,
+        yourGuesses: player.guesses.map((g) => ({ driverId: g.driverId, feedback: g.feedback })),
+        opponentGuesses: (opponent?.guesses ?? []).map((g) => g.feedback),
+      })
+
       if (this.roomState.status === 'playing') {
         this.send(ws, {
           type: 'game_start',
           duration: Math.max(0, Math.floor((this.roomState.endTime! - Date.now()) / 1000)),
           mode: this.roomState.mode,
+        })
+      } else if (this.roomState.status === 'finished') {
+        // 重发结算结果（结算弹窗在刷新后会丢失）
+        const winnerId = this.roomState.winner
+        let result: 'win' | 'lose' | 'tie'
+        if (winnerId) {
+          result = winnerId === currentPlayerId ? 'win' : 'lose'
+        } else if (player.status === 'won' && opponent?.status !== 'won') {
+          result = 'win'
+        } else if (player.status !== 'won' && opponent?.status === 'won') {
+          result = 'lose'
+        } else if (player.guessCount < (opponent?.guessCount ?? Infinity)) {
+          result = 'win'
+        } else if (player.guessCount > (opponent?.guessCount ?? -1)) {
+          result = 'lose'
+        } else {
+          result = 'tie'
+        }
+        this.send(ws, {
+          type: 'game_end',
+          result,
+          reason: (this.roomState.endReason ?? 'guessed') as any,
+          yourGuesses: player.guessCount,
+          opponentGuesses: opponent?.guessCount ?? 0,
+          targetDriverId: this.roomState.targetDriverId!,
+          duration: 0,
         })
       }
     }
@@ -466,6 +523,7 @@ export class GameRoom implements DurableObject {
 
     this.roomState.status = 'finished'
     this.roomState.winner = winnerId
+    this.roomState.endReason = reason
     this.track('gamesFinished')
 
     if (this.timerInterval !== null) {

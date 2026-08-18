@@ -2,10 +2,16 @@ import { useState, useCallback, useEffect, useRef } from 'react'
 import { useWebSocket } from './useWebSocket'
 import type { Driver, Guess, GuessFeedback } from '../types'
 import { getDriverById } from '../utils/drivers'
-import { loadPlayerName, savePlayerName } from '../utils/storage'
+import {
+  loadPlayerName,
+  savePlayerName,
+  saveOnlineSession,
+  loadOnlineSession,
+  clearOnlineSession,
+} from '../utils/storage'
 import { API_BASE } from '../utils/api'
 
-type GamePhase = 'lobby' | 'waiting' | 'playing' | 'finished'
+type GamePhase = 'lobby' | 'reconnecting' | 'waiting' | 'playing' | 'finished'
 
 type GameMode = 'classic' | 'easy'
 
@@ -87,13 +93,38 @@ export function useOnlineGame() {
       case 'room_joined':
         setState((prev) => ({
           ...prev,
-          phase: 'waiting',
+          // 重连恢复时不回退阶段，由随后的 state_sync/game_start 决定
+          phase:
+            prev.phase === 'lobby' || prev.phase === 'reconnecting'
+              ? 'waiting'
+              : prev.phase,
           roomId: data.roomId,
           playerId: data.playerId,
           opponentName: data.opponent.name || null,
           mode: data.mode === 'easy' ? 'easy' : 'classic',
         }))
         break
+
+      case 'state_sync': {
+        // 刷新/断线重连后恢复完整对局状态
+        const myGuesses = data.yourGuesses
+          .map((g: any) => ({ driver: getDriverById(g.driverId), feedback: g.feedback }))
+          .filter((g: any) => g.driver) as Guess[]
+        setState((prev) => ({
+          ...prev,
+          phase:
+            data.phase === 'playing'
+              ? 'playing'
+              : data.phase === 'finished'
+                ? 'finished'
+                : 'waiting',
+          myGuesses,
+          opponentGuessCount: data.opponentGuesses.length,
+          opponentGuesses: data.opponentGuesses,
+          mode: data.mode === 'easy' ? 'easy' : prev.mode,
+        }))
+        break
+      }
 
       case 'opponent_joined':
         setState((prev) => ({ ...prev, opponentName: data.opponent.name }))
@@ -205,6 +236,7 @@ export function useOnlineGame() {
 
       case 'room_closed':
         // 对手离开，房间被服务端关闭
+        clearOnlineSession()
         closeWsRef.current?.()
         setWsUrl(null)
         // 如果本局已结算（对手中途离开时我们会先收到 game_end），
@@ -230,6 +262,20 @@ export function useOnlineGame() {
         break
 
       case 'error':
+        // 会话过期/房间失效：清除本地会话，回到大厅
+        if (data.code === 'ROOM_EXPIRED' || data.code === 'ROOM_FULL') {
+          clearOnlineSession()
+          setState((prev) => ({
+            ...prev,
+            phase: 'lobby',
+            roomId: null,
+            playerId: null,
+            error: data.message,
+          }))
+          closeWsRef.current?.()
+          setWsUrl(null)
+          break
+        }
         setState((prev) => ({ ...prev, error: data.message }))
         break
     }
@@ -241,6 +287,23 @@ export function useOnlineGame() {
     closeWsRef.current = close
   }, [close])
 
+  // 页面刷新后自动重连恢复对局（会话存于 sessionStorage）
+  useEffect(() => {
+    const session = loadOnlineSession()
+    if (!session) return
+    isLeavingRef.current = false
+    finishedRef.current = false
+    setState({
+      ...getInitialState(),
+      playerName: session.playerName,
+      roomId: session.roomId,
+      playerId: session.playerId,
+      phase: 'reconnecting',
+    })
+    const wsUrl = `${API_BASE.replace('https', 'wss')}/room/${session.roomId}?playerName=${encodeURIComponent(session.playerName)}&playerId=${encodeURIComponent(session.playerId)}&reconnect=1`
+    setWsUrl(wsUrl)
+  }, [])
+
   const createRoom = useCallback(
     async (playerName: string, mode: GameMode = 'classic') => {
       try {
@@ -250,9 +313,11 @@ export function useOnlineGame() {
 
         // 重置所有游戏状态，保留 playerName
         const initialState = getInitialState()
+        const playerId = crypto.randomUUID()
         setState({
           ...initialState,
           playerName,
+          playerId,
           mode,
           error: null,
         })
@@ -263,8 +328,9 @@ export function useOnlineGame() {
         if (!response.ok) throw new Error('创建房间失败')
         const data = await response.json()
 
+        saveOnlineSession({ roomId: data.roomId, playerId, playerName })
         setState((prev) => ({ ...prev, roomId: data.roomId }))
-        const wsUrl = `${API_BASE.replace('https', 'wss')}/room/${data.roomId}?playerName=${encodeURIComponent(playerName)}&mode=${mode}`
+        const wsUrl = `${API_BASE.replace('https', 'wss')}/room/${data.roomId}?playerName=${encodeURIComponent(playerName)}&playerId=${encodeURIComponent(playerId)}&mode=${mode}`
         setWsUrl(wsUrl)
       } catch (err) {
         setState((prev) => ({ ...prev, error: '创建房间失败，请重试' }))
@@ -280,13 +346,17 @@ export function useOnlineGame() {
 
     // 重置所有游戏状态，保留 playerName 和 roomId
     const initialState = getInitialState()
+    const playerId = crypto.randomUUID()
+    const normalizedRoomId = roomId.toUpperCase()
     setState({
       ...initialState,
       playerName,
-      roomId: roomId.toUpperCase(),
+      playerId,
+      roomId: normalizedRoomId,
       error: null,
     })
-    const wsUrl = `${API_BASE.replace('https', 'wss')}/room/${roomId.toUpperCase()}?playerName=${encodeURIComponent(playerName)}`
+    saveOnlineSession({ roomId: normalizedRoomId, playerId, playerName })
+    const wsUrl = `${API_BASE.replace('https', 'wss')}/room/${normalizedRoomId}?playerName=${encodeURIComponent(playerName)}&playerId=${encodeURIComponent(playerId)}`
     setWsUrl(wsUrl)
   }, [])
 
@@ -322,6 +392,7 @@ export function useOnlineGame() {
   const leaveRoom = useCallback(() => {
     isLeavingRef.current = true
     finishedRef.current = false
+    clearOnlineSession()
     send({ type: 'leave_room' })
 
     // 立即重置状态到初始状态，清除所有游戏数据
