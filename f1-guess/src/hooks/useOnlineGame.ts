@@ -262,8 +262,12 @@ export function useOnlineGame() {
         break
 
       case 'error':
-        // 会话过期/房间失效：清除本地会话，回到大厅
-        if (data.code === 'ROOM_EXPIRED' || data.code === 'ROOM_FULL') {
+        // 会话过期/房间失效/超时销毁：清除本地会话，回到大厅
+        if (
+          data.code === 'ROOM_EXPIRED' ||
+          data.code === 'ROOM_FULL' ||
+          data.code === 'ROOM_TIMEOUT'
+        ) {
           clearOnlineSession()
           setState((prev) => ({
             ...prev,

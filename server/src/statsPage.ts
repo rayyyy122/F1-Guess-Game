@@ -71,7 +71,7 @@ export function renderStatsPage(stats: GlobalStatsData): string {
   </div>
 
   <p class="meta">
-    更新于 <span id="updatedAt">${updatedAt}</span> · 每 10 秒自动刷新 ·
+    更新于 <span id="updatedAt">${updatedAt}</span> · 每 60 秒自动刷新 ·
     <a href="https://f1-guess.online">f1-guess.online</a>
   </p>
 
@@ -89,7 +89,7 @@ export function renderStatsPage(stats: GlobalStatsData): string {
         // 刷新失败静默，下次重试
       }
     }
-    setInterval(refresh, 10000)
+    setInterval(refresh, 60000)
   </script>
 </body>
 </html>`

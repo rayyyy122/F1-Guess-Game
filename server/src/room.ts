@@ -11,6 +11,8 @@ import { compareDrivers } from './compare'
 
 const GAME_DURATION = 120
 const RECONNECT_WINDOW = 30_000
+// 等待/结算状态的闲置超时：超时后销毁房间，避免 DO 持续计费
+const ROOM_IDLE_TIMEOUT = 5 * 60 * 1000
 
 export class GameRoom implements DurableObject {
   private state: DurableObjectState
@@ -101,6 +103,8 @@ export class GameRoom implements DurableObject {
         createdAt: Date.now(),
         restartRequests: [],
       }
+      // 等待超时：5 分钟无人加入自动销毁（见 alarm()）
+      await this.state.storage.setAlarm(Date.now() + ROOM_IDLE_TIMEOUT)
     }
 
     // 兼容旧房间（无 mode 字段），默认经典版
@@ -485,6 +489,8 @@ export class GameRoom implements DurableObject {
     this.roomState.endTime = Date.now() + GAME_DURATION * 1000
     this.roomState.restartRequests = []
     this.track('gamesStarted')
+    // 对局开始，取消闲置超时
+    await this.state.storage.deleteAlarm()
 
     this.broadcast({
       type: 'game_start',
@@ -525,6 +531,8 @@ export class GameRoom implements DurableObject {
     this.roomState.winner = winnerId
     this.roomState.endReason = reason
     this.track('gamesFinished')
+    // 结算后闲置 5 分钟自动销毁房间（见 alarm()）
+    await this.state.storage.setAlarm(Date.now() + ROOM_IDLE_TIMEOUT)
 
     if (this.timerInterval !== null) {
       clearInterval(this.timerInterval)
@@ -644,6 +652,44 @@ export class GameRoom implements DurableObject {
     if (!this.roomState) {
       this.roomState = (await this.state.storage.get<RoomState>('roomState')) || null
     }
+  }
+
+  // 闲置超时销毁：等待中 5 分钟无人加入 / 结算后闲置 5 分钟
+  async alarm() {
+    await this.loadState()
+    if (!this.roomState) return
+
+    if (this.roomState.status === 'waiting') {
+      for (const ws of this.sessions.keys()) {
+        this.send(ws, {
+          type: 'error',
+          code: 'ROOM_TIMEOUT',
+          message: '房间超时未开始，已自动关闭',
+        })
+      }
+    } else if (this.roomState.status === 'finished') {
+      for (const ws of this.sessions.keys()) {
+        this.send(ws, { type: 'room_closed' })
+      }
+    } else {
+      // playing 状态不应触发（对局开始时已取消 alarm）
+      return
+    }
+
+    for (const ws of this.sessions.keys()) {
+      try {
+        ws.close(1000, 'Room idle timeout')
+      } catch {
+        // 忽略关闭错误
+      }
+    }
+    this.sessions.clear()
+    if (this.timerInterval !== null) {
+      clearInterval(this.timerInterval)
+      this.timerInterval = null
+    }
+    await this.state.storage.delete('roomState')
+    this.roomState = null
   }
 
   async saveState() {
