@@ -102,7 +102,7 @@ export function HelpModal({ isOpen, onClose, defaultTab = 'rules' }: HelpModalPr
               <p className="text-sm text-gray-400 text-center py-12">暂无公告</p>
             ) : (
               <div className="space-y-4">
-                {announcements.map((a, i) => (
+                {announcements.slice(0, 2).map((a, i) => (
                   <article key={i} className="p-4 bg-f1-dark rounded-lg">
                     <div className="text-xs text-gray-500 mb-1">{a.date}</div>
                     <h3 className="font-bold mb-1.5">{a.title}</h3>
