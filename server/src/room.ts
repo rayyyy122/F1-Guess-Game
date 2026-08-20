@@ -60,6 +60,19 @@ export class GameRoom implements DurableObject {
       return new Response(null, { status: 101, webSocket: client })
     }
 
+    if (url.pathname === '/leave') {
+      // sendBeacon 离开通知：复用 handleLeaveRoom 立即结算并通知对手。
+      // 幂等：房间已销毁或玩家不存在时直接返回
+      await this.loadState()
+      const playerId = url.searchParams.get('playerId')
+      if (playerId) {
+        await this.handleLeaveRoom(playerId)
+      }
+      return new Response(JSON.stringify({ ok: true }), {
+        headers: { 'Content-Type': 'application/json' },
+      })
+    }
+
     if (url.pathname === '/state') {
       await this.loadState()
       return new Response(JSON.stringify(this.roomState), {

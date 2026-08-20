@@ -84,6 +84,20 @@ export default {
       })
     }
 
+    // 页面卸载时的 sendBeacon 离开通知：让服务端立即结算，对手无需等重连窗口
+    const roomLeaveMatch = url.pathname.match(/^\/room\/([A-Z]{6})\/leave$/)
+    if (roomLeaveMatch && request.method === 'POST') {
+      const roomId = roomLeaveMatch[1]
+      const id = env.ROOMS.idFromName(roomId)
+      const stub = env.ROOMS.get(id)
+
+      const doUrl = new URL(request.url)
+      doUrl.pathname = '/leave'
+      doUrl.searchParams.set('roomId', roomId)
+
+      return stub.fetch(doUrl.toString(), request)
+    }
+
     const roomMatch = url.pathname.match(/^\/room\/([A-Z]{6})$/)
     if (roomMatch) {
       const roomId = roomMatch[1]

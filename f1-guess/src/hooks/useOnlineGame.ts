@@ -71,6 +71,9 @@ export function useOnlineGame() {
   const finishedRef = useRef(false)
   const closeWsRef = useRef<(() => void) | null>(null)
   const errorTimerRef = useRef<number | null>(null)
+  // 卸载通知需要读取最新的房间身份，避免闭包拿到旧 state
+  const roomIdRef = useRef<string | null>(null)
+  const playerIdRef = useRef<string | null>(null)
 
   // 错误消息 3 秒后自动消失
   useEffect(() => {
@@ -290,6 +293,45 @@ export function useOnlineGame() {
   useEffect(() => {
     closeWsRef.current = close
   }, [close])
+
+  // 房间身份同步到 ref，供页面卸载时的通知使用
+  useEffect(() => {
+    roomIdRef.current = state.roomId
+    playerIdRef.current = state.playerId
+  }, [state.roomId, state.playerId])
+
+  // 房间内关闭/刷新页面前弹浏览器确认框；确认离开后立即通知服务端结算，
+  // 对手不必再等 30 秒重连窗口（pagehide 不触发的极端情况仍由服务端判负兜底）
+  useEffect(() => {
+    const inRoom =
+      state.phase === 'waiting' || state.phase === 'playing' || state.phase === 'reconnecting'
+    if (!inRoom) return
+
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      // 现代浏览器忽略自定义文案，统一弹系统「离开网站？」确认框
+      e.preventDefault()
+      e.returnValue = ''
+    }
+
+    const handlePageHide = () => {
+      // 用户已确认离开，页面正在卸载：WS 与 sendBeacon 双通道通知服务端
+      send({ type: 'leave_room' })
+      const roomId = roomIdRef.current
+      const playerId = playerIdRef.current
+      if (roomId && playerId && navigator.sendBeacon) {
+        navigator.sendBeacon(
+          `${API_BASE}/room/${roomId}/leave?playerId=${encodeURIComponent(playerId)}`
+        )
+      }
+    }
+
+    window.addEventListener('beforeunload', handleBeforeUnload)
+    window.addEventListener('pagehide', handlePageHide)
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload)
+      window.removeEventListener('pagehide', handlePageHide)
+    }
+  }, [state.phase, send])
 
   // 页面刷新后自动重连恢复对局（会话存于 sessionStorage）
   useEffect(() => {
