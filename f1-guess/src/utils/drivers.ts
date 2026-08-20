@@ -20,14 +20,19 @@ export function getRandomDriver(pool: Driver[], excludeId?: string): Driver {
   return candidates[Math.floor(Math.random() * candidates.length)]
 }
 
-export function searchDrivers(query: string, limit = 8, pool: Driver[] = drivers): Driver[] {
-  if (!query.trim()) return []
-  const q = query.toLowerCase()
-  return pool
-    .filter((d) => d.name.toLowerCase().includes(q) || d.nameCn?.includes(q))
-    .slice(0, limit)
-}
-
 export function getDriverById(id: string): Driver | undefined {
   return drivers.find((d) => d.id === id)
+}
+
+// 去掉音调符号并转小写（é→e、ü→u 等），让英文键盘也能搜到带特殊字符的名字
+function normalizeName(str: string): string {
+  return str.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase()
+}
+
+export function searchDrivers(query: string, limit = 8, pool: Driver[] = drivers): Driver[] {
+  if (!query.trim()) return []
+  const q = normalizeName(query)
+  return pool
+    .filter((d) => normalizeName(d.name).includes(q) || d.nameCn?.includes(query.trim()))
+    .slice(0, limit)
 }
