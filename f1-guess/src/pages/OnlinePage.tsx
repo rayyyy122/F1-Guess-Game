@@ -7,6 +7,7 @@ import { RoomWaitView } from '../components/online/RoomWaitView'
 import { OnlineGameView } from '../components/online/OnlineGameView'
 import { ResultModal } from '../components/online/ResultModal'
 import { ChangeNameModal } from '../components/online/ChangeNameModal'
+import { ConfirmModal } from '../components/ConfirmModal/ConfirmModal'
 import { StatsModal } from '../components/StatsModal/StatsModal'
 import { HelpModal } from '../components/HelpModal/HelpModal'
 import { getDriverById } from '../utils/drivers'
@@ -39,13 +40,22 @@ export function OnlinePage() {
   } = useOnlineGame()
 
   const [showChangeNameModal, setShowChangeNameModal] = useState(false)
+  const [showLeaveConfirm, setShowLeaveConfirm] = useState(false)
   const [isStatsOpen, setIsStatsOpen] = useState(false)
   const [isHelpOpen, setIsHelpOpen] = useState(false)
   const navigate = useNavigate()
 
   // 返回首页前必须先走 leaveRoom 流程通知服务端，
-  // 否则对方会卡在房间里等不到结算
+  // 否则对方会卡在房间里等不到结算；
+  // 对局未结束时先弹确认，避免误触直接退出房间
+  const inActiveRoom =
+    phase === 'waiting' || phase === 'playing' || phase === 'reconnecting'
+
   const handleBackToHome = () => {
+    if (inActiveRoom) {
+      setShowLeaveConfirm(true)
+      return
+    }
     leaveRoom()
     navigate('/')
   }
@@ -141,6 +151,21 @@ export function OnlinePage() {
 
       <StatsModal isOpen={isStatsOpen} onClose={() => setIsStatsOpen(false)} />
       <HelpModal isOpen={isHelpOpen} onClose={handleCloseHelp} />
+
+      <ConfirmModal
+        isOpen={showLeaveConfirm}
+        title="退出房间？"
+        message="返回首页将退出当前房间，对局会立即结束并判对手获胜。"
+        confirmText="退出房间"
+        cancelText="继续对局"
+        danger
+        onConfirm={() => {
+          setShowLeaveConfirm(false)
+          leaveRoom()
+          navigate('/')
+        }}
+        onCancel={() => setShowLeaveConfirm(false)}
+      />
     </div>
   )
 }
