@@ -41,7 +41,7 @@ export function ResultModal({
   const TitleIcon = result === 'win' ? Trophy : result === 'lose' ? XCircle : Handshake
 
   return (
-    <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4 modal-overlay">
+    <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4 modal-overlay">
       <div className="bg-f1-card rounded-xl p-6 max-w-md w-full modal-panel" onClick={(e) => e.stopPropagation()}>
         <h2 className={`text-3xl font-bold mb-6 flex items-center justify-center gap-3 ${titleColor}`}>
           <TitleIcon size={30} />

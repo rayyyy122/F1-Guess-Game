@@ -61,7 +61,7 @@ export function HelpModal({ isOpen, onClose, defaultTab = 'rules' }: HelpModalPr
 
   return (
     <div
-      className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4 modal-overlay"
+      className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4 modal-overlay"
       onClick={onClose}
     >
       <div
