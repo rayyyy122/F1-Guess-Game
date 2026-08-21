@@ -46,7 +46,9 @@ export function OnlineGameView({
         <Countdown remaining={remainingTime} />
       </div>
       <p className="text-center text-xs text-gray-500 mb-4">
-        {mode === 'easy' ? `简单版 · ${pool.length} 位车手` : `经典版 · ${pool.length} 位车手`}
+        {mode === 'easy'
+          ? `简单版 · ${pool.length} 位车手，只包含历年WDC和22年以后首秀/现役的车手`
+          : `经典版 · ${pool.length} 位车手`}
       </p>
 
       <div className="flex justify-center items-center gap-8 sm:gap-16 mb-6">

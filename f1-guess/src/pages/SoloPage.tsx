@@ -108,7 +108,9 @@ function SoloGame({ mode }: { mode: SoloMode }) {
         <div className="text-center mb-8">
           <h1 className="text-3xl font-black italic tracking-tight mb-2">单机模式</h1>
           <p className="text-sm text-f1-red font-medium mb-1">
-            {mode === 'easy' ? `简单版 · ${pool.length} 位车手` : `经典版 · ${pool.length} 位车手`}
+            {mode === 'easy'
+              ? `简单版 · ${pool.length} 位车手，只包含历年WDC和22年以后首秀/现役的车手`
+              : `经典版 · ${pool.length} 位车手`}
           </p>
           <p className="text-gray-400">
             {isPlaying

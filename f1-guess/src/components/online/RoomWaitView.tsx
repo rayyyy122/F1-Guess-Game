@@ -33,7 +33,9 @@ export function RoomWaitView({ roomId, playerName, opponentName, mode }: RoomWai
     <div className="max-w-md mx-auto text-center">
       <h2 className="text-2xl font-bold mb-2">等待对手加入</h2>
       <p className="text-sm text-f1-red font-medium mb-6">
-        {mode === 'easy' ? `简单版 · ${easyDrivers.length} 位车手` : `经典版 · ${drivers.length} 位车手`}
+        {mode === 'easy'
+          ? `简单版 · ${easyDrivers.length} 位车手，只包含历年WDC和22年以后首秀/现役的车手`
+          : `经典版 · ${drivers.length} 位车手`}
       </p>
 
       <div className="mb-8">
