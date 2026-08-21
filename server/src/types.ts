@@ -12,6 +12,7 @@ export interface Driver {
   championships: number
   podiums: number
   wins: number
+  starts: number
   debutYear: number
   lastYear?: number
   status: 'active' | 'reserve' | 'retired'

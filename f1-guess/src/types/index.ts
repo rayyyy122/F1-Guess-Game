@@ -12,6 +12,7 @@ export interface Driver {
   championships: number
   podiums: number
   wins: number
+  starts: number       // 大奖赛参赛场次
   debutYear: number
   lastYear?: number  // 最后参赛年份（退役车手可选，用于简单版池子筛选）
   status: DriverStatus
