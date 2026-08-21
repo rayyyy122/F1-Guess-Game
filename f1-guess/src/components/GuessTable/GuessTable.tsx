@@ -139,7 +139,7 @@ function AttrCell({
   const colorClass = feedback ? getCellColor(feedback) : 'bg-f1-gray text-f1-text'
   return (
     <div
-      className={`${colorClass} rounded px-1.5 py-1.5 text-center min-h-[2.75rem] flex flex-col items-center justify-center ${className} ${
+      className={`${colorClass} rounded px-1 py-1 text-center min-h-[2.25rem] flex flex-col items-center justify-center ${className} ${
         delay != null ? 'cell-flip' : ''
       }`}
       style={delay != null ? { animationDelay: `${delay}ms` } : undefined}
@@ -172,11 +172,11 @@ function GuessCard({
         feedback={driver.id === targetDriverId ? 'correct' : undefined}
         delay={d(0)}
       />
-      <div className="grid grid-cols-2 gap-[3px] mt-[3px]">
+      <div className="grid grid-cols-3 gap-[3px] mt-[3px]">
         <AttrCell label="国籍" value={driver.nationality} feedback={feedback.nationality} delay={d(1)} />
         <AttrCell
           label="车队"
-          value={driver.teamCn ? `${driver.teamCn} (${driver.team})` : driver.team}
+          value={driver.teamCn || driver.team}
           feedback={feedback.team}
           delay={d(2)}
         />
@@ -186,7 +186,7 @@ function GuessCard({
         <AttrCell label="分站冠军" value={`${driver.wins}${arrowOf(feedback.wins)}`} feedback={feedback.wins.type} delay={d(6)} />
         <AttrCell label="首秀" value={`${driver.debutYear}${arrowOf(feedback.debutYear)}`} feedback={feedback.debutYear.type} delay={d(7)} />
         <AttrCell label="状态" value={statusText[driver.status] ?? driver.status} feedback={feedback.status} delay={d(8)} />
-        <AttrCell label="参赛场次" value={`${driver.starts}${arrowOf(feedback.starts)}`} feedback={feedback.starts.type} delay={d(9)} className="col-span-2" />
+        <AttrCell label="参赛场次" value={`${driver.starts}${arrowOf(feedback.starts)}`} feedback={feedback.starts.type} delay={d(9)} />
       </div>
     </div>
   )
@@ -204,7 +204,7 @@ function MaskedGuessCard({
   return (
     <div>
       <CardNameBanner value="***" delay={d(0)} />
-      <div className="grid grid-cols-2 gap-[3px] mt-[3px]">
+      <div className="grid grid-cols-3 gap-[3px] mt-[3px]">
         <AttrCell label="国籍" value="***" feedback={feedback.nationality} delay={d(1)} />
         <AttrCell label="车队" value="***" feedback={feedback.team} delay={d(2)} />
         <AttrCell label="车号" value="***" feedback={feedback.number.type} delay={d(3)} />
@@ -213,7 +213,7 @@ function MaskedGuessCard({
         <AttrCell label="分站冠军" value="***" feedback={feedback.wins.type} delay={d(6)} />
         <AttrCell label="首秀" value="***" feedback={feedback.debutYear.type} delay={d(7)} />
         <AttrCell label="状态" value="***" feedback={feedback.status} delay={d(8)} />
-        <AttrCell label="参赛场次" value="***" feedback={feedback.starts.type} delay={d(9)} className="col-span-2" />
+        <AttrCell label="参赛场次" value="***" feedback={feedback.starts.type} delay={d(9)} />
       </div>
     </div>
   )
@@ -225,7 +225,7 @@ export function GuessTable({ guesses, targetDriverId, masked = false }: GuessTab
   return (
     <>
       {/* 手机端：卡片布局 */}
-      <div className="sm:hidden space-y-4">
+      <div className="sm:hidden space-y-3">
         {masked
           ? (guesses as MaskedGuess[]).map((guess, index) => (
               <MaskedGuessCard
