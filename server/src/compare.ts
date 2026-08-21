@@ -33,6 +33,10 @@ const nationalityToContinent: Record<string, string> = {
   委内瑞拉: '南美',
   澳大利亚: '大洋洲',
   新西兰: '大洋洲',
+  匈牙利: '欧洲',
+  捷克: '欧洲',
+  智利: '南美',
+  马来西亚: '亚洲',
 }
 
 function compareNationality(guess: string, target: string): string {
@@ -43,11 +47,11 @@ function compareNationality(guess: string, target: string): string {
   return 'wrong'
 }
 
-function compareNumeric(guess: number, target: number): { type: string; direction: string } {
+function compareNumeric(guess: number, target: number, closeThreshold = 1): { type: string; direction: string } {
   const direction = guess === target ? 'equal' : guess < target ? 'up' : 'down'
   let type: string
   if (guess === target) type = 'correct'
-  else if (Math.abs(guess - target) <= 1) type = 'close'
+  else if (Math.abs(guess - target) <= closeThreshold) type = 'close'
   else type = 'wrong'
   return { type, direction }
 }
@@ -60,6 +64,7 @@ export function compareDrivers(guess: Driver, target: Driver): Record<string, an
     championships: compareNumeric(guess.championships, target.championships),
     podiums: compareNumeric(guess.podiums, target.podiums),
     wins: compareNumeric(guess.wins, target.wins),
+    starts: compareNumeric(guess.starts, target.starts, 10),
     debutYear: compareNumeric(guess.debutYear, target.debutYear),
     status: guess.status === target.status ? 'correct' : 'wrong',
   }

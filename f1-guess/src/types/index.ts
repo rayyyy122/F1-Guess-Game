@@ -35,6 +35,7 @@ export interface GuessFeedback {
   championships: NumericFeedback
   podiums: NumericFeedback
   wins: NumericFeedback
+  starts: NumericFeedback
   debutYear: NumericFeedback
   status: FeedbackType
 }

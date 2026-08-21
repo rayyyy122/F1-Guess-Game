@@ -19,6 +19,7 @@ const columns = [
   { key: 'championships', label: '世界冠军' },
   { key: 'podiums', label: '领奖台' },
   { key: 'wins', label: '分站冠军' },
+  { key: 'starts', label: '参赛' },
   { key: 'debutYear', label: '首秀' },
   { key: 'status', label: '状态' },
 ] as const
@@ -171,14 +172,13 @@ function GuessCard({
         feedback={driver.id === targetDriverId ? 'correct' : undefined}
         delay={d(0)}
       />
-      <div className="grid grid-cols-3 gap-[3px] mt-[3px]">
+      <div className="grid grid-cols-2 gap-[3px] mt-[3px]">
         <AttrCell label="国籍" value={driver.nationality} feedback={feedback.nationality} delay={d(1)} />
         <AttrCell
           label="车队"
           value={driver.teamCn ? `${driver.teamCn} (${driver.team})` : driver.team}
           feedback={feedback.team}
           delay={d(2)}
-          className="col-span-2"
         />
         <AttrCell label="车号" value={`${driver.number}${arrowOf(feedback.number)}`} feedback={feedback.number.type} delay={d(3)} />
         <AttrCell label="世界冠军" value={`${driver.championships}${arrowOf(feedback.championships)}`} feedback={feedback.championships.type} delay={d(4)} />
@@ -186,6 +186,7 @@ function GuessCard({
         <AttrCell label="分站冠军" value={`${driver.wins}${arrowOf(feedback.wins)}`} feedback={feedback.wins.type} delay={d(6)} />
         <AttrCell label="首秀" value={`${driver.debutYear}${arrowOf(feedback.debutYear)}`} feedback={feedback.debutYear.type} delay={d(7)} />
         <AttrCell label="状态" value={statusText[driver.status] ?? driver.status} feedback={feedback.status} delay={d(8)} />
+        <AttrCell label="参赛场次" value={`${driver.starts}${arrowOf(feedback.starts)}`} feedback={feedback.starts.type} delay={d(9)} className="col-span-2" />
       </div>
     </div>
   )
@@ -203,15 +204,16 @@ function MaskedGuessCard({
   return (
     <div>
       <CardNameBanner value="***" delay={d(0)} />
-      <div className="grid grid-cols-3 gap-[3px] mt-[3px]">
+      <div className="grid grid-cols-2 gap-[3px] mt-[3px]">
         <AttrCell label="国籍" value="***" feedback={feedback.nationality} delay={d(1)} />
-        <AttrCell label="车队" value="***" feedback={feedback.team} delay={d(2)} className="col-span-2" />
+        <AttrCell label="车队" value="***" feedback={feedback.team} delay={d(2)} />
         <AttrCell label="车号" value="***" feedback={feedback.number.type} delay={d(3)} />
         <AttrCell label="世界冠军" value="***" feedback={feedback.championships.type} delay={d(4)} />
         <AttrCell label="领奖台" value="***" feedback={feedback.podiums.type} delay={d(5)} />
         <AttrCell label="分站冠军" value="***" feedback={feedback.wins.type} delay={d(6)} />
         <AttrCell label="首秀" value="***" feedback={feedback.debutYear.type} delay={d(7)} />
         <AttrCell label="状态" value="***" feedback={feedback.status} delay={d(8)} />
+        <AttrCell label="参赛场次" value="***" feedback={feedback.starts.type} delay={d(9)} className="col-span-2" />
       </div>
     </div>
   )
@@ -273,8 +275,9 @@ export function GuessTable({ guesses, targetDriverId, masked = false }: GuessTab
                     <Cell value="***" feedback={guess.feedback.championships.type} delay={d(4)} />
                     <Cell value="***" feedback={guess.feedback.podiums.type} delay={d(5)} />
                     <Cell value="***" feedback={guess.feedback.wins.type} delay={d(6)} />
-                    <Cell value="***" feedback={guess.feedback.debutYear.type} delay={d(7)} />
-                    <Cell value="***" feedback={guess.feedback.status} delay={d(8)} />
+                    <Cell value="***" feedback={guess.feedback.starts.type} delay={d(7)} />
+                    <Cell value="***" feedback={guess.feedback.debutYear.type} delay={d(8)} />
+                    <Cell value="***" feedback={guess.feedback.status} delay={d(9)} />
                   </tr>
                 )
               })
@@ -310,11 +313,12 @@ export function GuessTable({ guesses, targetDriverId, masked = false }: GuessTab
               />
               <NumericCell value={guess.driver.podiums} feedback={guess.feedback.podiums} delay={d(5)} />
               <NumericCell value={guess.driver.wins} feedback={guess.feedback.wins} delay={d(6)} />
-              <NumericCell value={guess.driver.debutYear} feedback={guess.feedback.debutYear} delay={d(7)} />
+              <NumericCell value={guess.driver.starts} feedback={guess.feedback.starts} delay={d(7)} />
+              <NumericCell value={guess.driver.debutYear} feedback={guess.feedback.debutYear} delay={d(8)} />
               <Cell
                 value={statusText[guess.driver.status] ?? guess.driver.status}
                 feedback={guess.feedback.status}
-                delay={d(8)}
+                delay={d(9)}
               />
             </tr>
                 )

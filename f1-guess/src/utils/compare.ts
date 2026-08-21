@@ -33,6 +33,10 @@ const nationalityToContinent: Record<string, string> = {
   委内瑞拉: '南美',
   澳大利亚: '大洋洲',
   新西兰: '大洋洲',
+  匈牙利: '欧洲',
+  捷克: '欧洲',
+  智利: '南美',
+  马来西亚: '亚洲',
 }
 
 function compareNationality(guess: string, target: string): FeedbackType {
@@ -60,6 +64,7 @@ export function compareDrivers(guess: Driver, target: Driver): GuessFeedback {
     championships: compareNumeric(guess.championships, target.championships, 1),
     podiums: compareNumeric(guess.podiums, target.podiums, 1),
     wins: compareNumeric(guess.wins, target.wins, 1),
+    starts: compareNumeric(guess.starts, target.starts, 10),
     debutYear: compareNumeric(guess.debutYear, target.debutYear, 1),
     status: guess.status === target.status ? 'correct' : 'wrong',
   }
