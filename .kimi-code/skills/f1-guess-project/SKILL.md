@@ -2,7 +2,7 @@
 name: f1-guess-project
 description: |
   F1 Guess 项目记忆与上下文恢复技能。当用户提到 F1 Guess、f1-guess、F1 车手猜谜、F1 猜车手游戏、联机猜车手等项目相关关键词时触发。用于快速回顾项目架构、技术栈、部署信息、当前进展和待办事项，帮助 Claude 在新会话中迅速进入项目状态。
-version: "2.4.0"
+version: "2.5.0"
 author: "taodingrui"
 license: MIT
 allowed-tools:
@@ -39,8 +39,13 @@ allowed-tools:
 
 ### Step 2: 检查最新代码状态
 
+**双机开发**：项目在个人机和公司内网机之间来回切换开发（项目路径因机器而异：
+个人机 `/Users/ray/Desktop/F1-Guess-Game`，公司机 `/Users/taodingrui/Desktop/F1 Guess`）。
+**每次会话开始必须先同步远端进度**，避免基于旧代码开发：
+
 ```bash
-cd "/Users/taodingrui/Desktop/F1 Guess" && git log --oneline -10 && git status
+git fetch origin && git status && git log --oneline -5
+# 本地落后时先 git pull（在 main/preview 上直接 pull）
 ```
 
 ### Step 3: 确认用户意图
@@ -63,7 +68,7 @@ cd "/Users/taodingrui/Desktop/F1 Guess" && git log --oneline -10 && git status
 - 后端: Cloudflare Workers + Durable Objects + WebSocket (原生)
 - 包管理: pnpm (前端), npm (后端)
 
-**当前版本**: v2.4 (单机经典/简单 + 联机经典/简单 + 公告系统 + 断线重连)
+**当前版本**: v2.5 (单机经典/简单 + 联机经典/简单 + 公告系统 + 断线重连 + 退出保护)
 
 ## 核心功能
 
@@ -78,6 +83,10 @@ cd "/Users/taodingrui/Desktop/F1 Guess" && git log --oneline -10 && git status
 - 1v1 实时对战，双方猜测同一目标车手，2 分钟倒计时
 - 经典/简单两种车手池（创建房间时选择，房间级绑定）
 - 断线重连：刷新/断网后以同一 playerId 自动恢复对局（sessionStorage 会话）
+- 退出保护：房间内关闭/刷新页面前弹浏览器确认框（移动端浏览器不支持，为平台限制）；
+  对局中点「返回首页」先弹应用内确认弹窗
+- 确认离开后立即结算（WS leave_room + sendBeacon POST /room/:id/leave 双通道），
+  对手立刻弹出结算窗显示对方已离开，不再等 30 秒重连窗口
 - 闲置自动销毁：等待 5 分钟无人加入 / 结算后闲置 5 分钟（DO alarm）
 - 默认昵称系统 + 修改昵称、再来一局邀请机制（双方同意）
 - 实时同步对方猜测次数和颜色反馈（masked 表格，内容显示 ***）
@@ -212,6 +221,15 @@ npx wrangler deploy
 
 ## 最近重要更新
 
+### v2.5 (2026-08-21)
+- 联机退出保护：房间内关闭/刷新页面前弹浏览器确认框（iOS Safari/微信等移动浏览器不支持，
+  为平台限制；移动端靠立即结算 + 30 秒兜底）
+- 确认离开后立即结算：pagehide 时 WS leave_room + sendBeacon 调新增的
+  POST /room/:id/leave（DO 内幂等），对手立即弹出结算窗，不再等 30 秒
+- 对局中点「返回首页」先弹应用内 ConfirmModal 确认，防止误触退出
+- 修复 server package-lock.json 遗留公司内网 npm 源（npm.corp.kuaishou.com），
+  已统一替换为官方 registry，两台机器均可安装
+
 ### v2.4 (2026-08)
 - 联机模式支持简单版（房间级模式，服务端校验池内猜测）
 - 联机断线重连：playerId 客户端生成 + sessionStorage 会话，刷新/断网自动恢复对局；房间已销毁返回 ROOM_EXPIRED
@@ -252,12 +270,18 @@ npx wrangler deploy
 - playerId 由客户端生成（crypto.randomUUID），随连接参数携带
 
 ### 退出逻辑
-- 任何一方退出都会关闭整个房间
+- 任何一方退出都会关闭整个房间（包括页面关闭/刷新时确认离开的场景，
+  前端 pagehide 会通过 WS + beacon 双通道发 leave_room，服务端立即结算）
 - 剩余玩家收到 game_end（获胜）后保留结算弹窗，隐藏「再来一局」
 - ROOM_EXPIRED / ROOM_FULL / ROOM_TIMEOUT 为致命错误：清会话、手动关连接（防自动重连）、回大厅
 
 ## 注意事项
 
+- **双机开发**：个人机与公司内网机来回切换，每次会话开始先 `git fetch` 同步远端进度
+- **个人机环境**（`/Users/ray`）：Node 在 `/opt/homebrew/bin`，pnpm 在 `~/Library/pnpm`，
+  非交互 shell 需手动补 `export PATH="/opt/homebrew/bin:$HOME/Library/pnpm:$PATH"`；
+  GitHub SSH 已在 `~/.ssh/config` 配置走 `ssh.github.com:443`（22 端口会被代理 fake-IP 拦截）；
+  wrangler 已登录（2026-08-21）
 - 内网无法访问 `*.workers.dev`，但 `f1-guess.online` 和 `api.f1-guess.online` 可正常访问
 - WebSocket 消息处理需检查连接状态（`ws.readyState === WebSocket.OPEN`）
 - 离开房间时必须：设置标志 → 发送消息 → 清空 sessions → 关闭连接 → 重置状态
