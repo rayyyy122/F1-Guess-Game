@@ -10,7 +10,7 @@ interface HelpModalProps {
 
 const rules = [
   { label: '国籍', correct: '相同', close: '同一大洲', wrong: '不同大洲' },
-  { label: '车队', correct: '相同', close: '-', wrong: '不同' },
+  { label: '车队', correct: '相同', close: '谜底车手曾效力', wrong: '未曾效力' },
   { label: '车号', correct: '相同', close: '相差 ≤1', wrong: '相差 >1' },
   { label: '世界冠军', correct: '相同', close: '相差 ≤1', wrong: '相差 >1' },
   { label: '领奖台', correct: '相同', close: '相差 ≤1', wrong: '相差 >1' },
@@ -153,6 +153,10 @@ export function HelpModal({ isOpen, onClose, defaultTab = 'rules' }: HelpModalPr
                     <li>
                       <strong>退役</strong>：显示最后效力车队
                       <span className="text-gray-500">（舒马赫 → 梅赛德斯）</span>
+                    </li>
+                    <li>
+                      <strong>接近</strong>：谜底车手曾效力过该车队
+                      <span className="text-gray-500">（含历代更名，如 Alpine = Renault / Benetton）</span>
                     </li>
                   </ul>
                 </section>

@@ -56,10 +56,37 @@ function compareNumeric(guess: number, target: number, closeThreshold: number): 
   return { type, direction }
 }
 
+// 车队血缘链：同一支车队历代更名视为同一车队（每行一条链，现役队名放最后）
+// 注：Lotus 因混淆了经典 Team Lotus 与 2012-15 Enstone 时期，不做归并
+const teamChains: string[][] = [
+  ['Stewart', 'Jaguar', 'Red Bull', 'Red Bull Racing'],
+  ['Minardi', 'Toro Rosso', 'AlphaTauri', 'RB', 'Racing Bulls'],
+  ['BAR', 'Honda', 'Brawn', 'Mercedes'],
+  ['Jordan', 'Midland', 'Spyker', 'Force India', 'Racing Point', 'Aston Martin'],
+  ['Toleman', 'Benetton', 'Renault', 'Alpine'],
+  ['Sauber', 'BMW Sauber', 'Alfa Romeo', 'Audi'],
+  ['Team Lotus', 'Caterham'],
+  ['Virgin', 'Marussia', 'Manor'],
+]
+
+function canonicalTeam(team: string): string {
+  for (const chain of teamChains) {
+    if (chain.includes(team)) return chain[chain.length - 1]
+  }
+  return team
+}
+
+// 接近 = 谜底车手曾效力过该车队（含历代更名），但现已不在
+function compareTeam(guessTeam: string, target: Driver): FeedbackType {
+  if (guessTeam === target.team) return 'correct'
+  const g = canonicalTeam(guessTeam)
+  return target.teams.some((t) => canonicalTeam(t) === g) ? 'close' : 'wrong'
+}
+
 export function compareDrivers(guess: Driver, target: Driver): GuessFeedback {
   return {
     nationality: compareNationality(guess.nationality, target.nationality),
-    team: guess.team === target.team ? 'correct' : 'wrong',
+    team: compareTeam(guess.team, target),
     number: compareNumeric(guess.number, target.number, 1),
     championships: compareNumeric(guess.championships, target.championships, 1),
     podiums: compareNumeric(guess.podiums, target.podiums, 1),
