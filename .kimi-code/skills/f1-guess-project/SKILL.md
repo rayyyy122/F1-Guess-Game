@@ -2,7 +2,7 @@
 name: f1-guess-project
 description: |
   F1 Guess 项目记忆与上下文恢复技能。当用户提到 F1 Guess、f1-guess、F1 车手猜谜、F1 猜车手游戏、联机猜车手等项目相关关键词时触发。用于快速回顾项目架构、技术栈、部署信息、当前进展和待办事项，帮助 Claude 在新会话中迅速进入项目状态。
-version: "2.5.0"
+version: "2.6.0"
 author: "taodingrui"
 license: MIT
 allowed-tools:
@@ -68,7 +68,7 @@ git fetch origin && git status && git log --oneline -5
 - 后端: Cloudflare Workers + Durable Objects + WebSocket (原生)
 - 包管理: pnpm (前端), npm (后端)
 
-**当前版本**: v2.5 (单机经典/简单 + 联机经典/简单 + 公告系统 + 断线重连 + 退出保护)
+**当前版本**: v2.6 (单机经典/简单 + 联机经典/简单 + 公告系统 + 断线重连 + 退出保护 + 车队接近判定)
 
 ## 核心功能
 
@@ -220,6 +220,13 @@ npx wrangler deploy
 - **指标**: 创建房间数 / 累计开局 / 累计完局 / 总猜测次数
 
 ## 最近重要更新
+
+### v2.6 (2026-08-30)
+- 车队属性新增「接近」判定：谜底车手曾效力过所猜车队即为黄色（含历代更名血缘）
+- 车队血缘归一化：8 条更名链（红牛/小红牛/梅赛德斯/阿斯顿马丁/Alpine/索伯/Caterham/Manor 系），
+  Lotus 因经典 Team Lotus 与 2012-15 Enstone 时期混淆不归并；前后端 compare.ts 各一份 compareTeam
+- 数据无需改动：276 位车手均有完整 teams 履历字段
+- 顺手清理 TODO.md（关闭页面提示/车手扩充/参赛场次均已完成）
 
 ### v2.5 (2026-08-21)
 - 联机退出保护：房间内关闭/刷新页面前弹浏览器确认框（iOS Safari/微信等移动浏览器不支持，
